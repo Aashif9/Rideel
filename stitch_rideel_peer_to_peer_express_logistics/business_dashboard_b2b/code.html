@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIDEEL - Business Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#001e40",
+                      "inverse-primary": "#a7c8ff",
+                      "on-tertiary-fixed": "#002113",
+                      "secondary-fixed-dim": "#c4c7c9",
+                      "tertiary-fixed": "#6ffbbe",
+                      "tertiary-container": "#003c27",
+                      "on-primary-fixed": "#001b3c",
+                      "secondary-fixed": "#e0e3e5",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#002416",
+                      "on-tertiary-container": "#00b27b",
+                      "on-secondary-fixed": "#191c1e",
+                      "on-secondary-container": "#626567",
+                      "background": "#f8f9ff",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#e0e3e5",
+                      "surface-variant": "#d3e4fe",
+                      "on-primary-container": "#799dd6",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "surface-container-low": "#eff4ff",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "error": "#ba1a1a",
+                      "inverse-surface": "#213145",
+                      "surface-bright": "#f8f9ff",
+                      "surface-container-high": "#dce9ff",
+                      "outline": "#737780",
+                      "on-surface": "#0b1c30",
+                      "inverse-on-surface": "#eaf1ff",
+                      "surface-dim": "#cbdbf5",
+                      "on-primary-fixed-variant": "#1f477b",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-background": "#0b1c30",
+                      "primary-fixed-dim": "#a7c8ff",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#3a5f94",
+                      "outline-variant": "#c3c6d1",
+                      "surface-container-highest": "#d3e4fe",
+                      "primary-fixed": "#d5e3ff",
+                      "primary-container": "#003366",
+                      "surface-container": "#e5eeff",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-secondary-fixed-variant": "#444749",
+                      "secondary": "#5c5f61",
+                      "on-surface-variant": "#43474f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "12px",
+                      "stack-md": "24px",
+                      "container-padding-desktop": "40px",
+                      "gutter": "16px",
+                      "container-padding-mobile": "20px",
+                      "stack-lg": "40px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Public Sans"],
+                      "label-caps": ["Public Sans"],
+                      "headline-lg": ["Public Sans"],
+                      "body-lg": ["Public Sans"],
+                      "price-display": ["Public Sans"],
+                      "body-md": ["Public Sans"],
+                      "headline-md": ["Public Sans"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F8FAFC; /* Level 0 Background override for B2B feel, though theme surface is close */
+        }
+        .bento-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 51, 102, 0.04);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased h-screen overflow-hidden flex">
+<!-- Desktop Navigation Drawer (Hidden on mobile) -->
+<aside class="hidden md:flex flex-col h-screen fixed left-0 top-0 p-stack-md w-72 bg-surface-container-low border-r border-outline-variant z-40">
+<!-- Header -->
+<div class="flex items-center gap-4 mb-stack-lg pl-2">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md text-headline-md overflow-hidden">
+<img alt="Admin Portrait" class="w-full h-full object-cover" data-alt="A professional corporate headshot of a logistics administrator in a modern office setting. Clear, bright lighting, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFzzyAv7hmCU7-t8zJCmeRHFotRenJllLNTtXi3FBugnaUDLvf2on5y1VzXb6VmsCg3kvlFFdJJyObaXB_k-ect1_Fp_HSN_HnXCHWPGAd_zp_9I9fTWN4ykbsPwKx_fE9Bx7RQleEAk0t8iyPTjaK7qeR7HVD_ZJhDfF-IG2RFBp3pLh-tYqFKTSUYgoC4SxM8RqmPLJvMJ3YNuxa_QtHqztumKqC7lb0u7gL8qe7D17DakTYs6eG"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Admin Dashboard</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Platform Overview</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 flex flex-col gap-2">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-bold transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">local_post_office</span>
+<span>Deliveries</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Payments</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant">
+<p class="font-label-caps text-label-caps text-on-surface-variant text-center">v1.0.4</p>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen md:ml-72 overflow-y-auto w-full relative pb-24 md:pb-0">
+<!-- Mobile TopAppBar (Visible only on mobile) -->
+<header class="md:hidden flex justify-between items-center px-container-padding-mobile h-16 w-full z-50 sticky top-0 bg-surface border-b border-outline-variant transition-colors duration-200">
+<button class="text-on-surface-variant hover:bg-surface-container rounded-full p-2 transition-colors duration-200">
+<span class="material-symbols-outlined">local_shipping</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">RIDEEL</h1>
+<button class="text-on-surface-variant hover:bg-surface-container rounded-full p-2 transition-colors duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<!-- Desktop Header Area (Inside Main Canvas) -->
+<div class="hidden md:flex justify-between items-end px-container-padding-desktop pt-stack-lg pb-stack-md w-full max-w-[1200px] mx-auto">
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">Business Overview</h1>
+<p class="text-on-surface-variant font-body-lg text-body-lg mt-1">Monitor your logistics performance and active network.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-surface-container-highest text-on-surface px-6 py-3 rounded-lg font-bold hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">download</span>
+                    Export Report
+                </button>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                    New Shipment
+                </button>
+</div>
+</div>
+<!-- Dashboard Canvas -->
+<div class="px-container-padding-mobile md:px-container-padding-desktop py-stack-md w-full max-w-[1200px] mx-auto flex flex-col gap-stack-md">
+<!-- Mobile Page Title -->
+<div class="md:hidden mb-2">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Business Overview</h1>
+</div>
+<!-- Bento Grid - KPIs -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-gutter md:gap-stack-md">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm md:p-stack-md bento-shadow flex flex-col relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-primary-container bg-primary-container/10 p-2 rounded-lg">package_2</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-1">Total Shipments</p>
+<h3 class="font-headline-lg text-headline-lg font-bold text-primary">12,450</h3>
+<div class="mt-2 text-on-tertiary-container font-label-caps text-label-caps flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">trending_up</span>
+<span>+8.4% this month</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm md:p-stack-md bento-shadow flex flex-col relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-primary-container bg-primary-container/10 p-2 rounded-lg">local_shipping</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-1">Active Shipments</p>
+<h3 class="font-headline-lg text-headline-lg font-bold text-primary">342</h3>
+<div class="mt-2 text-on-surface-variant font-label-caps text-label-caps flex items-center gap-1">
+<span>48 pending dispatch</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm md:p-stack-md bento-shadow flex flex-col relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-primary-container bg-primary-container/10 p-2 rounded-lg">account_balance_wallet</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-1">Monthly Spend</p>
+<h3 class="font-price-display text-price-display font-bold text-primary">₹1,24,500</h3>
+<div class="mt-2 text-error font-label-caps text-label-caps flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">trending_up</span>
+<span>+2.1% vs budget</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm md:p-stack-md bento-shadow flex flex-col relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-tertiary-container bg-tertiary-container/10 p-2 rounded-lg">check_circle</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-1">Success Rate</p>
+<h3 class="font-headline-lg text-headline-lg font-bold text-primary">99.2%</h3>
+<div class="mt-2 text-on-surface-variant font-label-caps text-label-caps flex items-center gap-1">
+<span>SLA Target: 99.0%</span>
+</div>
+</div>
+</div>
+<!-- Main Layout Split (Chart + Quick Actions) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-md">
+<!-- Chart Area (Placeholder) -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md bento-shadow flex flex-col min-h-[300px]">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Volume Trends</h3>
+<select class="bg-surface-variant text-on-surface border-none rounded-lg font-body-md py-1 px-3">
+<option>This Week</option>
+<option>This Month</option>
+</select>
+</div>
+<!-- Chart Graphic Representation -->
+<div class="flex-1 w-full bg-surface-container-low rounded-lg relative overflow-hidden flex items-end">
+<!-- Abstract Bar Chart bars -->
+<div class="w-1/12 bg-primary/20 hover:bg-primary/40 h-[40%] ml-[2%] rounded-t-sm transition-colors"></div>
+<div class="w-1/12 bg-primary/30 hover:bg-primary/50 h-[60%] ml-[2%] rounded-t-sm transition-colors"></div>
+<div class="w-1/12 bg-primary/50 hover:bg-primary/70 h-[30%] ml-[2%] rounded-t-sm transition-colors"></div>
+<div class="w-1/12 bg-primary/80 hover:bg-primary h-[80%] ml-[2%] rounded-t-sm transition-colors relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded opacity-0 hover:opacity-100 transition-opacity">Peak</div>
+</div>
+<div class="w-1/12 bg-primary/40 hover:bg-primary/60 h-[50%] ml-[2%] rounded-t-sm transition-colors"></div>
+<div class="w-1/12 bg-primary/60 hover:bg-primary/80 h-[70%] ml-[2%] rounded-t-sm transition-colors"></div>
+<div class="w-1/12 bg-primary/90 hover:bg-primary h-[90%] ml-[2%] rounded-t-sm transition-colors"></div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="lg:col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md bento-shadow flex flex-col">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-6">Quick Actions</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+<button class="flex items-center gap-3 w-full p-3 rounded-lg border border-outline-variant hover:bg-surface-variant hover:border-primary transition-all text-left group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">view_list</span>
+<span class="font-body-md text-body-md font-bold text-on-surface">Bulk Shipments</span>
+</button>
+<button class="flex items-center gap-3 w-full p-3 rounded-lg border border-outline-variant hover:bg-surface-variant hover:border-primary transition-all text-left group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">route</span>
+<span class="font-body-md text-body-md font-bold text-on-surface">Recurring Routes</span>
+</button>
+<button class="flex items-center gap-3 w-full p-3 rounded-lg border border-outline-variant hover:bg-surface-variant hover:border-primary transition-all text-left group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">receipt_long</span>
+<span class="font-body-md text-body-md font-bold text-on-surface">Invoices</span>
+</button>
+<button class="flex items-center gap-3 w-full p-3 rounded-lg border border-outline-variant hover:bg-surface-variant hover:border-primary transition-all text-left group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">history</span>
+<span class="font-body-md text-body-md font-bold text-on-surface">Shipment History</span>
+</button>
+<button class="flex items-center gap-3 w-full p-3 rounded-lg border border-outline-variant hover:bg-surface-variant hover:border-primary transition-all text-left group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">support_agent</span>
+<span class="font-body-md text-body-md font-bold text-on-surface">Business Support</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Active Operations Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md bento-shadow flex flex-col mb-8 overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Active Fleet Operations</h3>
+<a class="text-primary font-body-md text-body-md font-bold hover:underline" href="#">View All</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="pb-3 font-label-caps text-label-caps text-on-surface-variant font-bold uppercase tracking-wider">Tracking ID</th>
+<th class="pb-3 font-label-caps text-label-caps text-on-surface-variant font-bold uppercase tracking-wider">Route</th>
+<th class="pb-3 font-label-caps text-label-caps text-on-surface-variant font-bold uppercase tracking-wider">Status</th>
+<th class="pb-3 font-label-caps text-label-caps text-on-surface-variant font-bold uppercase tracking-wider text-right">ETA</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface">
+<tr class="border-b border-outline-variant/50 hover:bg-surface-variant/30 transition-colors">
+<td class="py-4 font-bold text-primary">RD-8832-IN</td>
+<td class="py-4">Mumbai Hub → Pune West</td>
+<td class="py-4">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-primary-container/10 text-primary text-xs font-bold">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                        In Transit
+                                    </span>
+</td>
+<td class="py-4 text-right">14:30 Today</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-variant/30 transition-colors">
+<td class="py-4 font-bold text-primary">RD-8835-IN</td>
+<td class="py-4">Delhi Central → Gurugram</td>
+<td class="py-4">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-tertiary-container/10 text-on-tertiary-container text-xs font-bold">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
+                                        Delivered
+                                    </span>
+</td>
+<td class="py-4 text-right">10:15 Today</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="py-4 font-bold text-primary">RD-8841-IN</td>
+<td class="py-4">Bangalore South → Hub 2</td>
+<td class="py-4">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant text-xs font-bold">
+<span class="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+                                        Loading
+                                    </span>
+</td>
+<td class="py-4 text-right">16:00 Today</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile BottomNavBar (Visible only on mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 z-50 flex justify-around items-center px-4 bg-surface border-t border-outline-variant shadow-md pb-safe transition-transform duration-150">
+<!-- Active Tab: Home (Maps to Dashboard conceptually) -->
+<a class="flex flex-col items-center justify-center text-primary font-bold after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1 hover:opacity-80 transition-transform duration-150 scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">package_2</span>
+<span class="font-label-caps text-label-caps mt-1">Deliveries</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-caps text-label-caps mt-1">Trips</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps mt-1">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

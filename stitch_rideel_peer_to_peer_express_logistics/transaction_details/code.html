@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Transaction Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e0e3e5",
+                    "secondary": "#5c5f61",
+                    "on-primary-container": "#799dd6",
+                    "secondary-fixed": "#e0e3e5",
+                    "inverse-on-surface": "#eaf1ff",
+                    "outline-variant": "#c3c6d1",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#00b27b",
+                    "on-secondary-fixed-variant": "#444749",
+                    "on-secondary-container": "#626567",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-tint": "#3a5f94",
+                    "error-container": "#ffdad6",
+                    "background": "#f8f9ff",
+                    "primary-fixed": "#d5e3ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#002416",
+                    "surface-variant": "#d3e4fe",
+                    "on-background": "#0b1c30",
+                    "surface-container": "#e5eeff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#737780",
+                    "on-surface-variant": "#43474f",
+                    "secondary-fixed-dim": "#c4c7c9",
+                    "primary": "#001e40",
+                    "primary-container": "#003366",
+                    "on-primary-fixed": "#001b3c",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-surface": "#0b1c30",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "inverse-surface": "#213145",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed": "#191c1e",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#003c27",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "inverse-primary": "#a7c8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-padding-mobile": "20px",
+                    "stack-sm": "12px",
+                    "stack-lg": "40px",
+                    "container-padding-desktop": "40px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Public Sans"],
+                    "headline-md": ["Public Sans"],
+                    "label-caps": ["Public Sans"],
+                    "price-display": ["Public Sans"],
+                    "body-lg": ["Public Sans"],
+                    "body-md": ["Public Sans"],
+                    "headline-lg": ["Public Sans"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #F8FAFC;
+        }
+        .soft-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 51, 102, 0.08);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopAppBar from JSON -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding-mobile h-16 bg-surface border-b border-outline-variant font-headline-md text-headline-md">
+<button class="flex items-center justify-center p-2 text-primary hover:bg-surface-container transition-colors rounded-full opacity-80 duration-100">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">RIDEEL</span>
+<button class="flex items-center justify-center p-2 text-primary hover:bg-surface-container transition-colors rounded-full overflow-hidden w-10 h-10">
+<img alt="user_profile_photo" class="object-cover w-full h-full rounded-full" data-alt="A small circular profile photo of a professional delivery driver in bright lighting, clean corporate style, deep blue background, headshot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGrHTl4VQnAq3fYtalwJdQkanO2waOy4LVGN0fYOF8Na5oKIeZSSrbtiyyoFTpfLA88TvHcu7K3crwjhtZ7OpfuwwqyLpCNKOdjwvC6CgKlU6ntLmUUwv9latseZKlwIc30YMRUbfbU2EMJ0ofWZI52swbEosMu8dzv40i48NmM6W6Zskuqm8ckRthNiV5fYxvB6LXfWF7G3nr6_uDSmHa7HWdrppkUzVSnE39zs_kOV6Bmas-EUwC"/>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="pt-24 pb-stack-lg px-container-padding-mobile max-w-lg mx-auto flex flex-col gap-stack-md">
+<!-- Screen Title & Back Navigation -->
+<div class="flex items-center gap-gutter">
+<a class="flex items-center justify-center p-2 bg-surface-container-lowest rounded-full soft-shadow text-primary-container hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h1 class="font-headline-md text-headline-md text-primary-container">Transaction Details</h1>
+</div>
+<!-- Amount & Status Header -->
+<div class="flex flex-col items-center justify-center gap-base py-stack-md bg-surface-container-lowest rounded-[24px] border border-outline-variant soft-shadow text-center">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary-container font-extrabold text-[48px] leading-tight">₹145</span>
+<div class="flex items-center gap-2 bg-[#E6F4EA] text-on-tertiary-fixed-variant font-label-caps text-label-caps px-4 py-2 rounded-full mt-2">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                PAYMENT RELEASED
+            </div>
+<span class="font-body-md text-body-md text-on-surface-variant mt-1">Oct 24, 2023, 6:45 PM</span>
+</div>
+<!-- Details List Card -->
+<div class="bg-surface-container-lowest rounded-[24px] border border-outline-variant p-stack-sm soft-shadow flex flex-col gap-base">
+<h2 class="font-headline-md text-headline-md text-primary-container mb-2 px-2">Overview</h2>
+<div class="flex justify-between items-center py-2 px-2 border-b border-outline-variant/30">
+<span class="font-body-md text-body-md text-on-surface-variant">Transaction ID</span>
+<span class="font-body-md text-body-md font-semibold text-on-background">TRN-99824X</span>
+</div>
+<div class="flex justify-between items-center py-2 px-2 border-b border-outline-variant/30">
+<span class="font-body-md text-body-md text-on-surface-variant">Delivery ID</span>
+<span class="font-body-md text-body-md font-semibold text-primary-container">RD784521</span>
+</div>
+<div class="flex justify-between items-center py-2 px-2 border-b border-outline-variant/30">
+<span class="font-body-md text-body-md text-on-surface-variant">Sender</span>
+<span class="font-body-md text-body-md font-semibold text-on-background">Aashif Shaik</span>
+</div>
+<div class="flex justify-between items-center py-2 px-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Traveler</span>
+<span class="font-body-md text-body-md font-semibold text-on-background">Rahul Kumar</span>
+</div>
+</div>
+<!-- Financial Breakdown Card -->
+<div class="bg-surface-container-lowest rounded-[24px] border border-outline-variant p-stack-sm soft-shadow flex flex-col gap-base">
+<h2 class="font-headline-md text-headline-md text-primary-container mb-2 px-2">Payment Breakdown</h2>
+<div class="flex justify-between items-center py-2 px-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Delivery Fee</span>
+<span class="font-body-md text-body-md text-on-background">₹120</span>
+</div>
+<div class="flex justify-between items-center py-2 px-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Rideel Service Fee</span>
+<span class="font-body-md text-body-md text-on-background">₹15</span>
+</div>
+<div class="flex justify-between items-center py-2 px-2 border-b border-outline-variant/50 pb-4">
+<span class="font-body-md text-body-md text-on-surface-variant">Insurance</span>
+<span class="font-body-md text-body-md text-on-background">₹10</span>
+</div>
+<div class="flex justify-between items-center py-3 px-2 mt-1 bg-surface-container rounded-xl">
+<span class="font-body-lg text-body-lg font-bold text-primary-container">Traveler Payout</span>
+<span class="font-price-display text-price-display text-primary-container">₹120</span>
+</div>
+</div>
+<!-- Support Action -->
+<button class="w-full bg-surface-container-lowest border border-outline-variant text-primary-container font-headline-md text-headline-md py-3 rounded-xl flex items-center justify-center gap-2 soft-shadow hover:bg-surface-container transition-colors mt-2">
+<span class="material-symbols-outlined">support_agent</span>
+            Report an Issue
+        </button>
+</main>
+</body></html>

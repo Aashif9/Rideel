@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Available Travelers - RIDEEL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d3e4fe",
+                        "on-primary-fixed": "#001b3c",
+                        "error-container": "#ffdad6",
+                        "outline": "#737780",
+                        "outline-variant": "#c3c6d1",
+                        "primary": "#001e40",
+                        "on-primary-container": "#799dd6",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-tertiary-fixed": "#002113",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-dim": "#cbdbf5",
+                        "on-surface-variant": "#43474f",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "primary-fixed": "#d5e3ff",
+                        "secondary-fixed": "#e0e3e5",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#003c27",
+                        "surface-variant": "#d3e4fe",
+                        "primary-container": "#003366",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#5c5f61",
+                        "inverse-primary": "#a7c8ff",
+                        "on-secondary-container": "#626567",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-tint": "#3a5f94",
+                        "on-background": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "base": "8px",
+                        "stack-md": "24px",
+                        "stack-sm": "12px",
+                        "safe": "env(safe-area-inset-bottom, 20px)"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-lg-mobile": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "label-caps": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    },
+                    "boxShadow": {
+                        "soft-ambient": "0px 4px 20px rgba(0, 51, 102, 0.08)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-safe">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding-mobile h-16 md:px-container-padding-desktop">
+<button class="text-on-surface-variant hover:bg-surface-container transition-colors p-2 rounded-full active:opacity-80 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<div class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary md:font-headline-lg md:text-headline-lg">
+            RIDEEL
+        </div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="user_profile_photo" class="w-full h-full object-cover" data-alt="A professional headshot of an Indian man in his late twenties, smiling warmly. He is wearing a smart casual navy blue shirt. The background is a blurred modern office setting with bright, natural lighting. The image embodies a modern, trustworthy startup aesthetic with a cool, corporate color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXkVEm9zvVc_SVjYP6D-q3cXePs2W44qjVbd0aDNjFSuhWr7R78AFtfQWYaNWFvrd5xIxYEVbXyYJ1o53ahCRPKVB8QcQ9UBMe0FZW-ocqcWZPfN7s55Vvu53qvx2eUDJHSSbECkhXqvS7jwfTEX3fJTGJZV-2q30mSGXcZhM286hKeQFrWWf84RIk4t9tlNDRMeSnt1PI_plAyFdb9UFHUKtsgIwbtXdCdPkODhCKBvQjOan7VESX"/>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 px-container-padding-mobile md:px-container-padding-desktop max-w-[1200px] mx-auto">
+<!-- Search Context Header -->
+<div class="py-stack-sm mb-4">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md mb-2">
+<span class="font-semibold text-on-surface">Vijayawada</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+<span class="font-semibold text-on-surface">Hyderabad</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary md:font-headline-lg md:text-headline-lg">Travelers heading your way</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">3 matches found for Today</p>
+</div>
+<!-- Filters / Sort Chips -->
+<div class="flex overflow-x-auto hide-scrollbar gap-3 pb-4 mb-stack-md -mx-container-padding-mobile px-container-padding-mobile md:mx-0 md:px-0">
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface hover:bg-surface-container transition-colors shadow-sm flex items-center gap-1 active:bg-surface-variant">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                Departure time
+            </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-primary bg-primary-container font-body-md text-body-md text-on-primary-container shadow-sm flex items-center gap-1 active:opacity-80">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">sort</span>
+                Price
+            </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface hover:bg-surface-container transition-colors shadow-sm flex items-center gap-1 active:bg-surface-variant">
+<span class="material-symbols-outlined text-[18px]">star</span>
+                Rating
+            </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface hover:bg-surface-container transition-colors shadow-sm flex items-center gap-1 active:bg-surface-variant">
+<span class="material-symbols-outlined text-[18px]">directions_car</span>
+                Vehicle
+            </button>
+</div>
+<!-- Results Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md pb-24">
+<!-- Card 1 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm shadow-soft-ambient flex flex-col gap-4 relative overflow-hidden transition-transform active:scale-[0.98] duration-150">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img alt="Rahul Kumar" class="w-full h-full object-cover" data-alt="A portrait of an Indian male driver in his thirties with a neat beard, smiling confidently. He is wearing a light blue polo shirt. The background is slightly blurred showing an outdoor daytime street scene. The lighting is natural and bright, conveying trust and reliability suitable for a delivery app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEmWVhOrcIqY_wVO_zKs2gDUvfU8ECs1EwpXUCy8uW0ZZ_36JOgYwIatfLyebWKCamGkTGx1SKK968Per0-u1XTsDrdblzeYR8s-OlsylJ2IBDTYxQa5KvGKz-8GaAlmd6Rs7dytgeenCbhbYTa7JJhaRC2Y71VMvlg49-hliyjRGv2DFUD8q1tNLnKeF89HSS9Teh8xpZVfEegupC1RahSzH_gAeXUIqp-EbkT3Jvyswb6QDjaGvV"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-1">
+                                Rahul Kumar
+                                <span class="material-symbols-outlined text-[16px] text-[#00b27b]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</h3>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[16px] text-primary">star</span>
+<span>4.8</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-price-display text-price-display text-primary">₹120</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mt-1">EST. COST</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg p-3 flex flex-col gap-2">
+<div class="flex items-center gap-2 font-body-md text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[20px]">departure_board</span>
+<span class="font-semibold">Today, 2:30 PM</span>
+</div>
+<div class="flex items-center gap-2 font-body-md text-body-md text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+<span>Hyundai Creta</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary rounded-[12px] py-3 font-body-lg text-body-lg font-semibold hover:bg-primary transition-colors active:bg-primary shadow-sm mt-auto">
+                    View Trip
+                </button>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm shadow-soft-ambient flex flex-col gap-4 relative overflow-hidden transition-transform active:scale-[0.98] duration-150">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img alt="Priya S." class="w-full h-full object-cover" data-alt="A professional headshot of an Indian female traveler in her late twenties, smiling cheerfully. She has long dark hair and wears a smart casual top. The background is a bright, modern interior setting. The mood is welcoming and professional, fitting for a modern peer-to-peer delivery platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgPzOy_pdeY91-Y0IyoGM1ISKqFbbwCBBP5Vt7XXACCU2th3sqxYtG1IaCnuMTRyjnUat82kFPVgyypFMSDWCfhlcO9bt9-BYtG77wA7fpAVMDH7UyFKx7puDEkamZSpWIPC-44cEhjPvQzGtY1jI8loYqU2J1e9U4nEjTKSRmNj8B4ISRKUCjNZxDq16RcBPzoQXM1i6lKUiXATGmbHIPPgdIIah4sysxzQdYSZOQMxMrQWkEewJT"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-1">
+                                Priya S.
+                                <span class="material-symbols-outlined text-[16px] text-[#00b27b]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</h3>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[16px] text-primary">star</span>
+<span>4.9</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-price-display text-price-display text-primary">₹150</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mt-1">EST. COST</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg p-3 flex flex-col gap-2">
+<div class="flex items-center gap-2 font-body-md text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[20px]">departure_board</span>
+<span class="font-semibold">Today, 5:00 PM</span>
+</div>
+<div class="flex items-center gap-2 font-body-md text-body-md text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+<span>Maruti Swift</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary rounded-[12px] py-3 font-body-lg text-body-lg font-semibold hover:bg-primary transition-colors active:bg-primary shadow-sm mt-auto">
+                    View Trip
+                </button>
+</article>
+<!-- Card 3 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm shadow-soft-ambient flex flex-col gap-4 relative overflow-hidden transition-transform active:scale-[0.98] duration-150">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img alt="Amit V." class="w-full h-full object-cover" data-alt="A portrait of a young Indian male traveler in casual business attire, looking directly at the camera with a subtle smile. He has short hair and glasses. The background is a clean, neutral white wall with soft, high-key lighting, emphasizing a clean, modern aesthetic suitable for a trusted application profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3nxZmIqP0tTCE-_iDn3aCrdBBqFFzJg-S6wvG9F5dw182wYQezRuOJKGi30mAwEv1mCdWvK2Eg6LGBNWgBllX81X2n0i0nks41SfIURrvG73SNZkqmJAt5mFvSuJKCKCMWVufGmhc72jU70jwOkrI2XfGtWLc7LmHB_PKdUIoIneUoczc9d1whR0pCP0JgMVCd0ptdDOFn-j1MRdYTuZvZWgV50AELs24GcAQy4z-fodR62i9BEQ9"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-1">
+                                Amit V.
+                                <span class="material-symbols-outlined text-[16px] text-[#00b27b]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</h3>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[16px] text-primary">star</span>
+<span>4.7</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-price-display text-price-display text-primary">₹130</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mt-1">EST. COST</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg p-3 flex flex-col gap-2">
+<div class="flex items-center gap-2 font-body-md text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[20px]">departure_board</span>
+<span class="font-semibold">Today, 3:15 PM</span>
+</div>
+<div class="flex items-center gap-2 font-body-md text-body-md text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+<span>Honda City</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary rounded-[12px] py-3 font-body-lg text-body-lg font-semibold hover:bg-primary transition-colors active:bg-primary shadow-sm mt-auto">
+                    View Trip
+                </button>
+</article>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<!-- Suppressed on desktop per guidelines, shown on mobile. Active tab: Home (Fallback for generic search flow) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 bg-surface-container-lowest border-t border-outline-variant shadow-lg px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-primary relative after:content-[''] after:absolute after:-bottom-1 after:w-1 after:h-1 after:bg-primary after:rounded-full hover:text-primary-container transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary-container transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">package_2</span>
+<span class="font-label-caps text-label-caps mt-1">Deliveries</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary-container transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">local_shipping</span>
+<span class="font-label-caps text-label-caps mt-1">Trips</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary-container transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps mt-1">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary-container transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

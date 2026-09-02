@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIDEEL - Platform Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e0e3e5",
+                    "secondary": "#5c5f61",
+                    "on-primary-container": "#799dd6",
+                    "secondary-fixed": "#e0e3e5",
+                    "inverse-on-surface": "#eaf1ff",
+                    "outline-variant": "#c3c6d1",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#00b27b",
+                    "on-secondary-fixed-variant": "#444749",
+                    "on-secondary-container": "#626567",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-tint": "#3a5f94",
+                    "error-container": "#ffdad6",
+                    "background": "#f8f9ff",
+                    "primary-fixed": "#d5e3ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#002416",
+                    "surface-variant": "#d3e4fe",
+                    "on-background": "#0b1c30",
+                    "surface-container": "#e5eeff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#737780",
+                    "on-surface-variant": "#43474f",
+                    "secondary-fixed-dim": "#c4c7c9",
+                    "primary": "#001e40",
+                    "primary-container": "#003366",
+                    "on-primary-fixed": "#001b3c",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-surface": "#0b1c30",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "inverse-surface": "#213145",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed": "#191c1e",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#003c27",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "inverse-primary": "#a7c8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-padding-mobile": "20px",
+                    "stack-sm": "12px",
+                    "stack-lg": "40px",
+                    "container-padding-desktop": "40px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": [
+                            "Public Sans"
+                    ],
+                    "headline-md": [
+                            "Public Sans"
+                    ],
+                    "label-caps": [
+                            "Public Sans"
+                    ],
+                    "price-display": [
+                            "Public Sans"
+                    ],
+                    "body-lg": [
+                            "Public Sans"
+                    ],
+                    "body-md": [
+                            "Public Sans"
+                    ],
+                    "headline-lg": [
+                            "Public Sans"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "price-display": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "30px",
+                            {
+                                    "lineHeight": "38px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden">
+<!-- Navigation Drawer -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 p-stack-md bg-surface-container-low border-r border-outline-variant h-full w-72 z-40 transition-all duration-200 ease-in-out">
+<div class="flex items-center gap-4 mb-stack-lg">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A small, professional avatar portrait of a business administrator in a modern corporate setting. The lighting is soft and professional, suggesting a light-mode corporate UI. High quality, clear focus, minimal background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8Kim_Q_RHIf6n8Y3VAvlb3td6d1vKdWin8c_hlgqV_54WUpDBf7Ui-7vMEScBrlQs8Gl94ecxjc9uBqMYdIScTNH6XbJL5ikFQMCan1UJw4fIHs28iZ4rxniQ_2NmvQDBVhFqOPau60Gny6zyrePEBOzg0DvpF_DFgNP4669CnPEkLkrWurnWhrYm2lrYut4H9zdGmHkDKFZlHsAM07LiHP290s32F6ZbGp15rnEFhxtEkIwELEox"/>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Admin Dashboard</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Platform Overview <span class="text-xs ml-1 opacity-70">v1.0.4</span></p>
+</div>
+</div>
+<ul class="flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-3 p-3 font-body-md text-body-md bg-primary-container text-on-primary-container rounded-lg font-bold transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 font-body-md text-body-md text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">group</span>
+                    Users
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 font-body-md text-body-md text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">local_post_office</span>
+                    Deliveries
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 font-body-md text-body-md text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">payments</span>
+                    Payments
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 ml-0 md:ml-72 flex flex-col h-screen overflow-y-auto">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-50 bg-surface border-b border-outline-variant sticky top-0">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary md:hidden">menu</span>
+<span class="material-symbols-outlined text-primary hidden md:block">local_shipping</span>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">RIDEEL</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container transition-colors duration-200 p-2 rounded-full cursor-pointer">notifications</span>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-container-padding-mobile md:p-container-padding-desktop flex flex-col gap-stack-md max-w-[1200px] mx-auto w-full">
+<!-- Page Header & Filters -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary mb-1">Platform Analytics</h2>
+<p class="font-body-md text-body-md text-secondary">Comprehensive overview of platform performance.</p>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex bg-surface-container-lowest border border-outline-variant rounded-lg p-1">
+<button class="px-4 py-1.5 font-label-caps text-label-caps rounded bg-primary-container text-on-primary">Today</button>
+<button class="px-4 py-1.5 font-label-caps text-label-caps rounded text-on-surface-variant hover:bg-surface-variant">7D</button>
+<button class="px-4 py-1.5 font-label-caps text-label-caps rounded text-on-surface-variant hover:bg-surface-variant">30D</button>
+</div>
+<select class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-body-md text-body-md rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">
+<option>All Regions</option>
+<option>North</option>
+<option>South</option>
+<option>East</option>
+<option>West</option>
+</select>
+<button class="flex items-center gap-2 bg-primary text-on-primary font-body-md text-body-md px-4 py-2 rounded-[12px] hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export
+                    </button>
+</div>
+</div>
+<!-- Key Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm flex flex-col shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-label-caps text-secondary uppercase">Total Revenue</span>
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+</div>
+<span class="font-price-display text-price-display text-primary text-2xl">₹4,25,000</span>
+<span class="font-body-md text-body-md text-on-tertiary-container text-sm mt-1 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12.5% vs last period</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm flex flex-col shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-label-caps text-secondary uppercase">Deliveries</span>
+<span class="material-symbols-outlined text-primary">package_2</span>
+</div>
+<span class="font-price-display text-price-display text-primary text-2xl">1,248</span>
+<span class="font-body-md text-body-md text-on-tertiary-container text-sm mt-1 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 8.2% vs last period</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm flex flex-col shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-label-caps text-secondary uppercase">Avg. Delivery Time</span>
+<span class="material-symbols-outlined text-primary">timer</span>
+</div>
+<span class="font-price-display text-price-display text-primary text-2xl">4h 15m</span>
+<span class="font-body-md text-body-md text-secondary text-sm mt-1 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_downward</span> 5m vs last period</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm flex flex-col shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-label-caps text-secondary uppercase">Success Rate</span>
+<span class="material-symbols-outlined text-on-tertiary-container">verified</span>
+</div>
+<span class="font-price-display text-price-display text-primary text-2xl">99.2%</span>
+<span class="font-body-md text-body-md text-on-tertiary-container text-sm mt-1 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 0.1% vs last period</span>
+</div>
+</div>
+<!-- Charts Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-stack-md">
+<!-- Revenue Line Chart -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-md shadow-sm">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-4">Revenue Trend</h3>
+<div class="relative h-64 w-full">
+<canvas id="revenueChart"></canvas>
+</div>
+</div>
+<!-- Daily Deliveries Bar Chart -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-md shadow-sm">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-4">Daily Deliveries</h3>
+<div class="relative h-64 w-full">
+<canvas id="deliveriesChart"></canvas>
+</div>
+</div>
+<!-- Active Travelers vs Senders Pie Chart -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-md shadow-sm">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-4">Travelers vs Senders</h3>
+<div class="relative h-64 w-full flex justify-center">
+<canvas id="userRatioChart"></canvas>
+</div>
+</div>
+<!-- User Growth Area Chart -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-md shadow-sm">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-4">User Growth</h3>
+<div class="relative h-64 w-full">
+<canvas id="growthChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Chart.js Configuration
+        const chartColors = {
+            primary: '#003366',
+            primaryDim: '#a7c8ff',
+            secondary: '#5c5f61',
+            tertiary: '#00b27b',
+            grid: '#e0e3e5'
+        };
+
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: { grid: { display: false }, ticks: { font: { family: 'Public Sans' } } },
+                y: { grid: { color: chartColors.grid }, ticks: { font: { family: 'Public Sans' } } }
+            }
+        };
+
+        // Revenue Chart (Line)
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [45000, 52000, 48000, 61000, 59000, 75000, 85000],
+                    borderColor: chartColors.primary,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointBackgroundColor: chartColors.primary
+                }]
+            },
+            options: commonOptions
+        });
+
+        // Deliveries Chart (Bar)
+        new Chart(document.getElementById('deliveriesChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Deliveries',
+                    data: [120, 145, 130, 160, 155, 210, 240],
+                    backgroundColor: chartColors.primaryDim,
+                    borderRadius: 4
+                }]
+            },
+            options: commonOptions
+        });
+
+        // User Ratio Chart (Doughnut/Pie)
+        new Chart(document.getElementById('userRatioChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Travelers', 'Senders'],
+                datasets: [{
+                    data: [40, 60],
+                    backgroundColor: [chartColors.tertiary, chartColors.primary],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { family: 'Public Sans' } } }
+                }
+            }
+        });
+
+        // User Growth Chart (Area)
+        new Chart(document.getElementById('growthChart'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'New Users',
+                    data: [300, 450, 400, 600],
+                    borderColor: chartColors.primary,
+                    backgroundColor: 'rgba(0, 51, 102, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: commonOptions
+        });
+    </script>
+</body></html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Report an Issue - RIDEEL</title>
+<!-- Google Fonts: Public Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e0e3e5",
+                    "secondary": "#5c5f61",
+                    "on-primary-container": "#799dd6",
+                    "secondary-fixed": "#e0e3e5",
+                    "inverse-on-surface": "#eaf1ff",
+                    "outline-variant": "#c3c6d1",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#00b27b",
+                    "on-secondary-fixed-variant": "#444749",
+                    "on-secondary-container": "#626567",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-tint": "#3a5f94",
+                    "error-container": "#ffdad6",
+                    "background": "#f8f9ff",
+                    "primary-fixed": "#d5e3ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#002416",
+                    "surface-variant": "#d3e4fe",
+                    "on-background": "#0b1c30",
+                    "surface-container": "#e5eeff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#737780",
+                    "on-surface-variant": "#43474f",
+                    "secondary-fixed-dim": "#c4c7c9",
+                    "primary": "#001e40",
+                    "primary-container": "#003366",
+                    "on-primary-fixed": "#001b3c",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-surface": "#0b1c30",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "inverse-surface": "#213145",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed": "#191c1e",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#003c27",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "inverse-primary": "#a7c8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-padding-mobile": "20px",
+                    "stack-sm": "12px",
+                    "stack-lg": "40px",
+                    "container-padding-desktop": "40px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Public Sans"],
+                    "headline-md": ["Public Sans"],
+                    "label-caps": ["Public Sans"],
+                    "price-display": ["Public Sans"],
+                    "body-lg": ["Public Sans"],
+                    "body-md": ["Public Sans"],
+                    "headline-lg": ["Public Sans"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom styles for hidden radio inputs to enable styling via peer */
+        .issue-radio-input:checked + .issue-card {
+            border-color: #ba1a1a; /* error */
+            background-color: #ffdad6; /* error-container */
+            color: #93000a; /* on-error-container */
+        }
+        .issue-radio-input:checked + .issue-card .icon-unselected { display: none; }
+        .issue-radio-input:checked + .issue-card .icon-selected { display: block; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen antialiased flex flex-col font-body-md text-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Task-Focused Header (Navigation Shell Suppressed per rules) -->
+<header class="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant px-container-padding-mobile h-16 flex items-center justify-between">
+<button class="p-2 -ml-2 rounded-full hover:bg-surface-variant text-on-surface transition-colors flex items-center justify-center" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">close</span>
+</button>
+<h1 class="font-headline-md text-headline-md absolute left-1/2 -translate-x-1/2">Report an Issue</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-container-padding-mobile py-stack-md flex flex-col gap-stack-lg max-w-3xl mx-auto w-full pb-32">
+<!-- Context Alert (Sparingly using red accent for urgency) -->
+<div class="bg-error-container rounded-xl p-4 flex items-start gap-3 shadow-sm border border-error/20">
+<span class="material-symbols-outlined text-error mt-0.5" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-error-container text-base">Safety First</span>
+<span class="font-body-md text-body-md text-on-error-container opacity-90 mt-1">If you are in immediate physical danger, please contact local emergency services immediately.</span>
+</div>
+</div>
+<form class="flex flex-col gap-stack-md" onsubmit="event.preventDefault();">
+<!-- Issue Type Selection (Bento Grid Style) -->
+<fieldset class="flex flex-col gap-stack-sm">
+<legend class="font-headline-md text-headline-md mb-2">What happened?</legend>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+<!-- Option: Lost Parcel -->
+<label class="relative cursor-pointer group">
+<input class="issue-radio-input sr-only" name="issue_type" type="radio" value="lost_parcel"/>
+<div class="issue-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-md hover:border-primary-fixed-dim h-full">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">package_2</span>
+<span class="font-body-md text-body-md font-medium">Lost Parcel</span>
+</div>
+</label>
+<!-- Option: Damaged Parcel -->
+<label class="relative cursor-pointer group">
+<input class="issue-radio-input sr-only" name="issue_type" type="radio" value="damaged_parcel"/>
+<div class="issue-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-md hover:border-primary-fixed-dim h-full">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">broken_image</span>
+<span class="font-body-md text-body-md font-medium">Damaged Parcel</span>
+</div>
+</label>
+<!-- Option: Wrong Receiver -->
+<label class="relative cursor-pointer group">
+<input class="issue-radio-input sr-only" name="issue_type" type="radio" value="wrong_receiver"/>
+<div class="issue-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-md hover:border-primary-fixed-dim h-full">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">person_off</span>
+<span class="font-body-md text-body-md font-medium">Wrong Receiver</span>
+</div>
+</label>
+<!-- Option: Traveler Problem -->
+<label class="relative cursor-pointer group">
+<input class="issue-radio-input sr-only" name="issue_type" type="radio" value="traveler_problem"/>
+<div class="issue-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-md hover:border-primary-fixed-dim h-full">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">directions_car</span>
+<span class="font-body-md text-body-md font-medium">Traveler Problem</span>
+</div>
+</label>
+<!-- Option: Sender Problem -->
+<label class="relative cursor-pointer group">
+<input class="issue-radio-input sr-only" name="issue_type" type="radio" value="sender_problem"/>
+<div class="issue-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-md hover:border-primary-fixed-dim h-full">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">outbox</span>
+<span class="font-body-md text-body-md font-medium">Sender Problem</span>
+</div>
+</label>
+<!-- Option: Payment Issue -->
+<label class="relative cursor-pointer group">
+<input class="issue-radio-input sr-only" name="issue_type" type="radio" value="payment_issue"/>
+<div class="issue-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-md hover:border-primary-fixed-dim h-full">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">credit_card_off</span>
+<span class="font-body-md text-body-md font-medium">Payment Issue</span>
+</div>
+</label>
+<!-- Option: Other -->
+<label class="relative cursor-pointer group col-span-2 md:col-span-1">
+<input class="issue-radio-input sr-only" name="issue_type" type="radio" value="other"/>
+<div class="issue-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-md hover:border-primary-fixed-dim h-full">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" style="font-variation-settings: 'FILL' 0;">more_horiz</span>
+<span class="font-body-md text-body-md font-medium">Other</span>
+</div>
+</label>
+</div>
+</fieldset>
+<!-- Description Text Area -->
+<div class="flex flex-col gap-2 mt-4">
+<label class="font-headline-md text-headline-md" for="description">Description</label>
+<div class="relative">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl p-4 font-body-md text-body-md text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary focus:border-primary resize-none shadow-sm transition-shadow" id="description" placeholder="Tell us more about what happened..." rows="5"></textarea>
+</div>
+</div>
+<!-- Evidence Upload -->
+<div class="flex flex-col gap-2 mt-2">
+<label class="font-headline-md text-headline-md flex items-center justify-between">
+<span>Evidence</span>
+<span class="font-body-md text-body-md text-secondary">Optional</span>
+</label>
+<button class="w-full border-2 border-dashed border-outline-variant hover:border-primary rounded-xl h-32 flex flex-col items-center justify-center gap-2 bg-surface-container-lowest hover:bg-surface-container-low transition-colors text-secondary group" type="button">
+<div class="bg-surface-variant p-3 rounded-full group-hover:bg-primary-fixed group-hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">photo_camera</span>
+</div>
+<span class="font-body-md text-body-md group-hover:text-primary transition-colors">Tap to upload photos</span>
+</button>
+</div>
+</form>
+</main>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/95 backdrop-blur-md border-t border-outline-variant p-container-padding-mobile pb-safe shadow-[0_-4px_20px_rgba(0,51,102,0.05)] z-40">
+<div class="max-w-3xl mx-auto w-full">
+<!-- Using Error color for primary action to signify urgency and high stakes -->
+<button class="w-full bg-error hover:bg-on-error-container text-on-error py-4 rounded-xl font-label-caps text-label-caps text-[14px] tracking-widest uppercase transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">send</span>
+                Submit Report
+            </button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Business Shipment History - RIDEEL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#e0e3e5",
+                      "secondary": "#5c5f61",
+                      "on-primary-container": "#799dd6",
+                      "secondary-fixed": "#e0e3e5",
+                      "inverse-on-surface": "#eaf1ff",
+                      "outline-variant": "#c3c6d1",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-container": "#00b27b",
+                      "on-secondary-fixed-variant": "#444749",
+                      "on-secondary-container": "#626567",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "surface-tint": "#3a5f94",
+                      "error-container": "#ffdad6",
+                      "background": "#f8f9ff",
+                      "primary-fixed": "#d5e3ff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#dce9ff",
+                      "surface-container-low": "#eff4ff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#002416",
+                      "surface-variant": "#d3e4fe",
+                      "on-background": "#0b1c30",
+                      "surface-container": "#e5eeff",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed": "#6ffbbe",
+                      "surface-dim": "#cbdbf5",
+                      "surface-container-highest": "#d3e4fe",
+                      "outline": "#737780",
+                      "on-surface-variant": "#43474f",
+                      "secondary-fixed-dim": "#c4c7c9",
+                      "primary": "#001e40",
+                      "primary-container": "#003366",
+                      "on-primary-fixed": "#001b3c",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-surface": "#0b1c30",
+                      "on-primary-fixed-variant": "#1f477b",
+                      "inverse-surface": "#213145",
+                      "on-secondary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-secondary-fixed": "#191c1e",
+                      "on-tertiary-fixed": "#002113",
+                      "tertiary-container": "#003c27",
+                      "primary-fixed-dim": "#a7c8ff",
+                      "inverse-primary": "#a7c8ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "gutter": "16px",
+                      "container-padding-mobile": "20px",
+                      "stack-sm": "12px",
+                      "stack-lg": "40px",
+                      "container-padding-desktop": "40px",
+                      "stack-md": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Public Sans"
+                      ],
+                      "headline-md": [
+                              "Public Sans"
+                      ],
+                      "label-caps": [
+                              "Public Sans"
+                      ],
+                      "price-display": [
+                              "Public Sans"
+                      ],
+                      "body-lg": [
+                              "Public Sans"
+                      ],
+                      "body-md": [
+                              "Public Sans"
+                      ],
+                      "headline-lg": [
+                              "Public Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "price-display": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+          font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Hide scrollbar for horizontal scroll areas */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen selection:bg-primary-fixed selection:text-on-primary-fixed pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<button aria-label="Menu" class="text-primary hover:bg-surface-container transition-colors p-2 rounded-full flex items-center justify-center opacity-80 duration-100">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">RIDEEL</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="user_profile_photo" class="w-full h-full object-cover" data-alt="A professional headshot of a courier delivery driver in modern urban attire. The lighting is crisp and natural, highlighting a trustworthy expression. Soft, bright urban background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8OCf4O3t30vJoVdYQggSSFn5EAtihnv7h5u_YRv4jN976_OADzlh0ovBGKyYBsDPCyVHyceLk35UV8_lzF53LelffOf-W7RXQxNYiE2_QJO0xET7SPC1c96qcInugkwQZsJ8S6DfPyEoSbvqaVaNnb7mFkmCpatofyopYUe1m0dPuyNkK4XadXD7YUGhuEtx8wSfEPXCo9tBuDrTJukVma-SDcs-Hj4RdXPss3XeyDS0F_T4Yh5zM"/>
+</div>
+</header>
+<!-- NavigationDrawer (Hidden on Mobile, Visible on Desktop) -->
+<nav class="hidden md:flex fixed inset-y-0 left-0 z-[60] flex flex-col py-stack-md h-full w-80 rounded-r-xl bg-surface shadow-xl border-r border-outline-variant top-16">
+<div class="px-container-padding-mobile mb-8">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-container flex-shrink-0">
+<img alt="User profile picture" class="w-full h-full object-cover" data-alt="A professional headshot of a courier delivery driver in modern urban attire. The lighting is crisp and natural, highlighting a trustworthy expression. Soft, bright urban background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6umJuejvpjQM4_Nt4ekQRfBWp0KZwJ5NxNBdOSnBVOZ-iWQgXXpXxIrY1cX03UHxOC6EPJzNkQgc5R219unKUMmADhvOUMdGhMgpQx1HIbAuzRasFco9ow2R2HNcEw1HzqJzHR7e89Dt7_rNCH-GhMSBhMlc2J7Lvwxz_1U5niMfjEhhOmM9bMZvOyNsxWJLJiaedbfran6bbzehi-bYyK0AMLIm7Tdws02URTswf5DsFO54kBKdB"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Rohan Sharma</h2>
+<p class="font-body-md text-body-md text-secondary">Verified Sender &amp; Traveler</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-1">Rating: 4.9/5.0</p>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-2 space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full mx-2 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-body-md text-body-md">My Profile</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full mx-2 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-body-md text-body-md">Verification Center</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full mx-2 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md">Payment Methods</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-full mx-2 scale-[0.99] duration-200" href="#">
+<span class="material-symbols-outlined fill">history</span>
+<span class="font-body-md text-body-md font-semibold">Transaction History</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full mx-2 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full mx-2 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">policy</span>
+<span class="font-body-md text-body-md">Legal</span>
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="pt-24 px-container-padding-mobile md:px-container-padding-desktop md:ml-80 max-w-7xl mx-auto pb-stack-lg">
+<!-- Page Header -->
+<div class="mb-stack-md flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Shipment History</h1>
+<p class="font-body-md text-body-md text-secondary mt-1">Manage and track your B2B logistics.</p>
+</div>
+<button class="hidden md:flex items-center gap-2 bg-primary-container text-on-primary px-4 py-2 rounded-lg hover:bg-primary-fixed-variant transition-colors">
+<span class="material-symbols-outlined">download</span>
+<span class="font-body-md text-body-md">Export Report</span>
+</button>
+</div>
+<!-- Filter Tabs -->
+<div class="mb-stack-md overflow-x-auto no-scrollbar pb-2">
+<div class="flex gap-2 min-w-max">
+<button class="px-4 py-2 rounded-full bg-primary-container text-on-primary font-body-md text-body-md font-semibold transition-colors">All</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-md text-body-md border border-outline-variant hover:bg-surface-container-highest transition-colors">Active</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-md text-body-md border border-outline-variant hover:bg-surface-container-highest transition-colors">In Transit</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-md text-body-md border border-outline-variant hover:bg-surface-container-highest transition-colors">Delivered</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-md text-body-md border border-outline-variant hover:bg-surface-container-highest transition-colors">Cancelled</button>
+</div>
+</div>
+<!-- Bento Grid Layout for Shipments -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md">
+<!-- Shipment Card 1 (Active/In Transit Focus) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow p-stack-sm flex flex-col relative overflow-hidden group">
+<!-- Status Badge -->
+<div class="absolute top-4 right-4 flex items-center gap-1 bg-surface-container-low text-primary px-2 py-1 rounded-full border border-primary-fixed">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span>
+<span class="font-label-caps text-label-caps">In Transit</span>
+</div>
+<div class="mb-4 pt-1">
+<p class="font-label-caps text-label-caps text-secondary uppercase tracking-wider mb-1">Oct 24, 2023</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">BULK-9921</h3>
+</div>
+<div class="flex items-center gap-3 mb-6 relative">
+<div class="flex flex-col items-center">
+<div class="w-3 h-3 rounded-full bg-primary border-2 border-surface-container-lowest z-10"></div>
+<div class="w-0.5 h-8 bg-primary"></div>
+<div class="w-3 h-3 rounded-full border-2 border-primary bg-surface-container-lowest z-10"></div>
+</div>
+<div class="flex flex-col justify-between h-16 w-full">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md font-semibold text-on-surface">Mumbai</span>
+<span class="font-label-caps text-label-caps text-secondary">08:00 AM</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md font-semibold text-on-surface">Pune</span>
+<span class="font-label-caps text-label-caps text-secondary">Est. 14:00 PM</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-auto border-t border-outline-variant pt-4">
+<div>
+<p class="font-label-caps text-label-caps text-secondary">Parcel Count</p>
+<p class="font-body-lg text-body-lg text-on-surface font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] text-primary">package_2</span> 15
+                        </p>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-label-caps text-secondary">Total Cost</p>
+<p class="font-price-display text-price-display text-primary">₹2,450</p>
+</div>
+</div>
+</div>
+<!-- Shipment Card 2 (Delivered) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow p-stack-sm flex flex-col relative overflow-hidden group opacity-80">
+<div class="absolute top-4 right-4 flex items-center gap-1 bg-tertiary-fixed-dim/20 text-on-tertiary-fixed-variant px-2 py-1 rounded-full border border-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span class="font-label-caps text-label-caps">Delivered</span>
+</div>
+<div class="mb-4 pt-1">
+<p class="font-label-caps text-label-caps text-secondary uppercase tracking-wider mb-1">Oct 22, 2023</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">BULK-9844</h3>
+</div>
+<div class="flex items-center gap-3 mb-6 relative">
+<div class="flex flex-col items-center">
+<div class="w-3 h-3 rounded-full bg-outline border-2 border-surface-container-lowest z-10"></div>
+<div class="w-0.5 h-8 bg-outline"></div>
+<div class="w-3 h-3 rounded-full bg-outline border-2 border-surface-container-lowest z-10"></div>
+</div>
+<div class="flex flex-col justify-between h-16 w-full">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md font-semibold text-on-surface">Delhi</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md font-semibold text-on-surface">Jaipur</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-auto border-t border-outline-variant pt-4">
+<div>
+<p class="font-label-caps text-label-caps text-secondary">Parcel Count</p>
+<p class="font-body-lg text-body-lg text-on-surface font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] text-outline">package_2</span> 8
+                        </p>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-label-caps text-secondary">Total Cost</p>
+<p class="font-price-display text-price-display text-on-surface">₹1,200</p>
+</div>
+</div>
+</div>
+<!-- Shipment Card 3 (Cancelled) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow p-stack-sm flex flex-col relative overflow-hidden group opacity-70 bg-error-container/10">
+<div class="absolute top-4 right-4 flex items-center gap-1 bg-error-container text-on-error-container px-2 py-1 rounded-full border border-error/20">
+<span class="material-symbols-outlined text-[14px]">cancel</span>
+<span class="font-label-caps text-label-caps">Cancelled</span>
+</div>
+<div class="mb-4 pt-1">
+<p class="font-label-caps text-label-caps text-secondary uppercase tracking-wider mb-1">Oct 20, 2023</p>
+<h3 class="font-headline-md text-headline-md text-on-surface line-through decoration-error/50">BULK-9710</h3>
+</div>
+<div class="flex items-center gap-3 mb-6 relative">
+<div class="flex flex-col items-center">
+<div class="w-3 h-3 rounded-full border-2 border-outline bg-surface-container-lowest z-10"></div>
+<div class="w-0.5 h-8 bg-outline/30 border-l border-dashed border-outline/50"></div>
+<div class="w-3 h-3 rounded-full border-2 border-outline bg-surface-container-lowest z-10"></div>
+</div>
+<div class="flex flex-col justify-between h-16 w-full text-secondary">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md font-semibold">Bengaluru</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md font-semibold">Chennai</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-auto border-t border-outline-variant pt-4">
+<div>
+<p class="font-label-caps text-label-caps text-secondary">Parcel Count</p>
+<p class="font-body-lg text-body-lg text-secondary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">package_2</span> 42
+                        </p>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-label-caps text-secondary">Total Cost</p>
+<p class="font-price-display text-price-display text-secondary">₹8,900</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Hidden on Desktop, Visible on Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 bg-surface-container-lowest px-4 pb-safe border-t border-outline-variant shadow-[0_-4px_20px_rgba(0,51,102,0.08)]">
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary-container transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary-container transition-all" href="#">
+<span class="material-symbols-outlined">package_2</span>
+<span class="font-label-caps text-label-caps mt-1">Deliveries</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary-container transition-all" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-label-caps text-label-caps mt-1">Trips</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary relative after:content-[''] after:absolute after:-bottom-1 after:w-1 after:h-1 after:bg-primary after:rounded-full scale-95 duration-150" href="#">
+<span class="material-symbols-outlined fill">history</span>
+<span class="font-label-caps text-label-caps mt-1 font-bold">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary-container transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

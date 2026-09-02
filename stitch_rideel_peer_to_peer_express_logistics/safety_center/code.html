@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rideel Safety Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#001e40",
+                        "inverse-primary": "#a7c8ff",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-container": "#003c27",
+                        "on-primary-fixed": "#001b3c",
+                        "secondary-fixed": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-secondary-container": "#626567",
+                        "background": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary-container": "#799dd6",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#213145",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "outline": "#737780",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#3a5f94",
+                        "outline-variant": "#c3c6d1",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#d5e3ff",
+                        "primary-container": "#003366",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-secondary-fixed-variant": "#444749",
+                        "secondary": "#5c5f61",
+                        "on-surface-variant": "#43474f"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "stack-lg": "40px",
+                        "base": "8px",
+                        "safe-bottom": "env(safe-area-inset-bottom)"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-md": ["Public Sans"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    },
+                    boxShadow: {
+                        'ambient': '0px 4px 20px rgba(0, 51, 102, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen antialiased flex flex-col">
+<!-- TopAppBar (from JSON) -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-50 fixed top-0 transition-colors duration-200">
+<button aria-label="Menu" class="text-on-surface-variant hover:bg-surface-container p-2 rounded-full flex items-center justify-center transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg font-bold text-primary tracking-tight uppercase">RIDEEL</h1>
+<button aria-label="Notifications" class="text-on-surface-variant hover:bg-surface-container p-2 rounded-full flex items-center justify-center transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-24 pb-32 md:pb-24 px-container-padding-mobile md:px-container-padding-desktop max-w-[1200px] mx-auto w-full">
+<!-- Hero Section -->
+<section class="mb-stack-lg text-center md:text-left flex flex-col md:flex-row items-center gap-stack-md">
+<div class="flex-1">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high text-primary-container rounded-full font-label-caps text-label-caps uppercase mb-stack-sm">
+<span class="material-symbols-outlined text-[16px] icon-fill">shield</span> Trust &amp; Security
+                </div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-stack-sm">Rideel Safety Center</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                    Your peace of mind is our priority. Explore our comprehensive safety protocols, verification processes, and support systems designed to protect every transaction on the Rideel network.
+                </p>
+</div>
+<div class="hidden md:block w-48 h-48 rounded-full bg-surface-container-low border-8 border-surface flex items-center justify-center shadow-ambient relative overflow-hidden">
+<div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary via-transparent to-transparent"></div>
+<span class="material-symbols-outlined text-8xl text-primary icon-fill z-10">admin_panel_settings</span>
+</div>
+</section>
+<!-- Bento Grid Safety Sections -->
+<section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-gutter auto-rows-[minmax(160px,auto)]">
+<!-- Identity Verification (Wide) -->
+<article class="col-span-1 md:col-span-2 lg:col-span-2 bg-surface-container-lowest rounded-2xl border border-outline-variant p-stack-md flex flex-col justify-between hover:shadow-ambient hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center group-hover:bg-primary-container transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">how_to_reg</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors duration-300">arrow_forward</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Identity Verification</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Mandatory KYC, government ID validation, and real-time facial recognition for all couriers and senders.</p>
+</div>
+</article>
+<!-- OTP Protection (Square) -->
+<article class="col-span-1 bg-surface-container-lowest rounded-2xl border border-outline-variant p-stack-md flex flex-col justify-between hover:shadow-ambient hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-stack-sm group-hover:bg-primary-container transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">pin</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">OTP Protection</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Secure multi-factor handoffs using dynamically generated codes.</p>
+</div>
+</article>
+<!-- Insurance (Square) -->
+<article class="col-span-1 bg-surface-container-lowest rounded-2xl border border-outline-variant p-stack-md flex flex-col justify-between hover:shadow-ambient hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-stack-sm group-hover:bg-primary-container transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">verified_user</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Insurance</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Opt-in comprehensive coverage for high-value parcels.</p>
+</div>
+</article>
+<!-- Safe Handoffs (Square) -->
+<article class="col-span-1 md:col-span-2 lg:col-span-1 bg-surface-container-lowest rounded-2xl border border-outline-variant p-stack-md flex flex-col justify-between hover:shadow-ambient hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-stack-sm group-hover:bg-primary-container transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">handshake</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Safe Handoffs</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Community guidelines for conducting secure physical exchanges in public spaces.</p>
+</div>
+</article>
+<!-- Restricted Items (Wide) -->
+<article class="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-2xl border border-outline-variant p-stack-md flex flex-col justify-between hover:shadow-ambient hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="w-12 h-12 rounded-full bg-error-container/20 flex items-center justify-center group-hover:bg-error-container transition-colors duration-300">
+<span class="material-symbols-outlined text-error">gavel</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors duration-300">arrow_forward</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Restricted Items</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Review our strict policy on prohibited goods, hazardous materials, and items requiring special authorization.</p>
+</div>
+</article>
+<!-- Report a User (Square) -->
+<article class="col-span-1 bg-surface-container-lowest rounded-2xl border border-outline-variant p-stack-md flex flex-col justify-between hover:shadow-ambient hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-stack-sm group-hover:bg-primary-container transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">report</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Report a User</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Flag suspicious behavior or guideline violations anonymously.</p>
+</div>
+</article>
+<!-- Lost/Damaged Parcel (Square) -->
+<article class="col-span-1 bg-surface-container-lowest rounded-2xl border border-outline-variant p-stack-md flex flex-col justify-between hover:shadow-ambient hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mb-stack-sm group-hover:bg-primary-container transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">inventory_2</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Issue Resolution</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Initiate claims for lost, delayed, or damaged parcels swiftly.</p>
+</div>
+</article>
+<!-- Emergency Support (Full Width Callout) -->
+<article class="col-span-1 md:col-span-3 lg:col-span-4 bg-error-container rounded-2xl border border-error/20 p-stack-md md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-stack-md relative overflow-hidden mt-stack-sm">
+<div class="absolute -right-10 -top-10 opacity-10">
+<span class="material-symbols-outlined text-[200px] text-error icon-fill">emergency</span>
+</div>
+<div class="relative z-10 max-w-2xl">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-error-container mb-2">Emergency Support</h3>
+<p class="font-body-lg text-body-lg text-on-error-container/80">
+                        In the event of an immediate threat, accident, or critical incident during a delivery, our 24/7 incident response team is ready to assist.
+                    </p>
+</div>
+<button class="relative z-10 shrink-0 bg-[#93000a] text-white px-8 py-4 rounded-xl font-body-lg text-body-lg font-bold flex items-center gap-2 hover:bg-[#ba1a1a] transition-colors shadow-md">
+<span class="material-symbols-outlined">call</span> Contact SOS
+                </button>
+</article>
+</section>
+</main>
+<!-- BottomNavBar (from JSON - Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 z-50 flex justify-around items-center px-4 bg-surface border-t border-outline-variant shadow-md pb-safe">
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="package_2">package_2</span>
+<span class="font-label-caps text-label-caps">Deliveries</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="map">map</span>
+<span class="font-label-caps text-label-caps">Trips</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps">Wallet</span>
+</a>
+<!-- Active State: Profile (Logical parent for Safety Center) -->
+<a class="flex flex-col items-center justify-center text-primary font-bold after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1 hover:opacity-80 scale-95 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1 icon-fill" data-icon="person">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+</body></html>

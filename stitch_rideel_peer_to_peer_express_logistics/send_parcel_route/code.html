@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>RIDEEL - Send a Parcel</title>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d3e4fe",
+                        "on-primary-fixed": "#001b3c",
+                        "error-container": "#ffdad6",
+                        "outline": "#737780",
+                        "outline-variant": "#c3c6d1",
+                        "primary": "#001e40",
+                        "on-primary-container": "#799dd6",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-tertiary-fixed": "#002113",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-dim": "#cbdbf5",
+                        "on-surface-variant": "#43474f",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "primary-fixed": "#d5e3ff",
+                        "secondary-fixed": "#e0e3e5",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#003c27",
+                        "surface-variant": "#d3e4fe",
+                        "primary-container": "#003366",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#5c5f61",
+                        "inverse-primary": "#a7c8ff",
+                        "on-secondary-container": "#626567",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-tint": "#3a5f94",
+                        "on-background": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "base": "8px",
+                        "stack-md": "24px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Public Sans", "sans-serif"],
+                        "body-lg": ["Public Sans", "sans-serif"],
+                        "headline-lg": ["Public Sans", "sans-serif"],
+                        "body-md": ["Public Sans", "sans-serif"],
+                        "headline-lg-mobile": ["Public Sans", "sans-serif"],
+                        "price-display": ["Public Sans", "sans-serif"],
+                        "label-caps": ["Public Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #F8FAFC; /* Level 0 Background */
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+        
+        /* Form Inputs */
+        .input-field {
+            border: 1px solid #c3c6d1;
+            border-radius: 0.5rem;
+            padding: 12px 16px;
+            width: 100%;
+            background: #ffffff;
+            font-size: 16px;
+            color: #0b1c30;
+            transition: all 0.2s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #003366;
+            box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.1);
+        }
+        
+        /* Soft Ambient Shadow */
+        .ambient-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 51, 102, 0.08);
+        }
+        
+        /* Hide scrollbar for horizontal scroll areas */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="text-on-background relative min-h-screen pb-[100px] md:pb-0 pt-[64px]">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-background border-b border-outline-variant dark:border-outline fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding-mobile h-16 pt-safe">
+<button aria-label="Menu" class="text-primary dark:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors rounded-full p-2 -ml-2">
+<span class="material-symbols-outlined" data-icon="menu" data-weight="regular">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed">
+            RIDEEL
+        </h1>
+<button aria-label="Profile" class="hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors rounded-full overflow-hidden w-8 h-8 flex items-center justify-center bg-surface-variant">
+<span class="material-symbols-outlined text-primary" data-icon="person" data-weight="fill" style="font-variation-settings: 'FILL' 1;">person</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[1200px] mx-auto px-container-padding-mobile md:px-container-padding-desktop py-stack-md flex flex-col gap-stack-md">
+<!-- Header Section -->
+<section class="flex flex-col gap-base">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Send a Parcel</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Tell us where it needs to go</p>
+</section>
+<!-- Route Selection Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm ambient-shadow flex flex-col gap-stack-md">
+<!-- Inputs: Pickup & Destination -->
+<div class="relative flex flex-col gap-base pl-8">
+<!-- Vertical Timeline Line -->
+<div class="absolute left-[11px] top-[24px] bottom-[24px] w-[2px] bg-outline-variant border-dashed border-l-2"></div>
+<!-- Pickup City -->
+<div class="relative">
+<div class="absolute -left-[32px] top-1/2 -translate-y-1/2 w-[10px] h-[10px] rounded-full bg-primary z-10 ring-4 ring-surface-container-lowest"></div>
+<label class="block font-label-caps text-label-caps text-secondary mb-1">Pickup city</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" style="font-size: 20px;">location_on</span>
+<input class="input-field pl-10" placeholder="Enter pickup city" type="text" value="Vijayawada"/>
+</div>
+</div>
+<!-- Swap Button -->
+<button aria-label="Swap locations" class="absolute -left-2 top-1/2 -translate-y-1/2 bg-surface-container border border-outline-variant rounded-full p-1 z-20 hover:bg-surface-container-highest transition-colors shadow-sm">
+<span class="material-symbols-outlined text-primary" style="font-size: 16px;">swap_vert</span>
+</button>
+<!-- Destination City -->
+<div class="relative mt-2">
+<div class="absolute -left-[32px] top-1/2 -translate-y-1/2 w-[10px] h-[10px] rounded-full bg-error z-10 ring-4 ring-surface-container-lowest"></div>
+<label class="block font-label-caps text-label-caps text-secondary mb-1">Destination city</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" style="font-size: 20px;">flag</span>
+<input class="input-field pl-10" placeholder="Enter destination city" type="text" value="Hyderabad"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Preferences Section -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<!-- Pickup Method Group -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm ambient-shadow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-stack-sm">Pickup method</h3>
+<div class="flex flex-col gap-base">
+<!-- Option 1 -->
+<label class="flex items-center p-3 rounded-xl border border-primary bg-primary/5 cursor-pointer transition-colors">
+<div class="flex-1">
+<span class="block font-body-md text-body-md font-semibold text-primary">Meet traveler</span>
+<span class="block text-xs text-on-surface-variant">Hand it over directly</span>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+</div>
+<input checked="" class="hidden" name="pickup_method" type="radio" value="meet"/>
+</label>
+<!-- Option 2 -->
+<label class="flex items-center p-3 rounded-xl border border-outline-variant hover:border-outline cursor-pointer transition-colors">
+<div class="flex-1">
+<span class="block font-body-md text-body-md text-on-surface">Pickup point</span>
+<span class="block text-xs text-on-surface-variant">Drop at a partner store</span>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+<input class="hidden" name="pickup_method" type="radio" value="point"/>
+</label>
+</div>
+</div>
+<!-- Delivery Method Group -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm ambient-shadow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-stack-sm">Delivery method</h3>
+<div class="flex flex-col gap-base">
+<!-- Option 1 -->
+<label class="flex items-center p-3 rounded-xl border border-outline-variant hover:border-outline cursor-pointer transition-colors">
+<div class="flex-1">
+<span class="block font-body-md text-body-md text-on-surface">Meet traveler</span>
+<span class="block text-xs text-on-surface-variant">Receiver picks up directly</span>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+<input class="hidden" name="delivery_method" type="radio" value="meet"/>
+</label>
+<!-- Option 2 -->
+<label class="flex items-center p-3 rounded-xl border border-primary bg-primary/5 cursor-pointer transition-colors">
+<div class="flex-1">
+<span class="block font-body-md text-body-md font-semibold text-primary">Destination point</span>
+<span class="block text-xs text-on-surface-variant">Deliver to a partner store</span>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+</div>
+<input checked="" class="hidden" name="delivery_method" type="radio" value="point"/>
+</label>
+</div>
+</div>
+</section>
+<!-- Date & Type Section -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-sm ambient-shadow flex flex-col gap-stack-md">
+<!-- Date Selector -->
+<div>
+<label class="block font-label-caps text-label-caps text-secondary mb-2">Dispatch Date</label>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+<button class="shrink-0 px-4 py-2 rounded-lg bg-primary text-on-primary font-body-md text-body-md font-semibold whitespace-nowrap">Today</button>
+<button class="shrink-0 px-4 py-2 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant font-body-md text-body-md whitespace-nowrap transition-colors">Tomorrow</button>
+<button class="shrink-0 px-4 py-2 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant font-body-md text-body-md whitespace-nowrap transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 16px;">calendar_month</span> Choose Date
+                    </button>
+</div>
+</div>
+<!-- Delivery Type -->
+<div>
+<label class="block font-label-caps text-label-caps text-secondary mb-2">Delivery Speed</label>
+<div class="flex flex-wrap gap-2">
+<label class="flex-1 min-w-[120px] cursor-pointer">
+<input checked="" class="hidden peer" name="speed" type="radio" value="sameday"/>
+<div class="px-4 py-3 rounded-xl border border-outline-variant peer-checked:border-primary peer-checked:bg-primary/5 text-center transition-all">
+<span class="material-symbols-outlined text-primary block mb-1" style="font-size: 24px;">bolt</span>
+<span class="block font-body-md text-body-md font-semibold text-primary">Same day</span>
+</div>
+</label>
+<label class="flex-1 min-w-[120px] cursor-pointer">
+<input class="hidden peer" name="speed" type="radio" value="standard"/>
+<div class="px-4 py-3 rounded-xl border border-outline-variant peer-checked:border-primary peer-checked:bg-primary/5 text-center transition-all hover:bg-surface-variant/50">
+<span class="material-symbols-outlined text-secondary block mb-1" style="font-size: 24px;">local_shipping</span>
+<span class="block font-body-md text-body-md text-on-surface">Standard</span>
+</div>
+</label>
+</div>
+</div>
+</section>
+<!-- Primary Action -->
+<section class="mt-4 pb-stack-lg md:pb-0">
+<button class="w-full bg-primary-container text-on-primary font-headline-md text-headline-md py-4 px-6 rounded-xl hover:bg-primary transition-colors flex items-center justify-center gap-2 ambient-shadow active:scale-[0.98] duration-150">
+                Find Travelers
+                <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
+</button>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 bg-surface-container-lowest dark:bg-inverse-surface px-4 pb-safe border-t border-outline-variant dark:border-outline shadow-lg">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim relative after:content-[''] after:absolute after:-bottom-1 after:w-1 after:h-1 after:bg-primary after:rounded-full hover:text-primary-container transition-all active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="home" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<!-- Deliveries -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary-container transition-all active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="package_2" data-weight="regular">package_2</span>
+<span class="font-label-caps text-label-caps">Deliveries</span>
+</a>
+<!-- Trips -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary-container transition-all active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="local_shipping" data-weight="regular">local_shipping</span>
+<span class="font-label-caps text-label-caps">Trips</span>
+</a>
+<!-- Wallet -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary-container transition-all active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="account_balance_wallet" data-weight="regular">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps">Wallet</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary-container transition-all active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="person" data-weight="regular">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+<!-- Map UI / Background Graphic (Decorative for visual depth) -->
+<div class="fixed inset-0 z-[-1] opacity-5 pointer-events-none" data-alt="A highly detailed, subtle vector map background pattern featuring stylized top-down street grids and terrain lines. Designed in a light-mode corporate minimal aesthetic, using soft slate grays and muted blues on a pure white background. The pattern is continuous and non-distracting, conveying a sense of global logistics and travel infrastructure." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBWYPopV3OhEC0fmx4Xg_uVbvsVg_lXN607ghpUwtDfY-_6kGnHjIqy7DOtMynVpfYZ8VGf_nRRPTGg4DvJjKsADbDAY19N63r3E8kN667jA2HwbpkaZ83urb8Wwiyzg02NOi0d8NUxhu6QERqLzXWrf4GjrzwfdTYEOekvTKmkInAuec-rWdJNUNSfxuvgEQLkS232ZSu_-ruYegghhQ2KKNR5VNbGz71gXxEDBojXotkR7DCCX63q'); background-size: cover; background-position: center;"></div>
+</body></html>

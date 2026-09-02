@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rideel - Financial Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-container": "#e0e3e5",
+                        "secondary": "#5c5f61",
+                        "on-primary-container": "#799dd6",
+                        "secondary-fixed": "#e0e3e5",
+                        "inverse-on-surface": "#eaf1ff",
+                        "outline-variant": "#c3c6d1",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-secondary-container": "#626567",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-tint": "#3a5f94",
+                        "error-container": "#ffdad6",
+                        "background": "#f8f9ff",
+                        "primary-fixed": "#d5e3ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#002416",
+                        "surface-variant": "#d3e4fe",
+                        "on-background": "#0b1c30",
+                        "surface-container": "#e5eeff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-highest": "#d3e4fe",
+                        "outline": "#737780",
+                        "on-surface-variant": "#43474f",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "primary": "#001e40",
+                        "primary-container": "#003366",
+                        "on-primary-fixed": "#001b3c",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface": "#0b1c30",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "inverse-surface": "#213145",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-container": "#003c27",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "inverse-primary": "#a7c8ff"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        base: "8px",
+                        gutter: "16px",
+                        "container-padding-mobile": "20px",
+                        "stack-sm": "12px",
+                        "stack-lg": "40px",
+                        "container-padding-desktop": "40px",
+                        "stack-md": "24px"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-lg": ["Public Sans"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "price-display": ["18px", { lineHeight: "24px", fontWeight: "700" }],
+                        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "headline-lg": ["30px", { lineHeight: "38px", letterSpacing: "-0.02em", fontWeight: "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md flex antialiased">
+<!-- NavigationDrawer (Shared Component) -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 p-stack-md bg-surface-container-low dark:bg-surface-container-highest border-r border-outline-variant dark:border-outline flat no shadows h-full w-72 z-40 transition-all duration-200 ease-in-out">
+<div class="flex items-center gap-3 mb-stack-lg pl-3">
+<img alt="Admin Portrait" class="w-12 h-12 rounded-full object-cover border-2 border-primary-container" data-alt="A professional headshot of a business administrator in a modern office setting. The lighting is bright and even, highlighting a confident expression. Corporate modern aesthetic with minimal background clutter." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-X7PFqg3xsArVQEoq_O0QgWllXAWeN6T5s6JBBrd5uNbJXsT69ogaqBC4AnYcAjQNcmeb-U1ehjveBC9Xo_bUITjaug8d9Ia38du6t8_xFfs7AKmiMJgAXmIvlu_XEIxVPHluacx3UVbkPXJm3fpSsgK4fa_2bPBO8ANTBFfdyV4T_PaInWNXlQWhflLd_QocIN7r_ET55Fgri74uYQlkevTiFy6NztoTQard42DBjRBIYHC2UjOX"/>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary dark:text-inverse-primary font-bold">Admin Dashboard</h2>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Platform Overview</p>
+</div>
+</div>
+<div class="flex-grow flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">group</span>
+<span class="font-body-md text-body-md">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">local_post_office</span>
+<span class="font-body-md text-body-md">Deliveries</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-bold hover:bg-surface-container-high dark:hover:bg-surface-container transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-body-md text-body-md">Payments</span>
+</a>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant">
+<p class="font-label-caps text-label-caps text-on-surface-variant text-center">v1.0.4</p>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-72 flex flex-col min-h-screen">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-surface dark:bg-surface-dim flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-50 docked full-width top-0 border-b border-outline-variant dark:border-outline flat no shadows transition-colors duration-200">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-surface-variant hover:bg-surface-container rounded-full p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="material-symbols-outlined text-primary hidden md:block">local_shipping</span>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary tracking-tight">RIDEEL</h1>
+</div>
+<div class="flex items-center gap-4">
+<h2 class="hidden md:block font-headline-md text-headline-md text-on-surface">Financial Overview</h2>
+<button class="text-on-surface-variant hover:bg-surface-container p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 p-container-padding-mobile md:p-container-padding-desktop max-w-[1400px] mx-auto w-full">
+<h1 class="md:hidden font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface mb-stack-md">Financial Overview</h1>
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md mb-stack-lg">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md border border-outline-variant shadow-[0_4px_20px_rgba(0,51,102,0.03)] hover:shadow-[0_4px_20px_rgba(0,51,102,0.08)] transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Total Escrow Volume</p>
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-1.5 rounded-lg">account_balance</span>
+</div>
+<p class="font-headline-lg text-headline-lg text-primary-container font-bold">₹1,452,000</p>
+<div class="flex items-center gap-1 mt-2 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span class="font-body-md text-body-md">+12.5% this month</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md border border-outline-variant shadow-[0_4px_20px_rgba(0,51,102,0.03)] hover:shadow-[0_4px_20px_rgba(0,51,102,0.08)] transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Total Payouts</p>
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-1.5 rounded-lg">payments</span>
+</div>
+<p class="font-headline-lg text-headline-lg text-primary-container font-bold">₹1,120,500</p>
+<div class="flex items-center gap-1 mt-2 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="font-body-md text-body-md">482 successful transfers</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md border border-outline-variant shadow-[0_4px_20px_rgba(0,51,102,0.03)] hover:shadow-[0_4px_20px_rgba(0,51,102,0.08)] transition-shadow bg-gradient-to-br from-surface-container-lowest to-surface-container-low">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Commissions Earned</p>
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-1.5 rounded-lg">monetization_on</span>
+</div>
+<p class="font-headline-lg text-headline-lg text-primary-container font-bold">₹331,500</p>
+<div class="flex items-center gap-1 mt-2 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span class="font-body-md text-body-md">+8.2% this month</span>
+</div>
+</div>
+</div>
+<!-- Transaction Table Section -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-[0_4px_20px_rgba(0,51,102,0.03)] overflow-hidden">
+<!-- Table Header / Filters -->
+<div class="p-stack-md border-b border-outline-variant flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface-bright">
+<h3 class="font-headline-md text-headline-md text-on-surface">Transactions</h3>
+<div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+<!-- Search -->
+<div class="relative w-full sm:w-auto flex-grow sm:flex-grow-0">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors font-body-md text-body-md placeholder:text-on-surface-variant" placeholder="Search ID or User..." type="text"/>
+</div>
+<!-- Status Filter -->
+<select class="px-4 py-2 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface cursor-pointer w-full sm:w-auto appearance-none pr-10 relative">
+<option value="all">All Status</option>
+<option value="escrow">In Escrow</option>
+<option value="released">Released</option>
+<option value="refunded">Refunded</option>
+</select>
+<!-- Date Filter -->
+<button class="px-4 py-2 bg-surface rounded-lg border border-outline-variant flex items-center gap-2 hover:bg-surface-container transition-colors w-full sm:w-auto justify-center">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">calendar_today</span>
+<span class="font-body-md text-body-md text-on-surface">Last 30 Days</span>
+</button>
+<!-- Export -->
+<button class="px-4 py-2 bg-primary-container text-on-primary rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity w-full sm:w-auto justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span class="font-label-caps text-label-caps">EXPORT</span>
+</button>
+</div>
+</div>
+<!-- Responsive Table Wrapper -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low font-label-caps text-label-caps text-on-surface-variant uppercase whitespace-nowrap">
+<tr>
+<th class="px-6 py-4 font-semibold">Transaction ID</th>
+<th class="px-6 py-4 font-semibold">Delivery ID</th>
+<th class="px-6 py-4 font-semibold">Sender</th>
+<th class="px-6 py-4 font-semibold">Traveler</th>
+<th class="px-6 py-4 font-semibold">Amount</th>
+<th class="px-6 py-4 font-semibold">Commission</th>
+<th class="px-6 py-4 font-semibold">Payout</th>
+<th class="px-6 py-4 font-semibold">Status</th>
+<th class="px-6 py-4 font-semibold text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant text-body-md font-body-md text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="px-6 py-4 font-medium text-primary">TX-9021A</td>
+<td class="px-6 py-4 text-on-surface-variant hover:text-primary cursor-pointer underline decoration-outline-variant underline-offset-2">DEL-441</td>
+<td class="px-6 py-4">Rohan K.</td>
+<td class="px-6 py-4">Arjun P.</td>
+<td class="px-6 py-4 font-price-display text-price-display text-on-surface">₹2,400</td>
+<td class="px-6 py-4 text-secondary">₹400</td>
+<td class="px-6 py-4 font-semibold">₹2,000</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container border border-primary-fixed text-primary text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                        Escrow
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest/50 transition-colors bg-surface-bright/30">
+<td class="px-6 py-4 font-medium text-primary">TX-9018B</td>
+<td class="px-6 py-4 text-on-surface-variant hover:text-primary cursor-pointer underline decoration-outline-variant underline-offset-2">DEL-439</td>
+<td class="px-6 py-4">Priya S.</td>
+<td class="px-6 py-4">Vikram M.</td>
+<td class="px-6 py-4 font-price-display text-price-display text-on-surface">₹1,500</td>
+<td class="px-6 py-4 text-secondary">₹300</td>
+<td class="px-6 py-4 font-semibold">₹1,200</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high border border-tertiary-fixed text-tertiary text-xs font-semibold">
+<span class="material-symbols-outlined text-[12px]">check</span>
+                                        Released
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="px-6 py-4 font-medium text-primary">TX-9015C</td>
+<td class="px-6 py-4 text-on-surface-variant hover:text-primary cursor-pointer underline decoration-outline-variant underline-offset-2">DEL-420</td>
+<td class="px-6 py-4">Amit M.</td>
+<td class="px-6 py-4">Rahul D.</td>
+<td class="px-6 py-4 font-price-display text-price-display text-on-surface">₹4,500</td>
+<td class="px-6 py-4 text-secondary">₹500</td>
+<td class="px-6 py-4 font-semibold">₹4,000</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container border border-error/20 text-error text-xs font-semibold">
+<span class="material-symbols-outlined text-[12px]">undo</span>
+                                        Refunded
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-4 border-t border-outline-variant flex items-center justify-between text-on-surface-variant font-body-md text-body-md bg-surface-bright">
+<p>Showing 1 to 10 of 245 entries</p>
+<div class="flex items-center gap-2">
+<button class="p-1 rounded hover:bg-surface-container disabled:opacity-50" disabled=""><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="w-8 h-8 rounded bg-primary-container text-on-primary font-bold">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container">3</button>
+<span class="px-2">...</span>
+<button class="p-1 rounded hover:bg-surface-container"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

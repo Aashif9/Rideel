@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Live Tracking - RIDEEL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d3e4fe",
+                        "on-primary-fixed": "#001b3c",
+                        "error-container": "#ffdad6",
+                        "outline": "#737780",
+                        "outline-variant": "#c3c6d1",
+                        "primary": "#001e40",
+                        "on-primary-container": "#799dd6",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-tertiary-fixed": "#002113",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-dim": "#cbdbf5",
+                        "on-surface-variant": "#43474f",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "primary-fixed": "#d5e3ff",
+                        "secondary-fixed": "#e0e3e5",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#003c27",
+                        "surface-variant": "#d3e4fe",
+                        "primary-container": "#003366",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#5c5f61",
+                        "inverse-primary": "#a7c8ff",
+                        "on-secondary-container": "#626567",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-tint": "#3a5f94",
+                        "on-background": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "base": "8px",
+                        "stack-md": "24px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-lg-mobile": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "label-caps": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>.map-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCkF72LMkvsNoUwn9Q93s2M7qkQrbgcZDjsuThn479FB6WaOHA-d0vEqUNfvULUo6mlfE0u5qqo3R2dhSSri4KAxughGtUj08esqJNgIgvPvYMYoVln2ndUSHrW0tj4bxxyBlQJNdRankSKvr4PEPJ2JGE5tiVjbgQotVSf2knUw7CGRDLJyw1Zggix7EvWbZnsMUJKIry1hljsnRmjpHre0x8E4Fo3kfB2X2SylLLm5sijupkmi7rO);
+    background-size: cover;
+    background-position: center
+    }
+.shadow-ambient {
+    box-shadow: 0 4px 20px rgba(0, 51, 102, 0.08)
+    }
+.pulse-dot {
+    animation: pulse 2s infinite
+    }
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 51, 102, 0.4);
+        } 70% {
+        box-shadow: 0 0 0 10px rgba(0, 51, 102, 0);
+        } 100% {
+        box-shadow: 0 0 0 0 rgba(0, 51, 102, 0);
+        }
+    }
+/* Suppressing default navigation as this is a focused task screen (Tracking) */</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background h-screen w-screen overflow-hidden flex flex-col font-body-md text-body-md antialiased select-none">
+<!-- Full Screen Map Background -->
+<div class="absolute inset-0 z-0 map-bg" data-alt="A clean, modern top-down satellite map view showing a route between Vijayawada and Hyderabad. The map uses a minimalist, light-mode corporate aesthetic with subtle pastel colors for terrain and high-contrast lines for roads. The overall tone is bright, functional, and tech-forward." data-location="Vijayawada to Hyderabad, India" style="">
+<!-- Mock Map Route Overlay -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="opacity-40" d="M 20 80 Q 40 60 50 50 T 80 20" fill="none" stroke="#001e40" stroke-dasharray="1 1" stroke-width="0.5"></path>
+<!-- Pickup Point A -->
+<circle cx="20" cy="80" fill="#ffffff" r="1.5" stroke="#001e40" stroke-width="0.5"></circle>
+<text dy="0.3" fill="#001e40" font-family="Public Sans" font-size="0.8" font-weight="700" text-anchor="middle" x="20" y="80">A</text>
+<!-- Dropoff Point B -->
+<circle cx="80" cy="20" fill="#ffffff" r="1.5" stroke="#ba1a1a" stroke-width="0.5"></circle>
+<text dy="0.3" fill="#ba1a1a" font-family="Public Sans" font-size="0.8" font-weight="700" text-anchor="middle" x="80" y="20">B</text>
+<!-- Moving Vehicle Marker -->
+<g class="transition-transform duration-1000 ease-linear" transform="translate(45, 55)">
+<circle class="shadow-md" cx="0" cy="0" fill="#ffffff" r="2"></circle>
+<circle class="pulse-dot" cx="0" cy="0" fill="#003366" r="1"></circle>
+</g>
+</svg>
+</div>
+<!-- Top Floating Header Card (Replaces TopAppBar for focused task) -->
+<header class="relative z-10 w-full px-container-padding-mobile pt-safe mt-4 md:px-container-padding-desktop md:mt-8 flex justify-center">
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient border border-outline-variant w-full max-w-md p-4 flex items-center justify-between">
+<button aria-label="Go back" class="p-2 -ml-2 text-on-surface hover:bg-surface-container rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex-1 text-center">
+<h1 class="font-headline-md text-headline-md text-primary">Parcel is on the way</h1>
+<p class="text-secondary mt-1">ID: TRK-99824A</p>
+</div>
+<button aria-label="More options" class="p-2 -mr-2 text-on-surface hover:bg-surface-container rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Bottom Tracking Details Panel -->
+<div class="relative z-10 mt-auto w-full md:flex md:justify-center">
+<div class="bg-surface-container-lowest w-full max-w-md rounded-t-[24px] md:rounded-[24px] md:mb-8 shadow-ambient border-t md:border border-outline-variant overflow-hidden flex flex-col max-h-[707px]">
+<!-- Drag Handle (Mobile) -->
+<div class="w-full flex justify-center pt-3 pb-1 md:hidden">
+<div class="w-12 h-1.5 bg-secondary-fixed rounded-full"></div>
+</div>
+<!-- Scrollable Content Area -->
+<div class="px-container-padding-mobile py-4 overflow-y-auto">
+<!-- ETA & Distance Summary -->
+<div class="flex items-end justify-between mb-stack-md pb-4 border-b border-outline-variant">
+<div>
+<p class="text-secondary mb-1">Estimated Arrival</p>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">6:42 PM</h2>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center px-3 py-1 bg-surface-container rounded-full text-primary font-headline-md text-sm">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="route">route</span>
+                            24 km away
+                        </span>
+</div>
+</div>
+<!-- Courier Info (Compact) -->
+<div class="flex items-center bg-surface p-3 rounded-lg mb-stack-md border border-outline-variant">
+<img alt="Courier Avatar" class="w-12 h-12 rounded-full object-cover mr-4" data-alt="A professional headshot of an Indian delivery courier wearing a clean, branded navy blue polo shirt. The courier has a friendly, trustworthy expression. Bright, clean lighting against a neutral light grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzIsqy_Fgfac7P-ck5XDq2ewNB1P6orlMlx_-Lt6N9A7TYeuvVaP558q1lSQBZqik2NAJQrg1RTIeUfbIwWwk8byGZDsxaVtbts-HJvk1BFBzpcKnGAylN5qxJnLnjxHpzyqJoZmuJtZ8nRLVE8rVLhO4oAvKioaoc-OxQYMMeiTxFQDAiLgrMi7Umxv-5DgzfXXOPlQKGbKx0roROrSgvQlqzmNreidr1ooypOUPymMncYGnxSUhZ"/>
+<div class="flex-1">
+<p class="font-headline-md text-base text-on-surface">Rohan S.</p>
+<div class="flex items-center text-secondary text-sm">
+<span class="material-symbols-outlined text-sm mr-1 text-tertiary-container" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+                            4.9 (120+ deliveries)
+                        </div>
+</div>
+<div class="flex gap-2">
+<button aria-label="Call Courier" class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+</button>
+<button aria-label="Chat with Courier" class="w-10 h-10 rounded-full bg-surface-container-highest text-primary flex items-center justify-center hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+<!-- Status Timeline -->
+<div class="pl-2 relative">
+<!-- Vertical Line (Progress) -->
+<div class="absolute left-[15px] top-4 bottom-4 w-0.5 bg-outline-variant"></div>
+<div class="absolute left-[15px] top-4 h-1/2 w-0.5 bg-primary"></div> <!-- Active Progress -->
+<!-- Step 1: Confirmed -->
+<div class="flex relative z-10 mb-6">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center mr-4 shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-on-primary text-[14px]" data-icon="check">check</span>
+</div>
+<div>
+<p class="font-headline-md text-base text-on-surface">Booking confirmed</p>
+<p class="text-secondary text-sm">1:30 PM • Vijayawada</p>
+</div>
+</div>
+<!-- Step 2: Picked up -->
+<div class="flex relative z-10 mb-6">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center mr-4 shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-on-primary text-[14px]" data-icon="check">check</span>
+</div>
+<div>
+<p class="font-headline-md text-base text-on-surface">Parcel picked up</p>
+<p class="text-secondary text-sm">2:15 PM • Secure Handover</p>
+</div>
+</div>
+<!-- Step 3: In Transit (Active) -->
+<div class="flex relative z-10 mb-6">
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center mr-4 shrink-0 mt-0.5">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+</div>
+<div>
+<p class="font-headline-md text-base text-primary">In transit</p>
+<p class="text-secondary text-sm">Currently moving towards destination</p>
+</div>
+</div>
+<!-- Step 4: Delivered (Pending) -->
+<div class="flex relative z-10">
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-outline-variant flex items-center justify-center mr-4 shrink-0 mt-0.5">
+</div>
+<div>
+<p class="font-headline-md text-base text-outline">Delivered</p>
+<p class="text-outline text-sm">Estimated 6:42 PM</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Action -->
+<div class="p-container-padding-mobile border-t border-outline-variant bg-surface mt-auto">
+<button class="w-full py-3 bg-surface text-error border border-error-container hover:bg-error-container rounded-lg font-headline-md text-base transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined mr-2 text-[20px]" data-icon="report">report</span>
+                    Report Issue
+                </button>
+</div>
+</div>
+</div>
+</body></html>

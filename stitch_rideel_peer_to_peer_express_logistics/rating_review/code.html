@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rating &amp; Review</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Public Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e0e3e5",
+                    "secondary": "#5c5f61",
+                    "on-primary-container": "#799dd6",
+                    "secondary-fixed": "#e0e3e5",
+                    "inverse-on-surface": "#eaf1ff",
+                    "outline-variant": "#c3c6d1",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#00b27b",
+                    "on-secondary-fixed-variant": "#444749",
+                    "on-secondary-container": "#626567",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-tint": "#3a5f94",
+                    "error-container": "#ffdad6",
+                    "background": "#f8f9ff",
+                    "primary-fixed": "#d5e3ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#002416",
+                    "surface-variant": "#d3e4fe",
+                    "on-background": "#0b1c30",
+                    "surface-container": "#e5eeff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#737780",
+                    "on-surface-variant": "#43474f",
+                    "secondary-fixed-dim": "#c4c7c9",
+                    "primary": "#001e40",
+                    "primary-container": "#003366",
+                    "on-primary-fixed": "#001b3c",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-surface": "#0b1c30",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "inverse-surface": "#213145",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed": "#191c1e",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#003c27",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "inverse-primary": "#a7c8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-padding-mobile": "20px",
+                    "stack-sm": "12px",
+                    "stack-lg": "40px",
+                    "container-padding-desktop": "40px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": [
+                            "Public Sans"
+                    ],
+                    "headline-md": [
+                            "Public Sans"
+                    ],
+                    "label-caps": [
+                            "Public Sans"
+                    ],
+                    "price-display": [
+                            "Public Sans"
+                    ],
+                    "body-lg": [
+                            "Public Sans"
+                    ],
+                    "body-md": [
+                            "Public Sans"
+                    ],
+                    "headline-lg": [
+                            "Public Sans"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "price-display": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "30px",
+                            {
+                                    "lineHeight": "38px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        /* Smooth scrolling and tap highlights removal for mobile feel */
+        html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #F8FAFC; } /* Level 0 Background */
+    </style>
+</head>
+<body class="bg-surface antialiased flex flex-col min-h-screen relative font-body-md text-on-surface">
+<!-- Header (Task-Focused / Transactional) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding-mobile h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<button class="text-primary hover:bg-surface-container transition-colors rounded-full p-2 -ml-2 flex items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary">Rating &amp; Review</h1>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 w-full max-w-md mx-auto pt-24 px-container-padding-mobile pb-32 flex flex-col gap-stack-lg">
+<!-- Context Card -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-sm border border-outline-variant flex items-center gap-stack-sm shadow-[0_4px_20px_rgba(0,51,102,0.03)]">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a young Indian male courier with a friendly smile, wearing a clean, modern navy blue uniform jacket, set against a bright, minimalist outdoor background with soft daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-XMvAnV7qtqVZKiXuVTP4g6tTje_6iOgqN3yhkhKyJOncT5FFLllH1_7lGmo55_e4p2KprH-FQi4_94wTtW9tSf8maOZoFgqJiisMg4TnkYdTo00uoSe3WQyv974Jdyvhr_8y-hxlgImoqfBOzC2OZ3y9UZyfAhFiteyF64L_OHvvxbTstKI4BFhJEvWoPw_kA-tdQeHlabdhgY9Q4yEc4NPTryUrj-U_Rw88-oaBAYJ2VN2ML9hq"/>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Delivery Completed By</span>
+<span class="font-headline-md text-headline-md text-primary">Rohan Sharma</span>
+</div>
+</div>
+<!-- Rating Section -->
+<section class="flex flex-col items-center text-center gap-stack-sm">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">How was your experience?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[280px]">Your feedback helps us improve the delivery experience for everyone.</p>
+<div class="flex justify-center gap-3 mt-4" id="star-rating-container">
+<!-- Stars: 4 filled, 1 empty as an example state -->
+<button class="text-primary-container transition-transform hover:scale-110 active:scale-95 focus:outline-none">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="text-primary-container transition-transform hover:scale-110 active:scale-95 focus:outline-none">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="text-primary-container transition-transform hover:scale-110 active:scale-95 focus:outline-none">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="text-primary-container transition-transform hover:scale-110 active:scale-95 focus:outline-none">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button class="text-outline-variant transition-transform hover:scale-110 active:scale-95 focus:outline-none">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 0;">star</span>
+</button>
+</div>
+</section>
+<!-- Chip Tags Section -->
+<section class="flex flex-col gap-stack-sm">
+<h3 class="font-headline-md text-headline-md text-primary text-sm">What went well?</h3>
+<div class="flex flex-wrap gap-2">
+<!-- Active Chip -->
+<button class="px-4 py-2 rounded-full border border-primary-container bg-primary-container text-on-primary-container font-label-caps text-label-caps transition-colors active:scale-95">
+                    On time
+                </button>
+<!-- Inactive Chip -->
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container transition-colors active:scale-95">
+                    Professional
+                </button>
+<!-- Active Chip -->
+<button class="px-4 py-2 rounded-full border border-primary-container bg-primary-container text-on-primary-container font-label-caps text-label-caps transition-colors active:scale-95">
+                    Safe
+                </button>
+<!-- Inactive Chip -->
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container transition-colors active:scale-95">
+                    Good communication
+                </button>
+</div>
+</section>
+<!-- Text Input Section -->
+<section class="flex flex-col gap-stack-sm">
+<label class="font-headline-md text-headline-md text-primary text-sm" for="review-notes">Write a review (optional)</label>
+<textarea class="w-full rounded-xl border border-outline-variant bg-surface-container-lowest p-4 font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none placeholder:text-outline-variant transition-colors" id="review-notes" placeholder="Share more details about your delivery..." rows="4"></textarea>
+</section>
+</main>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant p-container-padding-mobile pb-8 z-50 shadow-[0_-4px_20px_rgba(0,51,102,0.08)]">
+<div class="max-w-md mx-auto">
+<button class="w-full h-14 bg-primary-container text-on-primary rounded-xl font-headline-md text-headline-md flex items-center justify-center transition-all hover:opacity-90 active:scale-[0.98] shadow-md">
+                Submit Review
+            </button>
+</div>
+</div>
+</body></html>

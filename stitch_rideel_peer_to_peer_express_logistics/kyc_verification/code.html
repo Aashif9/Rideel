@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KYC Verification - RIDEEL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#001e40",
+                        "inverse-primary": "#a7c8ff",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-container": "#003c27",
+                        "on-primary-fixed": "#001b3c",
+                        "secondary-fixed": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-secondary-container": "#626567",
+                        "background": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary-container": "#799dd6",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#213145",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "outline": "#737780",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#3a5f94",
+                        "outline-variant": "#c3c6d1",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#d5e3ff",
+                        "primary-container": "#003366",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-secondary-fixed-variant": "#444749",
+                        "secondary": "#5c5f61",
+                        "on-surface-variant": "#43474f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "stack-lg": "40px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #E2E8F0;
+            box-shadow: 0px 4px 20px rgba(0, 51, 102, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- Header / TopAppBar (Modified for transactional screen - back button) -->
+<header class="bg-surface flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-50 border-b border-outline-variant flat no shadows">
+<button class="flex items-center text-primary transition-colors duration-200 hover:bg-surface-container p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary">RIDEEL</span>
+<div class="w-10"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-3xl mx-auto px-container-padding-mobile py-stack-lg flex flex-col gap-stack-md">
+<!-- Header Section -->
+<div class="text-center mb-stack-sm">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-2">Verify your identity</h1>
+<p class="font-body-lg text-body-lg text-secondary">Complete your KYC to unlock all features and start delivering securely.</p>
+</div>
+<!-- Progress Stepper -->
+<div class="flex items-center justify-between max-w-md mx-auto w-full mb-stack-md">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold font-body-md text-body-md mb-2">1</div>
+<span class="font-label-caps text-label-caps text-primary">ID</span>
+</div>
+<div class="flex-grow h-0.5 bg-outline-variant mx-4 mt-[-24px]"></div>
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant flex items-center justify-center font-bold font-body-md text-body-md mb-2">2</div>
+<span class="font-label-caps text-label-caps text-secondary">Selfie</span>
+</div>
+<div class="flex-grow h-0.5 bg-outline-variant mx-4 mt-[-24px]"></div>
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant flex items-center justify-center font-bold font-body-md text-body-md mb-2">3</div>
+<span class="font-label-caps text-label-caps text-secondary">Done</span>
+</div>
+</div>
+<!-- Content Card -->
+<div class="glass-card rounded-[24px] p-stack-md md:p-container-padding-desktop">
+<h2 class="font-headline-md text-headline-md text-primary mb-stack-sm">Government ID</h2>
+<p class="font-body-md text-body-md text-secondary mb-stack-md">Please upload a clear, legible photo of your valid government-issued ID.</p>
+<!-- Document Selection -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-sm mb-stack-md">
+<label class="relative flex flex-col items-center p-stack-sm border border-outline-variant rounded-xl cursor-pointer hover:bg-surface-container transition-colors">
+<input checked="" class="absolute opacity-0" name="doc_type" type="radio"/>
+<span class="material-symbols-outlined text-primary mb-2 text-3xl" data-icon="badge">badge</span>
+<span class="font-body-md text-body-md text-primary font-semibold">Aadhaar</span>
+<div class="absolute inset-0 border-2 border-primary rounded-xl opacity-100 pointer-events-none"></div>
+</label>
+<label class="relative flex flex-col items-center p-stack-sm border border-outline-variant rounded-xl cursor-pointer hover:bg-surface-container transition-colors">
+<input class="absolute opacity-0" name="doc_type" type="radio"/>
+<span class="material-symbols-outlined text-secondary mb-2 text-3xl" data-icon="credit_card">credit_card</span>
+<span class="font-body-md text-body-md text-secondary font-semibold">PAN</span>
+</label>
+<label class="relative flex flex-col items-center p-stack-sm border border-outline-variant rounded-xl cursor-pointer hover:bg-surface-container transition-colors">
+<input class="absolute opacity-0" name="doc_type" type="radio"/>
+<span class="material-symbols-outlined text-secondary mb-2 text-3xl" data-icon="import_contacts">import_contacts</span>
+<span class="font-body-md text-body-md text-secondary font-semibold">Passport</span>
+</label>
+</div>
+<!-- Upload Area -->
+<div class="border-2 border-dashed border-outline-variant rounded-[12px] p-stack-lg flex flex-col items-center justify-center bg-surface-container-low mb-stack-md hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-secondary mb-2 text-4xl group-hover:text-primary transition-colors" data-icon="cloud_upload">cloud_upload</span>
+<span class="font-body-md text-body-md text-primary font-semibold">Tap to upload front</span>
+<span class="font-label-caps text-label-caps text-secondary mt-1">JPEG, PNG up to 5MB</span>
+</div>
+<!-- Travelers Additional Docs -->
+<div class="mt-stack-lg pt-stack-md border-t border-outline-variant">
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-sm">For Travelers (Optional)</h3>
+<p class="font-body-md text-body-md text-secondary mb-stack-md">If you plan to use your own vehicle, provide these details to access driver features.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+<button class="flex items-center justify-between p-stack-sm border border-outline-variant rounded-xl hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="directions_car">directions_car</span>
+<span class="font-body-md text-body-md text-on-background">Driving Licence</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="add_circle">add_circle</span>
+</button>
+<button class="flex items-center justify-between p-stack-sm border border-outline-variant rounded-xl hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="description">description</span>
+<span class="font-body-md text-body-md text-on-background">Vehicle Registration</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="add_circle">add_circle</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Security Message -->
+<div class="flex items-start gap-3 mt-stack-sm p-4 bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="lock">lock</span>
+<p class="font-body-md text-body-md text-secondary">Your data is securely encrypted. We only use this information to verify your identity and ensure a safe platform for everyone. See our <a class="text-primary underline" href="#">Privacy Policy</a>.</p>
+</div>
+<!-- Action Buttons -->
+<div class="mt-stack-md pb-stack-lg flex gap-4">
+<button class="flex-1 py-3 px-6 rounded-[12px] bg-primary text-on-primary font-body-lg text-body-lg font-bold shadow-md hover:opacity-90 transition-opacity">
+                Continue
+            </button>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIDEEL - Earnings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#001e40",
+                        "inverse-primary": "#a7c8ff",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-container": "#003c27",
+                        "on-primary-fixed": "#001b3c",
+                        "secondary-fixed": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-secondary-container": "#626567",
+                        "background": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary-container": "#799dd6",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#213145",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "outline": "#737780",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#3a5f94",
+                        "outline-variant": "#c3c6d1",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#d5e3ff",
+                        "primary-container": "#003366",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-secondary-fixed-variant": "#444749",
+                        "secondary": "#5c5f61",
+                        "on-surface-variant": "#43474f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "stack-lg": "40px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface text-primary font-headline-md text-headline-md docked full-width top-0 border-b border-outline-variant flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-surface-container transition-colors duration-200 rounded-full p-2 -ml-2" data-icon="local_shipping">local_shipping</span>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">RIDEEL</h1>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container transition-colors duration-200 rounded-full p-2 cursor-pointer" data-icon="notifications">notifications</span>
+</header>
+<!-- NavigationDrawer (Desktop) -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 p-stack-md h-full w-72 bg-surface-container-low border-r border-outline-variant pt-24 z-40">
+<div class="flex items-center gap-4 mb-stack-lg px-4">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="A professional studio portrait of a reliable middle-aged delivery driver. He has a warm, confident expression and is wearing a clean, modern uniform jacket. The lighting is soft and flattering, creating a trustworthy and approachable mood. The background is a crisp, pure white seamlessly blending with a high-end corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9cB_fkELNiGvsjVhGa906SA1bGRO0aVzbqfvmv03fApYx0ba3JgBXqnHPwjUUEwfPbAoWO_bgf9NCbxvepam67RjKnTYRkte4O7xnjViyF4e79pcty0Hv3OuFgcL1QjaXMsX-51lStjynRdm9NVcGZOlnCIVIt8UuvwSyBZAriM4Dh2k9no1IEEBcvYBlPGs5eOQf-VoXgaztCOHE9oyIDCaotV6NbkYjtm_BQz22WQPyronD2DB-"/>
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Admin Dashboard</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Platform Overview</p>
+</div>
+</div>
+<ul class="flex flex-col gap-2 flex-grow">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Users
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="local_post_office">local_post_office</span>
+                    Deliveries
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-bold transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                    Payments
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-4 py-2 text-on-surface-variant font-label-caps text-label-caps opacity-70">
+            v1.0.4
+        </div>
+</nav>
+<!-- Main Content -->
+<main class="md:ml-72 pt-16 md:pt-24 px-container-padding-mobile md:px-container-padding-desktop pb-32 md:pb-12 w-full max-w-7xl mx-auto flex flex-col gap-stack-md">
+<header class="mb-stack-sm mt-stack-md">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary">Your earnings</h2>
+</header>
+<!-- Bento Grid Layout for Earnings -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-stack-md">
+<!-- Total Balance Card (Large, Gradient) -->
+<div class="md:col-span-12 lg:col-span-8 bg-gradient-to-br from-primary to-surface-tint rounded-[24px] p-stack-md shadow-[0px_4px_20px_rgba(0,51,102,0.08)] text-on-primary relative overflow-hidden flex flex-col justify-between min-h-[200px]">
+<!-- Decorative background elements -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-40 h-40 bg-tertiary-fixed opacity-10 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none"></div>
+<div class="relative z-10 flex justify-between items-start">
+<div>
+<p class="font-body-md text-body-md text-primary-fixed opacity-80 mb-1">Total Balance</p>
+<h3 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold">₹8,420</h3>
+</div>
+<span class="material-symbols-outlined text-primary-fixed bg-white/10 p-2 rounded-full" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div class="relative z-10 mt-stack-lg flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
+<div class="flex gap-stack-sm flex-wrap">
+<div>
+<p class="font-label-caps text-label-caps text-primary-fixed opacity-70 mb-1">Available</p>
+<p class="font-price-display text-price-display">₹2,840</p>
+</div>
+</div>
+<button class="bg-white text-primary font-body-md text-body-md font-bold py-3 px-6 rounded-xl hover:bg-surface-variant transition-colors shadow-sm self-start sm:self-auto">
+                        Withdraw
+                     </button>
+</div>
+</div>
+<!-- Breakdown Cards (Side by Side on mobile, stacked on desktop in grid) -->
+<div class="md:col-span-6 lg:col-span-4 flex flex-col gap-stack-md">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-md shadow-sm flex-1 flex flex-col justify-center">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-on-tertiary-container bg-tertiary-fixed-dim/20 p-2 rounded-full text-sm" data-icon="trending_up">trending_up</span>
+<p class="font-body-md text-body-md text-on-surface-variant">This month</p>
+</div>
+<h4 class="font-price-display text-price-display text-on-surface">₹3,250</h4>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-md shadow-sm flex-1 flex flex-col justify-center">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-secondary bg-secondary-container/50 p-2 rounded-full text-sm" data-icon="pending">pending</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Pending</p>
+</div>
+<h4 class="font-price-display text-price-display text-on-surface">₹360</h4>
+</div>
+</div>
+<!-- Chart Card -->
+<div class="md:col-span-6 lg:col-span-7 bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-md shadow-sm min-h-[300px] flex flex-col">
+<div class="flex justify-between items-center mb-stack-md">
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Activity</h3>
+<select class="bg-surface border-outline-variant rounded-lg text-sm text-on-surface-variant py-1 pl-2 pr-8 focus:ring-primary focus:border-primary">
+<option>This Week</option>
+<option>Last Week</option>
+<option>This Month</option>
+</select>
+</div>
+<!-- Simple CSS Bar Chart Representation -->
+<div class="flex-grow flex items-end justify-between gap-2 md:gap-4 mt-auto pt-8 border-b border-outline-variant pb-2 relative h-full w-full px-2">
+<!-- Background grid lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none pb-2">
+<div class="border-t border-outline-variant/30 w-full"></div>
+<div class="border-t border-outline-variant/30 w-full"></div>
+<div class="border-t border-outline-variant/30 w-full"></div>
+<div class="border-t border-outline-variant/30 w-full"></div>
+</div>
+<!-- Bars -->
+<div class="w-full max-w-[40px] bg-primary-fixed rounded-t-sm h-[30%] relative group cursor-pointer transition-all hover:bg-primary-container z-10"><span class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded pointer-events-none transition-opacity shadow-sm">₹150</span></div>
+<div class="w-full max-w-[40px] bg-primary-fixed rounded-t-sm h-[50%] relative group cursor-pointer transition-all hover:bg-primary-container z-10"><span class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded pointer-events-none transition-opacity shadow-sm">₹250</span></div>
+<div class="w-full max-w-[40px] bg-primary-fixed rounded-t-sm h-[20%] relative group cursor-pointer transition-all hover:bg-primary-container z-10"><span class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded pointer-events-none transition-opacity shadow-sm">₹100</span></div>
+<div class="w-full max-w-[40px] bg-primary-fixed rounded-t-sm h-[80%] relative group cursor-pointer transition-all hover:bg-primary-container z-10"><span class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded pointer-events-none transition-opacity shadow-sm">₹400</span></div>
+<div class="w-full max-w-[40px] bg-primary rounded-t-sm h-[100%] relative group cursor-pointer transition-all z-10 shadow-[0_0_10px_rgba(0,51,102,0.3)]"><span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary py-1 px-2 rounded pointer-events-none shadow-sm text-xs font-bold">₹500</span></div>
+<div class="w-full max-w-[40px] bg-primary-fixed rounded-t-sm h-[40%] relative group cursor-pointer transition-all hover:bg-primary-container z-10"><span class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded pointer-events-none transition-opacity shadow-sm">₹200</span></div>
+<div class="w-full max-w-[40px] bg-primary-fixed rounded-t-sm h-[60%] relative group cursor-pointer transition-all hover:bg-primary-container z-10"><span class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded pointer-events-none transition-opacity shadow-sm">₹300</span></div>
+</div>
+<div class="flex justify-between text-[10px] text-on-surface-variant mt-2 px-2 uppercase tracking-wider font-semibold">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span class="text-primary font-bold">Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+<!-- Transaction History -->
+<div class="md:col-span-12 lg:col-span-5 bg-surface-container-lowest border border-outline-variant rounded-[24px] p-stack-md shadow-sm">
+<div class="flex justify-between items-center mb-stack-md">
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Recent Transactions</h3>
+<a class="text-sm text-primary font-semibold hover:underline" href="#">View All</a>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Transaction Item 1 -->
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant/50 last:border-0 last:pb-0">
+<div class="flex items-center gap-3">
+<div class="bg-surface-container-low p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Delivery RD784610</p>
+<p class="text-xs text-on-surface-variant">Today, 2:45 PM</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-price-display text-[16px] text-on-tertiary-container">+ ₹180</p>
+<span class="inline-block bg-tertiary-fixed-dim/20 text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded-full mt-1">Completed</span>
+</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant/50 last:border-0 last:pb-0">
+<div class="flex items-center gap-3">
+<div class="bg-surface-container-low p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Delivery RD784521</p>
+<p class="text-xs text-on-surface-variant">Yesterday, 11:30 AM</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-price-display text-[16px] text-on-tertiary-container">+ ₹120</p>
+<span class="inline-block bg-tertiary-fixed-dim/20 text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded-full mt-1">Completed</span>
+</div>
+</div>
+<!-- Transaction Item 3 (Pending Example) -->
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant/50 last:border-0 last:pb-0">
+<div class="flex items-center gap-3">
+<div class="bg-surface-container-low p-2 rounded-lg text-secondary">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Delivery RD784400</p>
+<p class="text-xs text-on-surface-variant">Yesterday, 9:15 AM</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-price-display text-[16px] text-on-surface">+ ₹360</p>
+<span class="inline-block bg-secondary-container/50 text-on-surface-variant text-[10px] font-bold px-2 py-0.5 rounded-full mt-1">Pending</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 z-50 flex justify-around items-center px-4 bg-surface border-t border-outline-variant shadow-md pb-safe">
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150 p-2" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150 p-2" href="#">
+<span class="material-symbols-outlined" data-icon="package_2">package_2</span>
+<span class="font-label-caps text-label-caps mt-1">Deliveries</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150 p-2" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-caps text-label-caps mt-1">Trips</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1 hover:opacity-80 transition-transform duration-150 p-2 scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps mt-1">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 transition-transform duration-150 p-2" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

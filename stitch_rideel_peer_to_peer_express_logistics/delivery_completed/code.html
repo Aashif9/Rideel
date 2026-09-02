@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Delivery Completed - Rideel</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e0e3e5",
+                    "secondary": "#5c5f61",
+                    "on-primary-container": "#799dd6",
+                    "secondary-fixed": "#e0e3e5",
+                    "inverse-on-surface": "#eaf1ff",
+                    "outline-variant": "#c3c6d1",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#00b27b",
+                    "on-secondary-fixed-variant": "#444749",
+                    "on-secondary-container": "#626567",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-tint": "#3a5f94",
+                    "error-container": "#ffdad6",
+                    "background": "#f8f9ff",
+                    "primary-fixed": "#d5e3ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#002416",
+                    "surface-variant": "#d3e4fe",
+                    "on-background": "#0b1c30",
+                    "surface-container": "#e5eeff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#737780",
+                    "on-surface-variant": "#43474f",
+                    "secondary-fixed-dim": "#c4c7c9",
+                    "primary": "#001e40",
+                    "primary-container": "#003366",
+                    "on-primary-fixed": "#001b3c",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-surface": "#0b1c30",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "inverse-surface": "#213145",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed": "#191c1e",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#003c27",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "inverse-primary": "#a7c8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-padding-mobile": "20px",
+                    "stack-sm": "12px",
+                    "stack-lg": "40px",
+                    "container-padding-desktop": "40px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Public Sans"],
+                    "headline-md": ["Public Sans"],
+                    "label-caps": ["Public Sans"],
+                    "price-display": ["Public Sans"],
+                    "body-lg": ["Public Sans"],
+                    "body-md": ["Public Sans"],
+                    "headline-lg": ["Public Sans"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased pb-[80px]">
+<!-- Success Screen Content (Suppressed Nav Shell as this is a linear/transactional success screen) -->
+<main class="min-h-screen flex flex-col pt-16 px-container-padding-mobile pb-stack-lg max-w-md mx-auto relative overflow-hidden">
+<!-- Decorative Background Elements -->
+<div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-surface-container-highest to-background -z-10 pointer-events-none"></div>
+<!-- Success Header -->
+<div class="flex flex-col items-center justify-center pt-stack-md pb-stack-lg animate-[fade-in-up_0.5s_ease-out]">
+<div class="w-20 h-20 bg-primary-container rounded-full flex items-center justify-center mb-stack-sm shadow-xl relative">
+<!-- Inner glow -->
+<div class="absolute inset-0 bg-primary-fixed rounded-full animate-ping opacity-20"></div>
+<span class="material-symbols-outlined text-4xl text-on-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary text-center">Parcel Delivered</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">ID: RD784521</p>
+</div>
+<!-- Delivery Info Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant p-stack-sm mb-stack-md flex flex-col gap-stack-sm animate-[fade-in-up_0.6s_ease-out]">
+<div class="flex justify-between items-center pb-stack-sm border-b border-outline-variant">
+<span class="font-body-md text-body-md text-on-surface-variant">Delivered at</span>
+<span class="font-headline-md text-headline-md text-primary">6:38 PM</span>
+</div>
+<!-- Route -->
+<div class="flex items-center gap-3 py-2">
+<div class="flex flex-col items-center justify-center w-6">
+<span class="material-symbols-outlined text-outline text-lg">trip_origin</span>
+<div class="h-6 w-0.5 bg-outline-variant my-1"></div>
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="flex flex-col gap-5 flex-1">
+<span class="font-body-lg text-body-lg text-on-surface">Vijayawada</span>
+<span class="font-body-lg text-body-lg text-on-surface">Hyderabad</span>
+</div>
+</div>
+</div>
+<!-- Photo Proof Placeholder -->
+<div class="bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant overflow-hidden mb-stack-md relative animate-[fade-in-up_0.7s_ease-out]">
+<img class="w-full h-48 object-cover object-center" data-alt="A clean, close-up photograph of a medium-sized cardboard parcel resting on a modern front porch during late afternoon light. The photo serves as proof of delivery in a professional courier app context. The lighting is warm and natural, creating soft shadows. The overall aesthetic is bright, reassuring, and high-quality, fitting a premium service platform in light mode." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwM1oY2eCPY-8AXpUmTfpiw6e7FrkA9rKBqQz_326YIa8GZtp2Mn5ir00xAzPjnhu4BQesuO8-ZkE8Ws9DgXKXPj4ZykMw_jbQ2zpyyE9Za8fJ75Encfmt6cMHBEsQZS5nBfAus8ZcagJYJrWrA1I0s4k99EuGdla_xcIpSwjBYgFaPl19OORbxuX9a9P369OCvxuoXuSf5CrDr6ghdVCfAsfpeyJ3v4SMzcfTkuOoGP6QnzBNxqYa"/>
+<div class="absolute bottom-2 right-2 bg-background/80 backdrop-blur px-2 py-1 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-primary">photo_camera</span>
+<span class="font-label-caps text-label-caps text-primary">Proof</span>
+</div>
+</div>
+<!-- Traveler Info -->
+<div class="bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant p-stack-sm mb-stack-lg flex items-center justify-between animate-[fade-in-up_0.8s_ease-out]">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border-2 border-surface-container-lowest" data-alt="A professional headshot of an Indian male traveler named Rahul Kumar. He is wearing a neat, casual shirt and smiling warmly in a well-lit, neutral environment. The lighting is flattering and soft, projecting trust and reliability suitable for a premium peer-to-peer delivery platform profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0Sv51cb7ZNqkI0SunTsGvNuX18QkHEnq_EaPS49yFg3uuN5mmdQNBzsUcKQthaVx6BUcBVkoJJuABcMrJc246UuukcAPYHdF3sau_6YKLxZ1RSLihpKvTbkI6LqhNcihxpnZnQkYqVhroaFwL6BApGXunCij8mIkVJiSGUH1htKSFucFVj9Spc7rzNBKh1Y55BHEgYNENNEwMVaCSIrDTJ7_dW5eZWNXuVcVjNAM68hkvJYsJ-fqK"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-fixed-dim rounded-full p-0.5 border-2 border-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-container text-[10px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface-variant">Delivered by</span>
+<span class="font-headline-md text-headline-md text-primary">Rahul Kumar</span>
+</div>
+</div>
+</div>
+<!-- Payment Subtext -->
+<div class="flex items-center justify-center gap-2 mb-stack-lg animate-[fade-in-up_0.9s_ease-out]">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">lock_open</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Payment released to traveler</span>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 mt-auto animate-[fade-in-up_1s_ease-out]">
+<button class="w-full bg-primary-container text-on-primary font-headline-md text-headline-md py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">star</span>
+                Rate Traveler
+            </button>
+<button class="w-full bg-surface-container text-primary font-body-lg text-body-lg py-4 rounded-xl flex items-center justify-center hover:bg-surface-container-highest transition-colors">
+                View Delivery Details
+            </button>
+</div>
+</main>
+<style>
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</body></html>

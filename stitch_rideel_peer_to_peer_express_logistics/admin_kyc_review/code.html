@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KYC Review - Desktop Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#e0e3e5",
+                      "secondary": "#5c5f61",
+                      "on-primary-container": "#799dd6",
+                      "secondary-fixed": "#e0e3e5",
+                      "inverse-on-surface": "#eaf1ff",
+                      "outline-variant": "#c3c6d1",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-container": "#00b27b",
+                      "on-secondary-fixed-variant": "#444749",
+                      "on-secondary-container": "#626567",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "surface-tint": "#3a5f94",
+                      "error-container": "#ffdad6",
+                      "background": "#f8f9ff",
+                      "primary-fixed": "#d5e3ff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#dce9ff",
+                      "surface-container-low": "#eff4ff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#002416",
+                      "surface-variant": "#d3e4fe",
+                      "on-background": "#0b1c30",
+                      "surface-container": "#e5eeff",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed": "#6ffbbe",
+                      "surface-dim": "#cbdbf5",
+                      "surface-container-highest": "#d3e4fe",
+                      "outline": "#737780",
+                      "on-surface-variant": "#43474f",
+                      "secondary-fixed-dim": "#c4c7c9",
+                      "primary": "#001e40",
+                      "primary-container": "#003366",
+                      "on-primary-fixed": "#001b3c",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-surface": "#0b1c30",
+                      "on-primary-fixed-variant": "#1f477b",
+                      "inverse-surface": "#213145",
+                      "on-secondary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-secondary-fixed": "#191c1e",
+                      "on-tertiary-fixed": "#002113",
+                      "tertiary-container": "#003c27",
+                      "primary-fixed-dim": "#a7c8ff",
+                      "inverse-primary": "#a7c8ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "gutter": "16px",
+                      "container-padding-mobile": "20px",
+                      "stack-sm": "12px",
+                      "stack-lg": "40px",
+                      "container-padding-desktop": "40px",
+                      "stack-md": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Public Sans"
+                      ],
+                      "headline-md": [
+                              "Public Sans"
+                      ],
+                      "label-caps": [
+                              "Public Sans"
+                      ],
+                      "price-display": [
+                              "Public Sans"
+                      ],
+                      "body-lg": [
+                              "Public Sans"
+                      ],
+                      "body-md": [
+                              "Public Sans"
+                      ],
+                      "headline-lg": [
+                              "Public Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "price-display": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+      </script>
+<style>
+          body {
+              font-family: 'Public Sans', sans-serif;
+              background-color: #F8FAFC; /* Level 0 Background */
+          }
+      </style>
+</head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden">
+<!-- Navigation Drawer (SideNav) -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 p-stack-md bg-surface-container-low border-r border-outline-variant flat no shadows h-full w-72 z-50">
+<div class="flex items-center space-x-3 mb-8">
+<span class="material-symbols-outlined text-4xl text-primary font-bold">admin_panel_settings</span>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Admin Dashboard</h1>
+<p class="font-body-md text-body-md text-secondary">Platform Overview</p>
+<p class="font-label-caps text-label-caps text-secondary mt-1">v1.0.4</p>
+</div>
+</div>
+<ul class="space-y-2 flex-grow">
+<li>
+<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<!-- Active State -->
+<a class="flex items-center space-x-3 p-3 bg-primary-container text-on-primary-container rounded-lg font-bold transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span>Users</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="local_post_office">local_post_office</span>
+<span>Deliveries</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Payments</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto flex items-center space-x-3 p-3">
+<img alt="Admin Portrait" class="w-10 h-10 rounded-full object-cover border-2 border-primary-container" data-alt="Professional headshot of an Indian corporate administrator in a modern office setting. High key lighting, clean corporate aesthetic, deep blue background. Professional attire, clear focus, realistic photograph." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRIykQ08CEkjnHprZb98td_d8vDm5qs0LmgM0Om5TdfUkn5FLqZA0HVQaoufwF28X2GmRr1xLionLUxdFeqs1elHZ-i_FjxE64ud_bWRimxuxT1Z1d8bBdq1UvRz7ZlCuMZ2oW0qkzCu6RJlZfmwwEqNq4AQBlRzLDlO3_NN4ynh3CGnAVBKhrt2CQg35hwtD-n6oQPoWGtROJuRFPWLiiMmFjho6LMm16HcSA24zZd1aH44CzKkPF"/>
+<div>
+<p class="font-body-md text-body-md font-bold text-on-surface">System Admin</p>
+<p class="font-label-caps text-label-caps text-secondary">Superuser</p>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-72 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-40 bg-surface border-b border-outline-variant shrink-0">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-primary md:hidden cursor-pointer" data-icon="menu">menu</span>
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">KYC Verification Queue</h2>
+</div>
+<div class="flex items-center space-x-4 text-primary">
+<button class="p-2 hover:bg-surface-container rounded-full transition-colors duration-200 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-container-padding-mobile md:p-container-padding-desktop flex flex-col lg:flex-row gap-stack-md">
+<!-- Queue List (Left Column) -->
+<section class="w-full lg:w-1/3 flex flex-col bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm h-full max-h-[800px]">
+<div class="p-4 border-b border-outline-variant bg-surface">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Pending Users</h3>
+<span class="bg-surface-container-high text-primary font-label-caps text-label-caps px-2 py-1 rounded-full">24 Tasks</span>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 border border-outline-variant rounded-lg bg-surface-bright text-body-md font-body-md focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors" placeholder="Search ID or Name..." type="text"/>
+</div>
+</div>
+<div class="overflow-y-auto flex-1">
+<!-- Queue Item 1 (Selected) -->
+<div class="p-4 border-b border-outline-variant bg-primary-container/10 cursor-pointer border-l-4 border-l-primary-container">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center text-primary font-bold text-lg">
+                                    RA
+                                </div>
+<div>
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Rahul Sharma</h4>
+<p class="font-label-caps text-label-caps text-secondary">ID: 9827-DXC</p>
+</div>
+</div>
+<span class="text-xs font-semibold text-secondary flex items-center"><span class="material-symbols-outlined text-[16px] mr-1" data-icon="schedule">schedule</span> 10m ago</span>
+</div>
+<div class="flex space-x-2 mt-2">
+<span class="bg-surface-variant text-on-surface-variant font-label-caps text-label-caps px-2 py-0.5 rounded text-[10px]">Aadhaar</span>
+<span class="bg-surface-variant text-on-surface-variant font-label-caps text-label-caps px-2 py-0.5 rounded text-[10px]">PAN</span>
+</div>
+</div>
+<!-- Queue Item 2 -->
+<div class="p-4 border-b border-outline-variant hover:bg-surface cursor-pointer transition-colors border-l-4 border-l-transparent">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center text-primary font-bold text-lg">
+                                    PK
+                                </div>
+<div>
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Priya Kumar</h4>
+<p class="font-label-caps text-label-caps text-secondary">ID: 4412-MBN</p>
+</div>
+</div>
+<span class="text-xs font-semibold text-secondary flex items-center"><span class="material-symbols-outlined text-[16px] mr-1" data-icon="schedule">schedule</span> 22m ago</span>
+</div>
+<div class="flex space-x-2 mt-2">
+<span class="bg-surface-variant text-on-surface-variant font-label-caps text-label-caps px-2 py-0.5 rounded text-[10px]">Aadhaar</span>
+<span class="bg-surface-variant text-on-surface-variant font-label-caps text-label-caps px-2 py-0.5 rounded text-[10px]">DL</span>
+</div>
+</div>
+<!-- Queue Item 3 -->
+<div class="p-4 border-b border-outline-variant hover:bg-surface cursor-pointer transition-colors border-l-4 border-l-transparent">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center text-primary font-bold text-lg">
+                                    AJ
+                                </div>
+<div>
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Amit Jain</h4>
+<p class="font-label-caps text-label-caps text-secondary">ID: 1109-PQR</p>
+</div>
+</div>
+<span class="text-xs font-semibold text-secondary flex items-center"><span class="material-symbols-outlined text-[16px] mr-1" data-icon="schedule">schedule</span> 1h ago</span>
+</div>
+<div class="flex space-x-2 mt-2">
+<span class="bg-surface-variant text-on-surface-variant font-label-caps text-label-caps px-2 py-0.5 rounded text-[10px]">Aadhaar</span>
+<span class="bg-surface-variant text-on-surface-variant font-label-caps text-label-caps px-2 py-0.5 rounded text-[10px]">PAN</span>
+<span class="bg-surface-variant text-on-surface-variant font-label-caps text-label-caps px-2 py-0.5 rounded text-[10px]">RC</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Detail View (Right Column) -->
+<section class="w-full lg:w-2/3 flex flex-col gap-stack-sm h-full overflow-y-auto pb-20">
+<!-- Verification Status Header -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<div class="flex items-center space-x-3">
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Rahul Sharma</h2>
+<span class="bg-surface-container text-primary font-label-caps text-label-caps px-3 py-1 rounded-full flex items-center"><span class="material-symbols-outlined text-[14px] mr-1" data-icon="hourglass_empty">hourglass_empty</span> Pending Review</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-1">Courier Applicant • Applied: Oct 24, 2023, 10:45 AM</p>
+</div>
+<div class="flex space-x-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-4 py-2 bg-primary-container text-white font-body-md text-body-md font-semibold rounded-lg hover:bg-primary transition-colors flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined mr-2" data-icon="check_circle">check_circle</span>
+                            Approve KYC
+                        </button>
+<button class="px-4 py-2 bg-error-container text-on-error-container font-body-md text-body-md font-semibold rounded-lg hover:bg-error/20 transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined mr-2" data-icon="cancel">cancel</span>
+                             Reject
+                        </button>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-stack-sm flex-1">
+<!-- Identity Match (Left Col) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm shadow-sm flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center">
+<span class="material-symbols-outlined mr-2 text-primary" data-icon="face">face</span>
+                            Identity Verification
+                        </h3>
+<div class="flex flex-col md:flex-row gap-4 mb-6">
+<!-- Selfie -->
+<div class="flex-1 flex flex-col items-center">
+<p class="font-label-caps text-label-caps text-secondary mb-2">Live Selfie</p>
+<div class="w-full h-48 bg-surface-variant rounded-lg overflow-hidden border border-outline-variant relative group">
+<img alt="User Selfie" class="w-full h-full object-cover" data-alt="Clear, well-lit live selfie photo of a young Indian male looking straight at the camera. Neutral expression. Good lighting. Plain white background. Corporate modern style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtl2gMf8Vc3Qt4beBJmXdfM9j0xtzBnFjetA-yj67NUXpaU6gWLD99h-F4Bnv1uaxzMDxAfr-PqLxQYqpg_vA8SIFy5lsIF6x07zSqkUiI4t58poJwefNOK426KBwxlrhk5tUWxlWoQZ7dcNQnBmXfsxLuIReXB28WLIIVdmEYxfsoxbSDu6zpvFIO9TMQhO10T63vMTSQuVQ8Btk-_IP5KWymnQByMVphbKroQvoHJ3-ExlaDsT7M"/>
+<div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="zoom_in">zoom_in</span>
+</div>
+</div>
+</div>
+<!-- Match Indicator -->
+<div class="flex flex-col items-center justify-center px-4">
+<div class="w-12 h-12 rounded-full bg-surface-container text-primary flex items-center justify-center mb-2 shadow-sm border border-outline-variant">
+<span class="material-symbols-outlined text-2xl" data-icon="compare_arrows">compare_arrows</span>
+</div>
+<span class="font-body-md text-body-md font-bold text-on-tertiary-container flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="check_circle">check_circle</span>
+                                    94% Match
+                                </span>
+<span class="font-label-caps text-label-caps text-secondary mt-1 text-center">AI Confidence</span>
+</div>
+<!-- ID Photo -->
+<div class="flex-1 flex flex-col items-center">
+<p class="font-label-caps text-label-caps text-secondary mb-2">ID Document Crop</p>
+<div class="w-full h-48 bg-surface-variant rounded-lg overflow-hidden border border-outline-variant relative group">
+<img alt="ID Photo Crop" class="w-full h-full object-cover grayscale-[20%]" data-alt="Cropped face from an Indian government ID card. Slightly grainy, lower resolution but clear enough for identification. Young Indian male. Corporate modern context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADcJwv9Z98sgJkNrrdBty_9G5-X-dOjAqaKNPAYgSzY0-GB42cLkZfM6cNVlecqcwt5LeF1HSIVrU4GOEi9LLPxG9J52t4-AAOywecUEijobW7bYwH_si9irlQr_qgJonMsbIGX4MYdGmpeH6RcTb3xlEflPgZsOnKgTFJtnuK-otZy4pDi7Zm4GSgQQFG3smZgxLxkWLt4wURBGlbR6tfebqL_XOLsvV68GpOXwaToYLCay7vV24k"/>
+<div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="zoom_in">zoom_in</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Extracted Data -->
+<div class="mt-auto border-t border-outline-variant pt-4">
+<h4 class="font-label-caps text-label-caps text-secondary mb-3">Extracted Details (OCR)</h4>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="font-label-caps text-label-caps text-secondary">Full Name</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Rahul Sharma</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-secondary">Date of Birth</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold">12 May 1994</p>
+</div>
+<div class="col-span-2">
+<p class="font-label-caps text-label-caps text-secondary">Address</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold">45, Phase 2, Industrial Area, Bangalore, 560034</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Documents (Right Col) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm shadow-sm flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center">
+<span class="material-symbols-outlined mr-2 text-primary" data-icon="description">description</span>
+                            Submitted Documents
+                        </h3>
+<div class="space-y-4 flex-1 overflow-y-auto pr-2">
+<!-- Document 1: Aadhaar -->
+<div class="border border-outline-variant rounded-lg p-3 hover:bg-surface transition-colors">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary" data-icon="badge">badge</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Aadhaar Card (Front)</span>
+</div>
+<button class="text-primary hover:bg-surface-container p-1 rounded transition-colors" title="View Full Screen">
+<span class="material-symbols-outlined text-[20px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</div>
+<div class="h-32 bg-surface-variant rounded border border-outline-variant relative overflow-hidden group">
+<img alt="Aadhaar Document" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="High resolution scan of an Indian Aadhaar card front. Details are clear. Corporate modern context, realistic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwvOf3zfecWK9PnXIUZGdzPV6yInAQSBeaZZP9wKKIgo6tn3xfqX8YQD9pGr2AOjD9OzPba2nb8TbQ00qHNQWi01_IbLgD40bLXEf5qR2W0qzklcqJ0cnQuevleIqu30oDrvEulAMxAXo5ILrrqdXqN7_wutyDWipcvV9GsRG6S1IdtgOPr8KKqKIMEB254Hjl_AYFgxzuEGTFgfLMx2z3o7sZbMmj60WTiEnU3DpEfk8zY7mkFvFD"/>
+</div>
+</div>
+<!-- Document 2: PAN -->
+<div class="border border-outline-variant rounded-lg p-3 hover:bg-surface transition-colors">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary" data-icon="credit_card">credit_card</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">PAN Card</span>
+</div>
+<button class="text-primary hover:bg-surface-container p-1 rounded transition-colors" title="View Full Screen">
+<span class="material-symbols-outlined text-[20px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</div>
+<div class="h-32 bg-surface-variant rounded border border-outline-variant relative overflow-hidden group">
+<img alt="PAN Document" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="High resolution scan of an Indian PAN card. Details are clear. Corporate modern context, realistic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQI9vA1ZeBIn__25T7D4zdWWNDPnw92GDtYVmfJKHdh2nDU0I5-yzDGQe6877SFkqmV22AapohEYQ3THK4wHdNcF_9-3abQ0cgX6lQiUHrmO0EnzrJOnH7MyT5_gKJZa7_QVnQDFVGTMX6wiYgozecN_Tp1cZM6GB4t9_uN1GOPfIhzmVggJBtLcsXOw_72FWHOBKWOGPrv1BJWVnn6eMoUh6jOLXrfnvBcjSPbqHjByCqp1YR1boR"/>
+</div>
+</div>
+<!-- Action: Request More Info -->
+<div class="mt-4 pt-4 border-t border-outline-variant">
+<label class="block font-label-caps text-label-caps text-secondary mb-2" for="more_info_reason">Request More Information / Reason for Rejection</label>
+<textarea class="w-full p-3 border border-outline-variant rounded-lg bg-surface-bright text-body-md font-body-md focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors resize-none mb-3" id="more_info_reason" placeholder="E.g., Image is blurry, please re-upload Aadhaar front..." rows="3"></textarea>
+<button class="w-full px-4 py-2 bg-surface text-primary border border-primary font-body-md text-body-md font-semibold rounded-lg hover:bg-surface-container transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined mr-2 text-[20px]" data-icon="info">info</span>
+                                    Request More Info
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

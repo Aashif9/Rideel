@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8f9ff;
+  --foreground: #0b1c30;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Public Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8f9ff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c3c6d1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #737780;
+}
+
+/* Stitch elevation cards */
+.rideel-card {
+  background-color: #ffffff;
+  border: 1px solid #e5eeff;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 20px rgba(0, 51, 102, 0.05);
+}
+
+.rideel-card-interactive {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rideel-card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 8px 24px rgba(0, 51, 102, 0.1);
+}
+
+/* Timeline vertical connector */
+.timeline-connector {
+  position: absolute;
+  top: 24px;
+  bottom: 0;
+  left: 15px;
+  width: 2px;
+  background-color: #003366;
+}

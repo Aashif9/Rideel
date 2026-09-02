@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify Delivery - RIDEEL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#001e40",
+                      "inverse-primary": "#a7c8ff",
+                      "on-tertiary-fixed": "#002113",
+                      "secondary-fixed-dim": "#c4c7c9",
+                      "tertiary-fixed": "#6ffbbe",
+                      "tertiary-container": "#003c27",
+                      "on-primary-fixed": "#001b3c",
+                      "secondary-fixed": "#e0e3e5",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#002416",
+                      "on-tertiary-container": "#00b27b",
+                      "on-secondary-fixed": "#191c1e",
+                      "on-secondary-container": "#626567",
+                      "background": "#f8f9ff",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#e0e3e5",
+                      "surface-variant": "#d3e4fe",
+                      "on-primary-container": "#799dd6",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "surface-container-low": "#eff4ff",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "error": "#ba1a1a",
+                      "inverse-surface": "#213145",
+                      "surface-bright": "#f8f9ff",
+                      "surface-container-high": "#dce9ff",
+                      "outline": "#737780",
+                      "on-surface": "#0b1c30",
+                      "inverse-on-surface": "#eaf1ff",
+                      "surface-dim": "#cbdbf5",
+                      "on-primary-fixed-variant": "#1f477b",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-background": "#0b1c30",
+                      "primary-fixed-dim": "#a7c8ff",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#3a5f94",
+                      "outline-variant": "#c3c6d1",
+                      "surface-container-highest": "#d3e4fe",
+                      "primary-fixed": "#d5e3ff",
+                      "primary-container": "#003366",
+                      "surface-container": "#e5eeff",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-secondary-fixed-variant": "#444749",
+                      "secondary": "#5c5f61",
+                      "on-surface-variant": "#43474f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "12px",
+                      "stack-md": "24px",
+                      "container-padding-desktop": "40px",
+                      "gutter": "16px",
+                      "container-padding-mobile": "20px",
+                      "stack-lg": "40px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Public Sans"
+                      ],
+                      "label-caps": [
+                              "Public Sans"
+                      ],
+                      "headline-lg": [
+                              "Public Sans"
+                      ],
+                      "body-lg": [
+                              "Public Sans"
+                      ],
+                      "price-display": [
+                              "Public Sans"
+                      ],
+                      "body-md": [
+                              "Public Sans"
+                      ],
+                      "headline-md": [
+                              "Public Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "price-display": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #F8FAFC;
+        }
+        
+        .soft-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 51, 102, 0.08);
+        }
+
+        .otp-input:focus {
+            border-color: #003366;
+            outline: none;
+            box-shadow: 0 0 0 1px #003366;
+        }
+        
+        /* Hide arrows in number input */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col items-center">
+<!-- Top App Bar (Suppressed for transactional screen, using a simpler header) -->
+<header class="w-full max-w-[1200px] h-16 flex items-center px-container-padding-mobile md:px-container-padding-desktop sticky top-0 bg-background z-50">
+<button class="p-2 -ml-2 rounded-full hover:bg-surface-variant transition-colors" onclick="history.back()">
+<span class="material-symbols-outlined text-primary" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary ml-2">Verify Delivery</h1>
+</header>
+<main class="w-full max-w-[600px] px-container-padding-mobile flex-1 flex flex-col gap-stack-md pt-stack-sm pb-stack-lg">
+<!-- Delivery Details Card -->
+<section class="bg-surface-container-lowest rounded-[24px] border border-secondary-fixed p-stack-sm soft-shadow relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-surface-variant rounded-bl-full opacity-50 -z-10"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-label-caps text-label-caps text-secondary uppercase tracking-wider mb-1">Parcel ID</p>
+<h2 class="font-price-display text-price-display text-primary">RD784521</h2>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high text-primary px-3 py-1 rounded-full text-xs font-bold">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified_user">verified_user</span>
+<span>Ready</span>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-background p-3 rounded-lg border border-outline-variant/30">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-secondary">Receiver</p>
+<p class="font-body-lg text-body-lg text-on-surface font-semibold">Hyderabad</p>
+</div>
+</div>
+</section>
+<!-- OTP Verification Section -->
+<section class="flex-1 flex flex-col gap-stack-md mt-4">
+<div class="text-center">
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Handover Verification</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Ask the receiver for the delivery OTP to complete the handover.</p>
+</div>
+<div class="flex justify-center gap-2 md:gap-3 my-4">
+<input autofocus="" class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold bg-surface-container-lowest border border-outline-variant rounded-lg text-primary" maxlength="1" type="number"/>
+<input class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold bg-surface-container-lowest border border-outline-variant rounded-lg text-primary" maxlength="1" type="number"/>
+<input class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold bg-surface-container-lowest border border-outline-variant rounded-lg text-primary" maxlength="1" type="number"/>
+<input class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold bg-surface-container-lowest border border-outline-variant rounded-lg text-primary" maxlength="1" type="number"/>
+<input class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold bg-surface-container-lowest border border-outline-variant rounded-lg text-primary" maxlength="1" type="number"/>
+<input class="otp-input w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold bg-surface-container-lowest border border-outline-variant rounded-lg text-primary" maxlength="1" type="number"/>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-4 mt-auto">
+<button class="w-full py-4 bg-surface-container-lowest border-2 border-primary-container text-primary-container font-headline-md text-headline-md rounded-xl flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="photo_camera">photo_camera</span>
+                    Take delivery photo
+                </button>
+<button class="w-full py-4 bg-primary-container text-on-primary font-headline-md text-headline-md rounded-xl flex items-center justify-center gap-2 hover:bg-primary transition-colors soft-shadow active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                    Complete Delivery
+                </button>
+</div>
+</section>
+</main>
+<script>
+        // Simple OTP input logic for demonstration
+        const inputs = document.querySelectorAll('.otp-input');
+        
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length > 1) {
+                    e.target.value = e.target.value.slice(0, 1);
+                }
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
+</body></html>

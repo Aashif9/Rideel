@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rideel - User Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e0e3e5",
+                    "secondary": "#5c5f61",
+                    "on-primary-container": "#799dd6",
+                    "secondary-fixed": "#e0e3e5",
+                    "inverse-on-surface": "#eaf1ff",
+                    "outline-variant": "#c3c6d1",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#00b27b",
+                    "on-secondary-fixed-variant": "#444749",
+                    "on-secondary-container": "#626567",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-tint": "#3a5f94",
+                    "error-container": "#ffdad6",
+                    "background": "#f8f9ff",
+                    "primary-fixed": "#d5e3ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#002416",
+                    "surface-variant": "#d3e4fe",
+                    "on-background": "#0b1c30",
+                    "surface-container": "#e5eeff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#737780",
+                    "on-surface-variant": "#43474f",
+                    "secondary-fixed-dim": "#c4c7c9",
+                    "primary": "#001e40",
+                    "primary-container": "#003366",
+                    "on-primary-fixed": "#001b3c",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-surface": "#0b1c30",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "inverse-surface": "#213145",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed": "#191c1e",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-container": "#003c27",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "inverse-primary": "#a7c8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-padding-mobile": "20px",
+                    "stack-sm": "12px",
+                    "stack-lg": "40px",
+                    "container-padding-desktop": "40px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": [
+                            "Public Sans"
+                    ],
+                    "headline-md": [
+                            "Public Sans"
+                    ],
+                    "label-caps": [
+                            "Public Sans"
+                    ],
+                    "price-display": [
+                            "Public Sans"
+                    ],
+                    "body-lg": [
+                            "Public Sans"
+                    ],
+                    "body-md": [
+                            "Public Sans"
+                    ],
+                    "headline-lg": [
+                            "Public Sans"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "price-display": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "30px",
+                            {
+                                    "lineHeight": "38px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg h-screen flex overflow-hidden">
+<!-- NavigationDrawer -->
+<aside class="bg-surface-container-low dark:bg-surface-container-highest border-r border-outline-variant dark:border-outline h-full w-72 hidden md:flex flex-col fixed left-0 top-0 p-stack-md z-40">
+<div class="flex items-center gap-4 mb-stack-lg">
+<div class="w-12 h-12 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A highly detailed close-up portrait of a professional corporate admin, wearing a tailored navy suit with subtle grid patterns. The lighting is soft and studio-quality, emphasizing trust and competence. The background is a clean, neutral white space, fitting for a modern enterprise software avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCefVEv_ZjZbor1bFiMz0LxS2qX41EZg88M9mmbsCcJQTKuYHdaiIc0_iV5km-OKDpIHDR3ufzRhXUF8hKp_Ge7yrjBj0gROWkRp474crY9a7ueelOJZMY_iWJRCpXwiEZnYGEAV6lJm5M4Do9V4YYnsV2wXsuORdWsNA5plO4l1QTuH_8GYX-l8NFsaVMTMqfsZ6dRC3eVDcQsj1qkg79Lbyhba6WMsZUUnEksw3mfs3d-30_vIObz"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">Admin Dashboard</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Platform Overview</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-bold font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Users
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="local_post_office">local_post_office</span>
+                Deliveries
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Payments
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant">
+<p class="text-secondary font-label-caps text-label-caps">v1.0.4</p>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-72 flex flex-col h-screen bg-background">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-50 sticky top-0">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary dark:text-inverse-primary" data-icon="local_shipping">local_shipping</span>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary">RIDEEL</h1>
+</div>
+<div>
+<span class="material-symbols-outlined text-primary dark:text-inverse-primary cursor-pointer hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors duration-200 p-2 rounded-full" data-icon="notifications">notifications</span>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-container-padding-desktop overflow-y-auto flex-1">
+<div class="flex justify-between items-center mb-stack-md">
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-background">User Management</h2>
+<button class="bg-primary-container text-on-primary px-6 py-3 rounded-lg font-body-md text-body-md font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_4px_20px_rgba(0,51,102,0.08)]">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    Add User
+                </button>
+</div>
+<!-- Filter Bar (Bento style card) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm mb-stack-md shadow-[0_4px_20px_rgba(0,51,102,0.08)] flex flex-wrap gap-4 items-end">
+<div class="flex-1 min-w-[200px]">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1">Search</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 border border-outline-variant rounded-lg bg-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container font-body-md text-body-md text-on-background outline-none" placeholder="Search users by name, email..." type="text"/>
+</div>
+</div>
+<div class="w-48">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1">Role</label>
+<select class="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container font-body-md text-body-md text-on-background outline-none appearance-none">
+<option>All Roles</option>
+<option>Sender</option>
+<option>Traveler</option>
+<option>Business</option>
+</select>
+</div>
+<div class="w-48">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1">Status</label>
+<select class="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container font-body-md text-body-md text-on-background outline-none appearance-none">
+<option>All Statuses</option>
+<option>Verified</option>
+<option>Pending</option>
+<option>Suspended</option>
+</select>
+</div>
+<button class="px-4 py-2 border border-outline-variant text-primary-container rounded-lg font-body-md text-body-md hover:bg-surface-container transition-colors">
+                    Reset
+                </button>
+</div>
+<!-- Data Table Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,51,102,0.08)]">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps border-b border-outline-variant">
+<tr>
+<th class="p-4 font-semibold">User</th>
+<th class="p-4 font-semibold">Role</th>
+<th class="p-4 font-semibold">Verification</th>
+<th class="p-4 font-semibold">Deliveries</th>
+<th class="p-4 font-semibold">Rating</th>
+<th class="p-4 font-semibold">Status</th>
+<th class="p-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface transition-colors group">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young Indian male traveler standing in an airport terminal. He is wearing a casual blue jacket and has a confident smile. The scene is brightly lit with natural daylight streaming through large terminal windows, creating a crisp, optimistic atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_1T_z7li6-InGIBOApLMVS0hbUmYwA0OHEFKyxRz83J_b976E390qTEsXcaX_iDYwgdEnHwbXmVChdvkK2dkoXv7tnMu5WmwAxgNQnxZUXZDFHUK118U2QK48IhfPkywpslG5zX7gHsGE-rOQbrb96EWNMuY-H2fUlRdPt0IchfnaHzVrQg-MIB6vgFqolh8Shul6mp-iaQJoOsQdzK-NmO3eZ9jWrJjc3_yRglELaTm1WA771Tqr"/>
+</div>
+<div>
+<div class="font-semibold text-on-background">Rahul Sharma</div>
+<div class="text-on-surface-variant text-[12px]">rahul.s@example.com</div>
+</div>
+</div>
+</td>
+<td class="p-4 text-secondary">Traveler</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-container-high text-primary-container text-[12px] font-semibold border border-primary-container/20">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+                                    Verified
+                                </span>
+</td>
+<td class="p-4 text-on-background">42</td>
+<td class="p-4">
+<div class="flex items-center gap-1 text-on-background">
+<span class="material-symbols-outlined text-[16px] text-[#F59E0B]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    4.9
+                                </div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 rounded text-[12px] bg-tertiary-fixed-dim/20 text-tertiary">Active</span>
+</td>
+<td class="p-4 text-right">
+<button class="p-2 text-on-surface-variant hover:text-primary-container transition-colors rounded-full hover:bg-surface-container"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-2 text-on-surface-variant hover:text-error transition-colors rounded-full hover:bg-error-container/20"><span class="material-symbols-outlined text-[20px]">block</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface transition-colors group">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center text-primary-container font-semibold">
+                                        AK
+                                    </div>
+<div>
+<div class="font-semibold text-on-background">Anita Kapoor</div>
+<div class="text-on-surface-variant text-[12px]">anita.k@business.com</div>
+</div>
+</div>
+</td>
+<td class="p-4 text-secondary">Business</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-container-high text-secondary text-[12px] border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">pending</span>
+                                    Pending
+                                </span>
+</td>
+<td class="p-4 text-on-background">128</td>
+<td class="p-4">
+<div class="flex items-center gap-1 text-on-background">
+<span class="material-symbols-outlined text-[16px] text-[#F59E0B]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    4.7
+                                </div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 rounded text-[12px] bg-tertiary-fixed-dim/20 text-tertiary">Active</span>
+</td>
+<td class="p-4 text-right">
+<button class="p-2 text-on-surface-variant hover:text-primary-container transition-colors rounded-full hover:bg-surface-container"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-2 text-on-surface-variant hover:text-error transition-colors rounded-full hover:bg-error-container/20"><span class="material-symbols-outlined text-[20px]">block</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="p-4 border-t border-outline-variant flex items-center justify-between bg-surface">
+<div class="text-on-surface-variant font-body-md text-body-md">
+                        Showing 1 to 10 of 2,451 entries
+                    </div>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-outline-variant rounded bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 border border-primary-container rounded bg-primary-container text-on-primary">1</button>
+<button class="px-3 py-1 border border-outline-variant rounded bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container">2</button>
+<button class="px-3 py-1 border border-outline-variant rounded bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container">3</button>
+<button class="px-3 py-1 border border-outline-variant rounded bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container">Next</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

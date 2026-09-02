@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIDEEL - Profile</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#001e40",
+                        "inverse-primary": "#a7c8ff",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-container": "#003c27",
+                        "on-primary-fixed": "#001b3c",
+                        "secondary-fixed": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-secondary-container": "#626567",
+                        "background": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary-container": "#799dd6",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#213145",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "outline": "#737780",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#3a5f94",
+                        "outline-variant": "#c3c6d1",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#d5e3ff",
+                        "primary-container": "#003366",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-secondary-fixed-variant": "#444749",
+                        "secondary": "#5c5f61",
+                        "on-surface-variant": "#43474f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "stack-lg": "40px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Ambient Shadow Utility for Level 2 */
+        .ambient-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 51, 102, 0.08);
+        }
+        /* Custom scrollbar for clean aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c3c6d1;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-50 docked full-width top-0 fixed transition-colors duration-200">
+<div class="flex items-center gap-gutter">
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 transition-colors duration-200 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">local_shipping</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">RIDEEL</h1>
+</div>
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 transition-colors duration-200 flex items-center justify-center relative">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 md:pb-16 px-container-padding-mobile md:px-container-padding-desktop max-w-[1200px] w-full mx-auto flex flex-col gap-stack-lg">
+<!-- Profile Header Bento Block -->
+<section class="bg-surface-container-lowest rounded-2xl p-stack-md ambient-shadow border border-outline-variant/50 relative overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-stack-md text-center md:text-left">
+<!-- Decorative background blob -->
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary-fixed rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+<div class="relative shrink-0">
+<img class="w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-surface-container-lowest shadow-sm z-10 relative" data-alt="A professional yet approachable headshot of a young Indian man in his late 20s, wearing a clean, modern navy blue polo shirt. The lighting is bright and even, casting soft shadows, typical of a high-quality studio portrait. The background is a subtle, clean off-white studio backdrop to ensure the subject stands out. The overall mood is trustworthy, reliable, and friendly, perfect for a high-end service application profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0EBCtkIxvkayCVkb9cDDeL9spRI_2hAO-_l0Upiw2uNWKvB029QugQP9DWDNqyJ9RObKqJJK_fNus9r7HyuB69IPwpCb6U1tyTPWC-qoGt_1RnOiaqBNUFrvzU_5f9RhwUzx8C1AY3K9eHMaOATXCxrKDJHW5xAlwE05qZgPssntKfPKlANGqvmcpCPvFrlACDA1X4hh6hqfQosyuvVQVDkqBUwRVRDAP7g6ml2u5KbNjJ6pCnP8E"/>
+<button class="absolute bottom-0 right-0 bg-primary-container text-on-primary rounded-full p-1.5 shadow-md hover:scale-105 transition-transform z-20 flex items-center justify-center border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+<div class="flex-grow flex flex-col justify-center">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-primary mb-1">Aashif Shaik</h2>
+<div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-2">
+<div class="flex items-center gap-1 bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-tertiary-container text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-body-md font-semibold text-primary">4.8</span>
+</div>
+<div class="flex items-center gap-1.5 bg-[#E8F5E9] text-[#2E7D32] px-3 py-1.5 rounded-full border border-[#C8E6C9]">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-caps tracking-wider text-[#2E7D32]">Identity Verified</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid for Navigation Actions -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md">
+<!-- Core Activity (High Priority Cards) -->
+<a class="group block bg-surface-container-lowest rounded-2xl p-stack-md border border-outline-variant/50 ambient-shadow hover:-translate-y-1 transition-all duration-300" href="#">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed text-primary-container flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px]">package_2</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<h3 class="font-headline-md text-primary mb-1">My Deliveries</h3>
+<p class="font-body-md text-on-surface-variant">Track active parcels and history</p>
+</a>
+<a class="group block bg-surface-container-lowest rounded-2xl p-stack-md border border-outline-variant/50 ambient-shadow hover:-translate-y-1 transition-all duration-300" href="#">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed text-primary-container flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px]">map</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<h3 class="font-headline-md text-primary mb-1">My Trips</h3>
+<p class="font-body-md text-on-surface-variant">Manage your scheduled routes</p>
+</a>
+<!-- Wallet Card (Differentiated Styling) -->
+<a class="group block bg-gradient-to-br from-primary-container to-surface-tint rounded-2xl p-stack-md border border-primary/20 ambient-shadow hover:-translate-y-1 transition-all duration-300 relative overflow-hidden md:col-span-2 lg:col-span-1" href="#">
+<div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-4 translate-y-4">
+<span class="material-symbols-outlined text-[120px] text-on-primary">account_balance_wallet</span>
+</div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="w-12 h-12 rounded-xl bg-white/10 text-on-primary flex items-center justify-center backdrop-blur-sm">
+<span class="material-symbols-outlined text-[28px]">account_balance_wallet</span>
+</div>
+<span class="material-symbols-outlined text-inverse-primary group-hover:text-on-primary transition-colors">chevron_right</span>
+</div>
+<h3 class="font-headline-md text-on-primary mb-1 relative z-10">Wallet</h3>
+<p class="font-body-md text-inverse-primary relative z-10">Balance &amp; Earnings</p>
+</a>
+</section>
+<!-- Secondary Navigation Groups -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-stack-md">
+<!-- Group 1: Account & Security -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/50 ambient-shadow overflow-hidden">
+<h4 class="font-label-caps text-on-surface-variant px-stack-md py-4 bg-surface-container-low/50 border-b border-outline-variant/30 uppercase tracking-wider">Account &amp; Security</h4>
+<div class="divide-y divide-outline-variant/30">
+<a class="flex items-center justify-between p-stack-md hover:bg-surface-container-lowest transition-colors group cursor-pointer bg-white" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">person</span>
+<span class="font-body-lg text-on-surface group-hover:text-primary transition-colors font-medium">Personal Information</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-stack-md hover:bg-surface-container-lowest transition-colors group cursor-pointer bg-white" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">fingerprint</span>
+<span class="font-body-lg text-on-surface group-hover:text-primary transition-colors font-medium">KYC Verification</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#2E7D32]"></span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</a>
+<a class="flex items-center justify-between p-stack-md hover:bg-surface-container-lowest transition-colors group cursor-pointer bg-white" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">credit_card</span>
+<span class="font-body-lg text-on-surface group-hover:text-primary transition-colors font-medium">Payment Methods</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-stack-md hover:bg-surface-container-lowest transition-colors group cursor-pointer bg-white" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">location_on</span>
+<span class="font-body-lg text-on-surface group-hover:text-primary transition-colors font-medium">Saved Addresses</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Group 2: Support & Preferences -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/50 ambient-shadow overflow-hidden">
+<h4 class="font-label-caps text-on-surface-variant px-stack-md py-4 bg-surface-container-low/50 border-b border-outline-variant/30 uppercase tracking-wider">Support &amp; Preferences</h4>
+<div class="divide-y divide-outline-variant/30">
+<a class="flex items-center justify-between p-stack-md hover:bg-surface-container-lowest transition-colors group cursor-pointer bg-white" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">star_half</span>
+<span class="font-body-lg text-on-surface group-hover:text-primary transition-colors font-medium">Reviews</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-stack-md hover:bg-surface-container-lowest transition-colors group cursor-pointer bg-white" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">security</span>
+<span class="font-body-lg text-on-surface group-hover:text-primary transition-colors font-medium">Safety Center</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-stack-md hover:bg-surface-container-lowest transition-colors group cursor-pointer bg-white" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">help</span>
+<span class="font-body-lg text-on-surface group-hover:text-primary transition-colors font-medium">Help &amp; Support</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-stack-md hover:bg-surface-container-lowest transition-colors group cursor-pointer bg-white" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">settings</span>
+<span class="font-body-lg text-on-surface group-hover:text-primary transition-colors font-medium">Settings</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Logout Button (Standalone for emphasis) -->
+<div class="mt-4 pb-8 flex justify-center">
+<button class="font-label-caps text-error border border-error/30 bg-error-container/20 hover:bg-error-container/40 px-8 py-3 rounded-xl transition-colors duration-200 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+                LOG OUT
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 z-50 flex justify-around items-center px-4 bg-surface dark:bg-surface-dim pb-safe border-t border-outline-variant dark:border-outline shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<!-- Home: Inactive -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 transition-transform duration-150 active:scale-95 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<!-- Deliveries: Inactive -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 transition-transform duration-150 active:scale-95 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">package_2</span>
+<span class="font-label-caps text-label-caps">Deliveries</span>
+</a>
+<!-- Trips: Inactive -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 transition-transform duration-150 active:scale-95 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">map</span>
+<span class="font-label-caps text-label-caps">Trips</span>
+</a>
+<!-- Wallet: Inactive -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 transition-transform duration-150 active:scale-95 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps">Wallet</span>
+</a>
+<!-- Profile: Active -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary font-bold after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1 hover:opacity-80 transition-transform duration-150 active:scale-95 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+</body></html>

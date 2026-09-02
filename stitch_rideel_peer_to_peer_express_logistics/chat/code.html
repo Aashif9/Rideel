@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Chat - RIDEEL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "secondary-container": "#e0e3e5",
+                            "secondary": "#5c5f61",
+                            "on-primary-container": "#799dd6",
+                            "secondary-fixed": "#e0e3e5",
+                            "inverse-on-surface": "#eaf1ff",
+                            "outline-variant": "#c3c6d1",
+                            "surface-bright": "#f8f9ff",
+                            "on-tertiary-container": "#00b27b",
+                            "on-secondary-fixed-variant": "#444749",
+                            "on-secondary-container": "#626567",
+                            "tertiary-fixed-dim": "#4edea3",
+                            "surface-tint": "#3a5f94",
+                            "error-container": "#ffdad6",
+                            "background": "#f8f9ff",
+                            "primary-fixed": "#d5e3ff",
+                            "surface-container-lowest": "#ffffff",
+                            "on-primary": "#ffffff",
+                            "surface-container-high": "#dce9ff",
+                            "surface-container-low": "#eff4ff",
+                            "on-tertiary": "#ffffff",
+                            "tertiary": "#002416",
+                            "surface-variant": "#d3e4fe",
+                            "on-background": "#0b1c30",
+                            "surface-container": "#e5eeff",
+                            "on-error": "#ffffff",
+                            "tertiary-fixed": "#6ffbbe",
+                            "surface-dim": "#cbdbf5",
+                            "surface-container-highest": "#d3e4fe",
+                            "outline": "#737780",
+                            "on-surface-variant": "#43474f",
+                            "secondary-fixed-dim": "#c4c7c9",
+                            "primary": "#001e40",
+                            "primary-container": "#003366",
+                            "on-primary-fixed": "#001b3c",
+                            "on-error-container": "#93000a",
+                            "error": "#ba1a1a",
+                            "on-tertiary-fixed-variant": "#005236",
+                            "on-surface": "#0b1c30",
+                            "on-primary-fixed-variant": "#1f477b",
+                            "inverse-surface": "#213145",
+                            "on-secondary": "#ffffff",
+                            "surface": "#f8f9ff",
+                            "on-secondary-fixed": "#191c1e",
+                            "on-tertiary-fixed": "#002113",
+                            "tertiary-container": "#003c27",
+                            "primary-fixed-dim": "#a7c8ff",
+                            "inverse-primary": "#a7c8ff"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "base": "8px",
+                            "gutter": "16px",
+                            "container-padding-mobile": "20px",
+                            "stack-sm": "12px",
+                            "stack-lg": "40px",
+                            "container-padding-desktop": "40px",
+                            "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                            "headline-lg-mobile": ["Public Sans"],
+                            "headline-md": ["Public Sans"],
+                            "label-caps": ["Public Sans"],
+                            "price-display": ["Public Sans"],
+                            "body-lg": ["Public Sans"],
+                            "body-md": ["Public Sans"],
+                            "headline-lg": ["Public Sans"]
+                    },
+                    "fontSize": {
+                            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                            "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                            "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                            "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                            "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+        
+        /* Hide scrollbar for clean UI */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex flex-col pt-safe font-body-md text-body-md overflow-hidden">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding-mobile h-16 bg-surface dark:bg-background border-b border-outline-variant dark:border-outline pt-safe">
+<button aria-label="Back" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container transition-colors text-primary">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex flex-col items-center justify-center flex-1">
+<div class="flex items-center gap-1">
+<h1 class="font-headline-md text-headline-md text-primary">Rahul Kumar</h1>
+<span class="material-symbols-outlined text-[16px] text-[#00b27b]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Traveler • Flight AI-802</span>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container flex items-center justify-center">
+<img alt="User profile photo" class="w-full h-full object-cover" data-alt="A professional headshot of a young Indian man with a slight smile, wearing a neat casual shirt. The background is a soft, blurred airport terminal setting, bathed in natural light. The lighting is bright and modern, consistent with a clean corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7prG9SmVkAYmodMOOiBf34s16yhgIGdDdTuZbfxFJN9G-UJZYfA950dKN_vIxRt5lI0PwazPsWU5hOqFLKBqSxhvsNN2fOGCJW8e9Po3xzdvwLFgpPkQ8SIySKnBHnRAZ7PfrjX1uxr9TjvZTl_TzIUa68UtsEbHjWwJClSzHHBf21scs2jHSwY7hAXPsj38bAebQOYcXy0txZAPxK5vONyfNyJ62rLPj1ea7QGJqYiB77C_haKkE"/>
+</div>
+</header>
+<!-- Main Chat Canvas -->
+<main class="flex-1 flex flex-col overflow-y-auto no-scrollbar pt-[64px] pb-[140px] px-container-padding-mobile bg-surface-bright relative z-0">
+<!-- Transaction Context Sticky Banner -->
+<div class="sticky top-stack-sm left-0 right-0 mx-auto w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-xl p-3 shadow-lg z-10 flex items-center justify-between mb-stack-md mt-stack-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="package_2">package_2</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-sm text-primary">DEL-BLR Delivery</div>
+<div class="font-body-md text-body-md text-xs text-on-surface-variant">ETA: Tomorrow, 2:00 PM</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-price-display text-price-display text-sm text-primary">₹850</div>
+<div class="font-label-caps text-label-caps text-[10px] text-tertiary px-2 py-1 bg-tertiary-fixed-dim rounded-full uppercase font-bold">Secured</div>
+</div>
+</div>
+<!-- Chat Messages -->
+<div class="flex flex-col gap-stack-sm mt-stack-md">
+<!-- System Message -->
+<div class="flex justify-center my-4">
+<span class="bg-surface-container-low text-on-surface-variant font-label-caps text-label-caps px-4 py-1.5 rounded-full text-[10px] uppercase tracking-wider">Today, 09:42 AM</span>
+</div>
+<!-- Receiver (Traveler) -->
+<div class="flex items-end gap-2 max-w-[85%] self-start">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl rounded-bl-sm p-3 shadow-sm">
+<p class="text-on-surface">Hi there! I'm currently at T3 Departures, near Gate 4. Are you on your way to drop off the parcel?</p>
+<span class="block text-right text-[10px] text-on-surface-variant mt-1 font-label-caps text-label-caps">09:45 AM</span>
+</div>
+</div>
+<!-- Sender (Me) -->
+<div class="flex items-end gap-2 max-w-[85%] self-end">
+<div class="bg-primary-container text-on-primary rounded-2xl rounded-br-sm p-3 shadow-md shadow-primary-container/20">
+<p>Yes, I just entered the terminal. Headed your way now. Give me about 5 mins.</p>
+<div class="flex justify-end items-center gap-1 mt-1">
+<span class="text-[10px] text-primary-fixed-dim font-label-caps text-label-caps">09:47 AM</span>
+<span class="material-symbols-outlined text-[14px] text-primary-fixed-dim" data-icon="done_all">done_all</span>
+</div>
+</div>
+</div>
+<!-- Sender (Me) - Image Attachment -->
+<div class="flex items-end gap-2 max-w-[70%] self-end mt-2">
+<div class="bg-primary-container text-on-primary rounded-2xl rounded-br-sm p-1.5 shadow-md shadow-primary-container/20">
+<img alt="Parcel photo" class="w-full h-40 object-cover rounded-xl" data-alt="A close-up photo of a neatly packed cardboard box securely wrapped with brown packing tape. The box is sitting on a clean, light-colored surface. The lighting is bright and neutral, emphasizing the professional and secure nature of the packaging. Corporate logistics aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsIifEbxOReEWZxkSmCv1N25n3ItZv9Qx-beE4KvvrNvzHQOrGkxilHbnTZa9RVxSTmgp5IAuTjjbYaaGFlDheINwWakdsTX_62W9MPhrFdw52rrfMi8uEDGynZsrseeiOdHAjQss9QjWoRlCerxCFwYq8Pfiv4tVaCWMJePAoypAeKhKETdCCv3Rgiqwi-MCsArb9csZYJWWPguEtYTtqEXnEMAArnJ7MeEQdh9Eeqffbt-U69kUG"/>
+<div class="p-2 pb-1">
+<p class="text-sm">This is what the box looks like. It's quite small.</p>
+<div class="flex justify-end items-center gap-1 mt-1">
+<span class="text-[10px] text-primary-fixed-dim font-label-caps text-label-caps">09:48 AM</span>
+<span class="material-symbols-outlined text-[14px] text-primary-fixed-dim" data-icon="done_all">done_all</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Receiver (Traveler) -->
+<div class="flex items-end gap-2 max-w-[85%] self-start mt-2">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl rounded-bl-sm p-3 shadow-sm">
+<p class="text-on-surface">Perfect, I see the box description. I'm wearing a black jacket and sitting right next to the Costa Coffee kiosk.</p>
+<span class="block text-right text-[10px] text-on-surface-variant mt-1 font-label-caps text-label-caps">09:50 AM</span>
+</div>
+</div>
+<!-- Receiver (Traveler) Location Share -->
+<div class="flex items-end gap-2 max-w-[75%] self-start mt-2">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl rounded-bl-sm overflow-hidden shadow-sm">
+<img alt="Location Map" class="w-full h-32 object-cover border-b border-outline-variant" data-alt="A minimalist, top-down digital map view of an airport terminal specifically marked as Terminal 3. The map uses a clean, light-mode corporate palette with soft whites, light grays, and pale blues. A single, distinct primary blue location pin marks a spot near a coffee shop. High-end, functional UI aesthetic." data-location="New Delhi T3 Airport Map" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRrJKQ12lsqZc2DuN12cKabueC1LYIeHAabDg2l8zMUSOr0bdzibnY786_AK5eBYnSwZEARLUNoRyuqW2dNItM-aRH4m_NPtTP6OD7jvbx0w3U_PKwRBOInH2SpemX5eWHdvIoKhVMdiORNrWloyYNk9nX4IO_CGfqtYNsqEq35doidsQOrP5rdEJj8ID-_1v3-zkeVmXG-IIDpqdEX1BvHQypKxjPhJKkQtsLWoRv3MQzBM488ZYP"/>
+<div class="p-3 bg-surface-container-lowest">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<span class="font-headline-md text-sm text-primary">Live Location</span>
+</div>
+<p class="text-xs text-on-surface-variant">Gate 4, T3 Departures, IGI Airport</p>
+</div>
+</div>
+</div>
+<!-- System Message - Action -->
+<div class="flex justify-center my-4">
+<div class="bg-surface-container text-on-surface-variant text-xs px-4 py-2 rounded-lg flex flex-col items-center gap-1 border border-outline-variant shadow-sm max-w-[80%] text-center">
+<span class="material-symbols-outlined text-primary" data-icon="handshake">handshake</span>
+<span>To complete handover, please share the OTP with the traveler.</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Input & Actions Area -->
+<footer class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest border-t border-outline-variant pb-safe">
+<!-- Quick Action Row -->
+<div class="flex overflow-x-auto no-scrollbar gap-2 px-container-padding-mobile py-2 bg-surface-container-lowest">
+<button class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-outline-variant bg-surface hover:bg-surface-container transition-colors text-xs font-headline-md text-primary">
+<span class="material-symbols-outlined text-[16px]" data-icon="share_location">share_location</span>
+                Share Pickup Location
+            </button>
+<button class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-outline-variant bg-surface hover:bg-surface-container transition-colors text-xs font-headline-md text-primary">
+<span class="material-symbols-outlined text-[16px]" data-icon="call">call</span>
+                Call Traveler
+            </button>
+<button class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-outline-variant bg-surface hover:bg-surface-container transition-colors text-xs font-headline-md text-primary">
+<span class="material-symbols-outlined text-[16px]" data-icon="photo_camera">photo_camera</span>
+                Send Photo
+            </button>
+</div>
+<!-- Text Input Area -->
+<div class="flex items-center gap-2 px-container-padding-mobile py-3 bg-surface-container-lowest">
+<button class="flex items-center justify-center w-10 h-10 rounded-full text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+</button>
+<div class="flex-1 relative">
+<input class="w-full bg-surface-container text-on-surface rounded-full py-2.5 pl-4 pr-10 border-none focus:ring-2 focus:ring-primary-container focus:outline-none placeholder:text-outline text-sm" placeholder="Type a message..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary-container p-1">
+<span class="material-symbols-outlined text-[20px]" data-icon="mood">mood</span>
+</button>
+</div>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-container text-on-primary hover:bg-primary transition-colors shadow-md shadow-primary-container/20">
+<span class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+</button>
+</div>
+</footer>
+</body></html>

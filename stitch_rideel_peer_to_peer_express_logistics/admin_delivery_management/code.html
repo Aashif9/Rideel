@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Delivery Operations - RIDEEL Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#e0e3e5",
+                      "secondary": "#5c5f61",
+                      "on-primary-container": "#799dd6",
+                      "secondary-fixed": "#e0e3e5",
+                      "inverse-on-surface": "#eaf1ff",
+                      "outline-variant": "#c3c6d1",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-container": "#00b27b",
+                      "on-secondary-fixed-variant": "#444749",
+                      "on-secondary-container": "#626567",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "surface-tint": "#3a5f94",
+                      "error-container": "#ffdad6",
+                      "background": "#f8f9ff",
+                      "primary-fixed": "#d5e3ff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#dce9ff",
+                      "surface-container-low": "#eff4ff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#002416",
+                      "surface-variant": "#d3e4fe",
+                      "on-background": "#0b1c30",
+                      "surface-container": "#e5eeff",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed": "#6ffbbe",
+                      "surface-dim": "#cbdbf5",
+                      "surface-container-highest": "#d3e4fe",
+                      "outline": "#737780",
+                      "on-surface-variant": "#43474f",
+                      "secondary-fixed-dim": "#c4c7c9",
+                      "primary": "#001e40",
+                      "primary-container": "#003366",
+                      "on-primary-fixed": "#001b3c",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-surface": "#0b1c30",
+                      "on-primary-fixed-variant": "#1f477b",
+                      "inverse-surface": "#213145",
+                      "on-secondary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-secondary-fixed": "#191c1e",
+                      "on-tertiary-fixed": "#002113",
+                      "tertiary-container": "#003c27",
+                      "primary-fixed-dim": "#a7c8ff",
+                      "inverse-primary": "#a7c8ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "gutter": "16px",
+                      "container-padding-mobile": "20px",
+                      "stack-sm": "12px",
+                      "stack-lg": "40px",
+                      "container-padding-desktop": "40px",
+                      "stack-md": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Public Sans"
+                      ],
+                      "headline-md": [
+                              "Public Sans"
+                      ],
+                      "label-caps": [
+                              "Public Sans"
+                      ],
+                      "price-display": [
+                              "Public Sans"
+                      ],
+                      "body-lg": [
+                              "Public Sans"
+                      ],
+                      "body-md": [
+                              "Public Sans"
+                      ],
+                      "headline-lg": [
+                              "Public Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "price-display": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen overflow-hidden flex">
+<!-- NavigationDrawer (Shared Component) -->
+<nav class="bg-surface-container-low border-r border-outline-variant h-full w-72 hidden md:flex flex-col fixed left-0 top-0 p-stack-md z-40 transition-all duration-200 ease-in-out">
+<div class="mb-stack-md flex items-center justify-start gap-3">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A small, professional portrait of a tech-savvy Indian administrator, wearing a smart casual shirt, taken in a modern bright office setting with soft natural light, conveying trust and competence in a corporate modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuM2ZNR19PUfYQHApWuM7vXEs71DiIVVhC5PUw3-SIrKmBO3xYB8GO7O0lptmj0SQNsll1LTRwoF4YcKEHtWw50jfKztOAfHcI6wR2mqEMcP05JaeKTIjLJNzO36DQSJVf-muTa8KFZiCT6mio9Fv90Cnlt1YFxsuCDC_RoFlWteswYL7HA-U2INnbxCsZKYrgP3bAWXNoGhjDAf0bDf5vGBiGrmTjKz4QV8C5koMIoJre6h8ANhoZ"/>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Admin Dashboard</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Platform Overview</p>
+<p class="font-label-caps text-label-caps text-secondary mt-1">v1.0.4</p>
+</div>
+</div>
+<ul class="flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Users
+                </a>
+</li>
+<li>
+<!-- ACTIVE STATE LOGIC applied based on intent -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-bold transition-all duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="local_post_office" data-weight="fill" style="font-variation-settings: 'FILL' 1;">local_post_office</span>
+                    Deliveries
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                    Payments
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-72 flex-1 h-full flex flex-col bg-background overflow-hidden relative z-0">
+<!-- TopAppBar Contextual Replacement (Header for Canvas) -->
+<header class="bg-surface flex justify-between items-center px-container-padding-desktop h-16 w-full border-b border-outline-variant z-10 shrink-0">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">Delivery Operations</h1>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-container-padding-desktop">
+<!-- Controls Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-stack-md gap-4">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md text-on-surface" placeholder="Search Delivery ID, Sender, Traveler..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg hover:bg-surface-container transition-colors duration-200 text-on-surface font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">filter_list</span> Filter
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg hover:bg-surface-container transition-colors duration-200 text-on-surface font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">download</span> Export
+                    </button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="py-3 px-4 font-label-caps text-label-caps text-secondary uppercase tracking-wider">Delivery ID</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-secondary uppercase tracking-wider">Sender</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-secondary uppercase tracking-wider">Traveler</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-secondary uppercase tracking-wider">Route</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-secondary uppercase tracking-wider">Status</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-secondary uppercase tracking-wider">Payment</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-secondary uppercase tracking-wider">Date</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-secondary uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-md text-body-md text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-bright transition-colors duration-150 group">
+<td class="py-4 px-4 font-semibold text-primary">#DEL-8902</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold text-xs">AK</div>
+<span>Arjun Kapoor</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">SR</div>
+<span>Sneha Reddy</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span class="text-sm">BOM (Mumbai)</span>
+<span class="material-symbols-outlined text-outline text-[16px] my-0.5">arrow_downward</span>
+<span class="text-sm">DEL (Delhi)</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-highest text-primary font-medium text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        In Transit
+                                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-on-tertiary-container bg-tertiary-fixed-dim/20 px-2 py-1 rounded text-xs font-semibold">Escrow</span>
+</td>
+<td class="py-4 px-4 text-on-surface-variant">Oct 24, 14:30</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant" title="View Map">
+<span class="material-symbols-outlined text-[20px]">map</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-primary" title="Track">
+<span class="material-symbols-outlined text-[20px]">my_location</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-error-container text-error" title="Flag for Review">
+<span class="material-symbols-outlined text-[20px]">flag</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-bright transition-colors duration-150 group">
+<td class="py-4 px-4 font-semibold text-primary">#DEL-8901</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold text-xs">VS</div>
+<span>Vikram Singh</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">PM</div>
+<span>Priya Menon</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span class="text-sm">BLR (Bangalore)</span>
+<span class="material-symbols-outlined text-outline text-[16px] my-0.5">arrow_downward</span>
+<span class="text-sm">HYD (Hyderabad)</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-fixed-dim/20 text-on-tertiary-container font-medium text-xs">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+                                        Delivered
+                                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-secondary bg-surface-variant px-2 py-1 rounded text-xs font-semibold">Released</span>
+</td>
+<td class="py-4 px-4 text-on-surface-variant">Oct 24, 09:15</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant" title="View Details">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-bright transition-colors duration-150 group">
+<td class="py-4 px-4 font-semibold text-primary">#DEL-8900</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold text-xs">RN</div>
+<span>Rohan Nair</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">KD</div>
+<span>Kavita Desai</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span class="text-sm">PNQ (Pune)</span>
+<span class="material-symbols-outlined text-outline text-[16px] my-0.5">arrow_downward</span>
+<span class="text-sm">MAA (Chennai)</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-medium text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                        Picked Up
+                                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-on-tertiary-container bg-tertiary-fixed-dim/20 px-2 py-1 rounded text-xs font-semibold">Escrow</span>
+</td>
+<td class="py-4 px-4 text-on-surface-variant">Oct 23, 18:45</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant" title="View Map">
+<span class="material-symbols-outlined text-[20px]">map</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-primary" title="Track">
+<span class="material-symbols-outlined text-[20px]">my_location</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-error-container text-error" title="Flag for Review">
+<span class="material-symbols-outlined text-[20px]">flag</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="bg-surface-container-low px-4 py-3 border-t border-outline-variant flex items-center justify-between">
+<span class="font-body-md text-body-md text-secondary">Showing 1 to 3 of 124 entries</span>
+<div class="flex gap-1">
+<button class="p-1.5 rounded hover:bg-surface-container text-secondary disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary-container text-on-primary-container font-body-md text-body-md flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container text-on-surface font-body-md text-body-md flex items-center justify-center">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container text-on-surface font-body-md text-body-md flex items-center justify-center">3</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-secondary">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

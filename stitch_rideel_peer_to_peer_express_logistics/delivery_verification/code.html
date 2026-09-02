@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Delivery Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d3e4fe",
+                        "on-primary-fixed": "#001b3c",
+                        "error-container": "#ffdad6",
+                        "outline": "#737780",
+                        "outline-variant": "#c3c6d1",
+                        "primary": "#001e40",
+                        "on-primary-container": "#799dd6",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-tertiary-fixed": "#002113",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-dim": "#cbdbf5",
+                        "on-surface-variant": "#43474f",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "primary-fixed": "#d5e3ff",
+                        "secondary-fixed": "#e0e3e5",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#003c27",
+                        "surface-variant": "#d3e4fe",
+                        "primary-container": "#003366",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#5c5f61",
+                        "inverse-primary": "#a7c8ff",
+                        "on-secondary-container": "#626567",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-tint": "#3a5f94",
+                        "on-background": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "base": "8px",
+                        "stack-md": "24px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-lg-mobile": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "label-caps": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .otp-input:focus-within {
+            border-color: #001e40;
+            box-shadow: 0 0 0 1px #001e40;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- Top App Bar -->
+<header class="bg-surface dark:bg-background text-primary dark:text-primary-fixed font-headline-md text-headline-md docked full-width top-0 border-b border-outline-variant dark:border-outline flat no shadows text-primary dark:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors opacity-80 duration-100 fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding-mobile h-16">
+<button class="p-2 -ml-2 rounded-full hover:bg-surface-variant transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">close</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed">RIDEEL</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">person</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 mt-16 px-container-padding-mobile py-stack-md flex flex-col md:max-w-[600px] md:mx-auto w-full pb-safe">
+<div class="mb-stack-md">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-2">Complete delivery</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Ask the receiver for the delivery OTP to complete the handover.</p>
+</div>
+<!-- OTP Input Section -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-stack-md mb-stack-md shadow-[0px_4px_20px_rgba(0,51,102,0.08)]">
+<div class="flex justify-between gap-2 mb-4" id="otp-container">
+<input class="w-12 h-14 md:w-16 md:h-16 text-center font-price-display text-price-display text-primary bg-surface border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors otp-input" inputmode="numeric" maxlength="1" type="text"/>
+<input class="w-12 h-14 md:w-16 md:h-16 text-center font-price-display text-price-display text-primary bg-surface border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors otp-input" inputmode="numeric" maxlength="1" type="text"/>
+<input class="w-12 h-14 md:w-16 md:h-16 text-center font-price-display text-price-display text-primary bg-surface border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors otp-input" inputmode="numeric" maxlength="1" type="text"/>
+<input class="w-12 h-14 md:w-16 md:h-16 text-center font-price-display text-price-display text-primary bg-surface border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors otp-input" inputmode="numeric" maxlength="1" type="text"/>
+<input class="w-12 h-14 md:w-16 md:h-16 text-center font-price-display text-price-display text-primary bg-surface border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors otp-input" inputmode="numeric" maxlength="1" type="text"/>
+<input class="w-12 h-14 md:w-16 md:h-16 text-center font-price-display text-price-display text-primary bg-surface border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors otp-input" inputmode="numeric" maxlength="1" type="text"/>
+</div>
+<button class="w-full py-3 rounded-lg border border-primary text-primary font-label-caps text-label-caps flex items-center justify-center gap-2 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">photo_camera</span>
+                Upload/Take delivery photo
+            </button>
+</div>
+<!-- Verification Notice -->
+<div class="bg-surface-container rounded-xl p-stack-sm flex items-start gap-3 mb-stack-lg border border-primary-fixed-dim">
+<span class="material-symbols-outlined text-primary-container mt-0.5" style="font-variation-settings: 'FILL' 1;">info</span>
+<p class="font-body-md text-body-md text-on-surface">Payment of <span class="font-price-display text-[16px]">₹120</span> will be released to your wallet after verification.</p>
+</div>
+<!-- Spacer to push button to bottom -->
+<div class="flex-1"></div>
+<!-- Action Button -->
+<div class="mt-auto pt-4 pb-8 md:pb-4">
+<button class="w-full bg-primary-container text-on-primary rounded-[12px] py-4 font-headline-md text-headline-md hover:bg-primary transition-colors shadow-lg active:scale-[0.98]">
+                Confirm Delivery
+            </button>
+</div>
+</main>
+<script>
+        // Basic OTP input navigation logic
+        const inputs = document.querySelectorAll('.otp-input');
+        
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value.length === 0 && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+            
+            // Allow only numbers
+            input.addEventListener('keypress', (e) => {
+                if(isNaN(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body></html>

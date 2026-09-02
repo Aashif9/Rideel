@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify Parcel Handoff - RIDEEL</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Public Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration from Design System -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#d3e4fe",
+                    "on-primary-fixed": "#001b3c",
+                    "error-container": "#ffdad6",
+                    "outline": "#737780",
+                    "outline-variant": "#c3c6d1",
+                    "primary": "#001e40",
+                    "on-primary-container": "#799dd6",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#002416",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed-variant": "#444749",
+                    "on-tertiary-fixed": "#002113",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-dim": "#cbdbf5",
+                    "on-surface-variant": "#43474f",
+                    "surface-container": "#e5eeff",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "primary-fixed": "#d5e3ff",
+                    "secondary-fixed": "#e0e3e5",
+                    "background": "#f8f9ff",
+                    "tertiary-container": "#003c27",
+                    "surface-variant": "#d3e4fe",
+                    "primary-container": "#003366",
+                    "on-surface": "#0b1c30",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary": "#5c5f61",
+                    "inverse-primary": "#a7c8ff",
+                    "on-secondary-container": "#626567",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#e0e3e5",
+                    "secondary-fixed-dim": "#c4c7c9",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-tint": "#3a5f94",
+                    "on-background": "#0b1c30",
+                    "surface-container-low": "#eff4ff",
+                    "inverse-surface": "#213145",
+                    "on-tertiary-container": "#00b27b",
+                    "on-secondary-fixed": "#191c1e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "40px",
+                    "container-padding-desktop": "40px",
+                    "gutter": "16px",
+                    "container-padding-mobile": "20px",
+                    "base": "8px",
+                    "stack-md": "24px",
+                    "stack-sm": "12px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Public Sans"],
+                    "body-lg": ["Public Sans"],
+                    "headline-lg": ["Public Sans"],
+                    "body-md": ["Public Sans"],
+                    "headline-lg-mobile": ["Public Sans"],
+                    "price-display": ["Public Sans"],
+                    "label-caps": ["Public Sans"]
+            },
+            "fontSize": {
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md h-screen flex flex-col antialiased selection:bg-primary-container selection:text-surface-container-lowest">
+<!-- Shared Component: TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding-mobile h-16 bg-surface border-b border-outline-variant transition-colors duration-100 opacity-100 hover:bg-surface-container">
+<button aria-label="Menu" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tight">RIDEEL</h1>
+<button aria-label="Profile" class="w-8 h-8 rounded-full overflow-hidden border-2 border-surface focus:outline-none focus:ring-2 focus:ring-primary-container">
+<img alt="user_profile_photo" class="w-full h-full object-cover" data-alt="A clean, professional headshot of an Indian male user, smiling subtly. He is wearing a dark, casual blazer against a neutral light grey background. High resolution, bright even studio lighting, corporate modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgiL8aHU6MhrtgwmZoQQV1_2Lx6J6ZXd3NnPEVh4ZPa0PKZrz3HiIqyOK9dsCb2ghqghPV1blACNyOwMsnDPVnPmma7VNHfNbK3UOr1smGVFSo-QkGpH8Hf9863oQ4ebA1mZNOp1VdIIyaGWOWza_d0WAXMRN3rgFu-oEAe7bCtV0MyCkX5Cmbr1yC8jvrE8I3t75F8Fn_67OTRhbEEwVobIoavn7hNeKDkVAdnYAQa9wHcH6SAuuO"/>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col pt-[88px] pb-stack-lg px-container-padding-mobile max-w-md mx-auto w-full">
+<!-- Header -->
+<div class="mb-stack-md text-center">
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Verify parcel handoff</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Security step for sender</p>
+</div>
+<!-- OTP Display Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-[0px_4px_20px_rgba(0,51,102,0.04)] mb-stack-lg relative overflow-hidden">
+<!-- Decorative subtle top border line -->
+<div class="absolute top-0 left-0 w-full h-1 bg-primary-container opacity-20"></div>
+<p class="font-body-md text-body-md text-on-surface-variant text-center mb-stack-md">
+                Share this OTP with Rahul only when handing over the parcel.
+            </p>
+<!-- OTP Digits Container -->
+<div class="flex justify-center gap-2 sm:gap-3 mb-stack-sm">
+<!-- Digit 1 -->
+<div class="w-12 h-14 flex items-center justify-center border border-outline-variant rounded-lg bg-surface font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary-container shadow-sm">
+                    4
+                </div>
+<!-- Digit 2 -->
+<div class="w-12 h-14 flex items-center justify-center border border-outline-variant rounded-lg bg-surface font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary-container shadow-sm">
+                    8
+                </div>
+<!-- Digit 3 -->
+<div class="w-12 h-14 flex items-center justify-center border border-outline-variant rounded-lg bg-surface font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary-container shadow-sm">
+                    2
+                </div>
+<!-- Digit 4 -->
+<div class="w-12 h-14 flex items-center justify-center border border-outline-variant rounded-lg bg-surface font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary-container shadow-sm">
+                    9
+                </div>
+<!-- Digit 5 -->
+<div class="w-12 h-14 flex items-center justify-center border border-outline-variant rounded-lg bg-surface font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary-container shadow-sm">
+                    3
+                </div>
+<!-- Digit 6 -->
+<div class="w-12 h-14 flex items-center justify-center border border-outline-variant rounded-lg bg-surface font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary-container shadow-sm">
+                    1
+                </div>
+</div>
+<div class="flex items-center justify-center gap-2 mt-4 text-secondary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label-caps text-[10px] uppercase tracking-wider">Secure Transfer</span>
+</div>
+</div>
+<!-- Take Photo Action -->
+<button class="w-full flex items-center justify-center gap-base py-3 px-4 border border-outline-variant bg-surface-container-lowest rounded-xl font-label-caps text-label-caps text-primary hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary-container mb-stack-md group shadow-sm hover:shadow-md">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">photo_camera</span>
+            Take parcel photo
+        </button>
+<!-- Flexible spacer to push bottom content down -->
+<div class="flex-1"></div>
+<!-- Confirmation & Submission Area -->
+<div class="mt-stack-md pt-stack-md border-t border-outline-variant/30">
+<!-- Checkbox -->
+<label class="flex items-start gap-3 cursor-pointer mb-stack-md group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="peer appearance-none w-6 h-6 border-2 border-outline-variant rounded-md bg-surface-container-lowest checked:bg-primary-container checked:border-primary-container focus:ring-2 focus:ring-primary-container/50 focus:outline-none transition-all cursor-pointer" id="confirm-handoff" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-surface-container-lowest opacity-0 peer-checked:opacity-100 pointer-events-none text-lg transition-opacity duration-200" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface flex-1 select-none group-hover:text-primary transition-colors pt-1">
+                    I confirm this parcel is ready for handoff and matches the description.
+                </span>
+</label>
+<!-- Primary Button -->
+<!-- Note: In a real app, JS would toggle 'opacity-50 cursor-not-allowed' based on checkbox state. Shown in active state for UI review. -->
+<button class="w-full h-14 bg-primary-container text-surface-container-lowest font-label-caps text-label-caps rounded-xl shadow-[0px_4px_20px_rgba(0,51,102,0.15)] hover:bg-primary transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 flex items-center justify-center uppercase tracking-wide">
+                Confirm Pickup
+            </button>
+</div>
+</main>
+<!-- Suppression Notice (Invisible logic marker for the designer) -->
+<!-- BottomNavBar and NavigationDrawer suppressed intentionally per rule: Linear/Transactional intent. -->
+</body></html>

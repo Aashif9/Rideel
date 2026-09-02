@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Disputes | Rideel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#e0e3e5",
+                        "secondary": "#5c5f61",
+                        "on-primary-container": "#799dd6",
+                        "secondary-fixed": "#e0e3e5",
+                        "inverse-on-surface": "#eaf1ff",
+                        "outline-variant": "#c3c6d1",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-secondary-container": "#626567",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-tint": "#3a5f94",
+                        "error-container": "#ffdad6",
+                        "background": "#f8f9ff",
+                        "primary-fixed": "#d5e3ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#002416",
+                        "surface-variant": "#d3e4fe",
+                        "on-background": "#0b1c30",
+                        "surface-container": "#e5eeff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-highest": "#d3e4fe",
+                        "outline": "#737780",
+                        "on-surface-variant": "#43474f",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "primary": "#001e40",
+                        "primary-container": "#003366",
+                        "on-primary-fixed": "#001b3c",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface": "#0b1c30",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "inverse-surface": "#213145",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-container": "#003c27",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "inverse-primary": "#a7c8ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "stack-sm": "12px",
+                        "stack-lg": "40px",
+                        "container-padding-desktop": "40px",
+                        "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-lg": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "price-display": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- NavigationDrawer (Hidden on Mobile, Flex on MD+) -->
+<nav class="bg-surface-container-low dark:bg-surface-container-highest text-primary dark:text-inverse-primary font-body-md text-body-md font-headline-md text-headline-md font-bold h-full w-72 border-r border-outline-variant dark:border-outline flat no shadows hidden md:flex flex-col h-screen fixed left-0 top-0 p-stack-md transition-all duration-200 ease-in-out z-40">
+<div class="flex items-center gap-4 mb-8">
+<img alt="Admin Portrait" class="w-12 h-12 rounded-full object-cover" data-alt="A professional headshot of a corporate administrator in a modern office setting. The lighting is soft and bright, emphasizing a clean, modern aesthetic. The color palette is minimal, focusing on deep blues and bright whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvSpm7gkscqPS9cwR-DX20JYVhEddVDHb8Rhbwx2Q6DH5zLLliPhfxkU0z25H--MlIcf2-zfTwHVmfcAUzcnv3vIbBVnvbaJH6cJU_XAueGpZlWdt_aLyUftpO_GNSGbjj59mCYiTJWQN1O5CwsgMLksN34uDNFc6I_3KF2v2Kiu6Eh_kHSTk59eD_X_NOb9Ar8TvXlpL2XXwpZkI6wGtXD3fFVmmNFJfkIjiN4_T-urlG2UbtXTmL"/>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">Admin Dashboard</h2>
+<p class="font-body-md text-body-md text-secondary">Platform Overview</p>
+<span class="font-label-caps text-label-caps text-outline text-[10px]">v1.0.4</span>
+</div>
+</div>
+<ul class="flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Users</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="local_post_office">local_post_office</span>
+<span class="font-body-md text-body-md">Deliveries</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 bg-primary-container text-on-primary-container rounded-lg font-bold transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="font-body-md text-body-md">Disputes</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md text-body-md">Payments</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-72 flex flex-col min-h-screen">
+<!-- TopAppBar (Web & Mobile) -->
+<header class="bg-surface dark:bg-surface-dim text-primary dark:text-inverse-primary font-headline-md text-headline-md font-headline-lg text-headline-lg font-bold docked full-width top-0 border-b border-outline-variant dark:border-outline flat no shadows hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors duration-200 flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-30 sticky">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<div class="flex items-center gap-2 text-primary dark:text-inverse-primary">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<h1 class="font-headline-lg text-headline-lg font-bold m-0">RIDEEL</h1>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-container-padding-mobile md:p-container-padding-desktop flex-1 flex flex-col gap-stack-md h-[calc(100vh-64px)] overflow-hidden">
+<div class="flex justify-between items-end mb-4 shrink-0">
+<div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">Dispute Resolution Center</h2>
+<p class="font-body-md text-body-md text-secondary">Manage and resolve active user disputes.</p>
+</div>
+</div>
+<!-- Main Split Layout -->
+<div class="flex flex-col lg:flex-row gap-stack-md h-full overflow-hidden">
+<!-- Left Column: Dispute List -->
+<div class="w-full lg:w-1/3 flex flex-col h-full bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm shrink-0">
+<div class="p-4 border-b border-outline-variant bg-surface-bright flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md">Open Disputes (4)</h3>
+<span class="material-symbols-outlined text-outline" data-icon="filter_list">filter_list</span>
+</div>
+<div class="overflow-y-auto flex-1 p-2 space-y-2">
+<!-- Dispute Item 1 (Active) -->
+<div class="p-4 rounded-lg bg-surface-container border border-primary cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps bg-error-container text-on-error-container px-2 py-1 rounded-full">Urgent</span>
+<span class="font-body-md text-body-md text-secondary">10m ago</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Damaged Parcel</h4>
+<p class="font-body-md text-body-md text-secondary mb-2">Delivery: RD784521</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="person">person</span>
+<span class="font-body-md text-body-md text-secondary">Sender vs Traveler</span>
+</div>
+</div>
+<!-- Dispute Item 2 -->
+<div class="p-4 rounded-lg hover:bg-surface-variant border border-transparent cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps bg-surface-variant text-on-surface-variant px-2 py-1 rounded-full">Standard</span>
+<span class="font-body-md text-body-md text-secondary">2h ago</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Late Delivery</h4>
+<p class="font-body-md text-body-md text-secondary mb-2">Delivery: RD112233</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="person">person</span>
+<span class="font-body-md text-body-md text-secondary">Receiver vs Traveler</span>
+</div>
+</div>
+<!-- Dispute Item 3 -->
+<div class="p-4 rounded-lg hover:bg-surface-variant border border-transparent cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps bg-surface-variant text-on-surface-variant px-2 py-1 rounded-full">Standard</span>
+<span class="font-body-md text-body-md text-secondary">1d ago</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Payment Issue</h4>
+<p class="font-body-md text-body-md text-secondary mb-2">Delivery: RD998877</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="person">person</span>
+<span class="font-body-md text-body-md text-secondary">Sender vs Platform</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Detail View -->
+<div class="w-full lg:w-2/3 flex flex-col h-full bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<!-- Detail Header -->
+<div class="p-6 border-b border-outline-variant bg-surface-bright flex justify-between items-center shrink-0">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Dispute ID: DSP-8842</h3>
+<span class="font-label-caps text-label-caps bg-error-container text-on-error-container px-2 py-1 rounded-full">Urgent</span>
+</div>
+<p class="font-body-lg text-body-lg text-secondary">Delivery <a class="text-primary hover:underline font-bold" href="#">RD784521</a> • Issue: Damaged Parcel</p>
+</div>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<!-- Detail Body (Scrollable) -->
+<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-stack-md bg-background">
+<!-- Evidence Section -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="photo_camera">photo_camera</span> Evidence
+                            </h4>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<img alt="Damaged parcel 1" class="w-full h-32 object-cover rounded-lg border border-outline-variant cursor-pointer hover:opacity-80 transition-opacity" data-alt="A close up shot of a cardboard delivery box with a crushed corner. The lighting is harsh, highlighting the damage. The image is taken on a clean, white surface, typical of a modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUr-mzEl1qtwRQBp6ZhAfjy5iiVkBjSfXj0DanQUAmh8BBS-15nhxoFxVdIKaQ_idnrlHSd7ZOS0D49WVj1kcvfyC7-E-OEoWTfk-WeKEc_E1hd4YMZaelzobQH1s5deNLkJRsnftakqCMUnMZcQVWCA9zBa92diht2PhYs8RRyAM0BwDmRJ8WLM7m1ifKizxP8Oee_uPEo6kY4i-JpGI-yXnTXcX6iMOzxNsGYLO91G3I5mhShYj5"/>
+<img alt="Damaged parcel 2" class="w-full h-32 object-cover rounded-lg border border-outline-variant cursor-pointer hover:opacity-80 transition-opacity" data-alt="Another angle of the damaged cardboard delivery box, showing a tear along the side seam. The lighting is bright and clear, focusing on the defect. The background is a minimalist, light-mode setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcAP-OI5NsFTKWNpd_HVLf4pWyfsmmz_MPcOUlEKJxKSrtkJ2PXJBLw3Z57iyeX-lf9Vi30ZK5cr9KAuenP6Q8Mz25xCcl7SNveHK55OP4cAyPhgPB6WK1mCrk9c72myR9pb18Ce_oo_39aTIDKXONnpWkE4MGXKzFF0hYB1gFOuE5j6PSmU1na5X4exIcGFVFBxIs9kQE5nV36N8tVms0AZD3xPa3HpvC_tnjJn0uxUQWHKJ6gbqg"/>
+</div>
+</div>
+<!-- Chat Log Section -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant shadow-sm flex-1 flex flex-col min-h-[300px]">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="forum">forum</span> Chat Log
+                            </h4>
+<div class="flex-1 overflow-y-auto space-y-4 p-2 bg-surface-bright rounded-lg border border-outline-variant inset-shadow-sm">
+<!-- Message 1 -->
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm shrink-0">S</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-body-md text-body-md font-bold">Sender (Rahul)</span>
+<span class="font-label-caps text-label-caps text-outline">10:45 AM</span>
+</div>
+<div class="bg-surface p-3 rounded-lg rounded-tl-none border border-outline-variant inline-block mt-1">
+<p class="font-body-md text-body-md text-on-surface">When the parcel arrived, the box was completely crushed on one side. I suspect the contents might be damaged.</p>
+</div>
+</div>
+</div>
+<!-- Message 2 -->
+<div class="flex gap-3 flex-row-reverse">
+<div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold text-sm shrink-0">T</div>
+<div class="text-right">
+<div class="flex items-baseline gap-2 justify-end">
+<span class="font-label-caps text-label-caps text-outline">10:52 AM</span>
+<span class="font-body-md text-body-md font-bold">Traveler (Amit)</span>
+</div>
+<div class="bg-primary-container text-on-primary-container p-3 rounded-lg rounded-tr-none inline-block mt-1 text-left">
+<p class="font-body-md text-body-md">I apologize, but the box was already slightly dented when I picked it up. I made sure to handle it carefully during transit.</p>
+</div>
+</div>
+</div>
+<!-- Message 3 -->
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm shrink-0">S</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-body-md text-body-md font-bold">Sender (Rahul)</span>
+<span class="font-label-caps text-label-caps text-outline">11:05 AM</span>
+</div>
+<div class="bg-surface p-3 rounded-lg rounded-tl-none border border-outline-variant inline-block mt-1">
+<p class="font-body-md text-body-md text-on-surface">That's not true, I have pictures from right before handover. I want a refund.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Resolution Action Bar -->
+<div class="p-6 border-t border-outline-variant bg-surface-bright flex flex-wrap gap-4 items-center justify-end shrink-0">
+<span class="font-body-md text-body-md text-secondary mr-auto">Select resolution action:</span>
+<button class="px-4 py-2 font-body-md text-body-md font-bold text-on-surface border border-outline hover:bg-surface-variant rounded-lg transition-colors">
+                            Dismiss Dispute
+                        </button>
+<button class="px-4 py-2 font-body-md text-body-md font-bold text-primary border border-primary hover:bg-primary-container hover:text-on-primary-container rounded-lg transition-colors">
+                            Release Partial Payment
+                        </button>
+<button class="px-6 py-2 font-body-md text-body-md font-bold bg-primary text-on-primary rounded-lg hover:bg-on-primary-fixed-variant transition-colors shadow-sm">
+                            Full Refund to Sender
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

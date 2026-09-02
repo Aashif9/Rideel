@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>RIDEEL - Wallet</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#001e40",
+                        "inverse-primary": "#a7c8ff",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-container": "#003c27",
+                        "on-primary-fixed": "#001b3c",
+                        "secondary-fixed": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#002416",
+                        "on-tertiary-container": "#00b27b",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-secondary-container": "#626567",
+                        "background": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#e0e3e5",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary-container": "#799dd6",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#213145",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "outline": "#737780",
+                        "on-surface": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#3a5f94",
+                        "outline-variant": "#c3c6d1",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#d5e3ff",
+                        "primary-container": "#003366",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-secondary-fixed-variant": "#444749",
+                        "secondary": "#5c5f61",
+                        "on-surface-variant": "#43474f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "container-padding-desktop": "40px",
+                        "gutter": "16px",
+                        "container-padding-mobile": "20px",
+                        "stack-lg": "40px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "price-display": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "price-display": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md pt-safe">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-container-padding-mobile md:px-container-padding-desktop h-16 w-full z-50 bg-surface dark:bg-surface-dim docked full-width top-0 border-b border-outline-variant dark:border-outline flat no shadows transition-colors duration-200">
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-high p-2 rounded-full flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">local_shipping</span>
+</button>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary dark:text-inverse-primary">RIDEEL</h1>
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-high p-2 rounded-full flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<div class="flex-1 flex flex-col md:flex-row max-w-[1200px] w-full mx-auto pb-24 md:pb-8">
+<!-- NavigationDrawer (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 p-stack-md w-72 bg-surface-container-low dark:bg-surface-container-highest border-r border-outline-variant dark:border-outline flat no shadows z-40 pt-20">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md">
+                    AD
+                </div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">Admin Dashboard</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Platform Overview</span>
+<span class="font-label-caps text-label-caps text-secondary mt-1">v1.0.4</span>
+</div>
+</div>
+<ul class="flex flex-col gap-2 font-body-md text-body-md">
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">group</span>
+                        Users
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">local_post_office</span>
+                        Deliveries
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 bg-primary-container text-on-primary-container rounded-lg font-bold transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined filled">payments</span>
+                        Payments
+                    </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 w-full px-container-padding-mobile md:px-container-padding-desktop py-stack-md md:pl-80 flex flex-col gap-stack-md">
+<!-- Page Title -->
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface">Wallet</h2>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</div>
+</div>
+<!-- Balance Card -->
+<div class="bg-primary-container text-on-primary rounded-2xl p-stack-md flex flex-col gap-stack-sm relative overflow-hidden shadow-[0_4px_20px_rgba(0,51,102,0.15)]">
+<!-- Decorative background elements -->
+<div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-primary-fixed opacity-10"></div>
+<div class="absolute right-12 bottom-4 w-16 h-16 rounded-full bg-primary-fixed opacity-10"></div>
+<div class="flex flex-col relative z-10">
+<span class="font-body-md text-body-md opacity-80">Available Balance</span>
+<div class="flex items-end gap-2 mt-1">
+<span class="font-price-display text-[40px] leading-[48px] font-bold">₹2,840</span>
+<span class="font-body-md text-body-md opacity-80 mb-2">.00</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2 border-t border-white/20 pt-4 relative z-10">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps opacity-80">Pending Clearance</span>
+<span class="font-headline-md text-headline-md">₹360.00</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+</div>
+<div class="flex gap-4 mt-4 relative z-10">
+<button class="flex-1 bg-white text-primary-container font-headline-md text-body-md py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+                        Withdraw
+                    </button>
+<button class="flex-1 bg-primary border border-white/30 text-white font-headline-md text-body-md py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-fixed hover:text-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        Bank Account
+                    </button>
+</div>
+</div>
+<!-- Tabs -->
+<div class="w-full border-b border-outline-variant overflow-x-auto hide-scrollbar mt-2">
+<div class="flex gap-8 min-w-max px-2">
+<button class="pb-3 border-b-2 border-primary text-primary font-headline-md text-body-md font-bold px-1 transition-colors">
+                        Available
+                    </button>
+<button class="pb-3 border-b-2 border-transparent text-secondary hover:text-on-surface hover:border-outline-variant font-headline-md text-body-md px-1 transition-colors">
+                        Pending
+                    </button>
+<button class="pb-3 border-b-2 border-transparent text-secondary hover:text-on-surface hover:border-outline-variant font-headline-md text-body-md px-1 transition-colors">
+                        Released
+                    </button>
+<button class="pb-3 border-b-2 border-transparent text-secondary hover:text-on-surface hover:border-outline-variant font-headline-md text-body-md px-1 transition-colors">
+                        Refunded
+                    </button>
+</div>
+</div>
+<!-- Transactions List -->
+<div class="flex flex-col gap-4 mt-2">
+<div class="flex items-center justify-between mb-2">
+<h3 class="font-headline-md text-[18px] text-on-surface">Recent Activity</h3>
+<button class="text-primary flex items-center gap-1 font-body-md text-body-md">
+                        Filter <span class="material-symbols-outlined text-[18px]">filter_list</span>
+</button>
+</div>
+<!-- Transaction Item 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between hover:shadow-[0_4px_20px_rgba(0,51,102,0.08)] transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">package_2</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-[16px] text-on-surface">Delivery #DEL-8924</span>
+<span class="font-body-md text-body-md text-secondary mt-1">Today, 2:45 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-price-display text-[16px] text-on-surface">+ ₹120.00</span>
+<div class="flex items-center gap-1 mt-1 bg-tertiary-container/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-on-tertiary-container">check_circle</span>
+<span class="font-label-caps text-[10px] text-on-tertiary-container">COMPLETED</span>
+</div>
+</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between hover:shadow-[0_4px_20px_rgba(0,51,102,0.08)] transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-[16px] text-on-surface">Bank Withdrawal</span>
+<span class="font-body-md text-body-md text-secondary mt-1">Yesterday, 10:30 AM</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-price-display text-[16px] text-on-surface">- ₹500.00</span>
+<div class="flex items-center gap-1 mt-1 bg-tertiary-container/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-on-tertiary-container">check_circle</span>
+<span class="font-label-caps text-[10px] text-on-tertiary-container">COMPLETED</span>
+</div>
+</div>
+</div>
+<!-- Transaction Item 3 (Pending) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between hover:shadow-[0_4px_20px_rgba(0,51,102,0.08)] transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">package_2</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-[16px] text-on-surface">Delivery #DEL-8901</span>
+<span class="font-body-md text-body-md text-secondary mt-1">Oct 24, 4:15 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-price-display text-[16px] text-on-surface">+ ₹360.00</span>
+<div class="flex items-center gap-1 mt-1 bg-surface-variant px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">schedule</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">PENDING</span>
+</div>
+</div>
+</div>
+<button class="w-full py-3 mt-2 text-primary font-headline-md text-body-md hover:bg-surface-container rounded-lg transition-colors border border-transparent hover:border-primary-fixed">
+                    View All Transactions
+                </button>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 z-50 flex justify-around items-center px-4 bg-surface dark:bg-surface-dim pb-safe border-t border-outline-variant dark:border-outline shadow-md">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1">package_2</span>
+<span class="font-label-caps text-label-caps">Deliveries</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1">map</span>
+<span class="font-label-caps text-label-caps">Trips</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary font-bold after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1 hover:opacity-80 scale-95 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined filled mb-1">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple tab switching logic for visual demonstration
+        const tabs = document.querySelectorAll('.overflow-x-auto button');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Reset all tabs
+                tabs.forEach(t => {
+                    t.classList.remove('border-primary', 'text-primary', 'font-bold');
+                    t.classList.add('border-transparent', 'text-secondary');
+                });
+                // Set active tab
+                tab.classList.remove('border-transparent', 'text-secondary');
+                tab.classList.add('border-primary', 'text-primary', 'font-bold');
+            });
+        });
+    </script>
+</body></html>
