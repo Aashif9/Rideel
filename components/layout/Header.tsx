@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { User, AppNotification } from '@/types';
 import { Bell, ShieldCheck, User as UserIcon, Building2, Package, Truck, LayoutDashboard, LogIn } from 'lucide-react';
 
 export default function Header() {
+  const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -15,6 +17,8 @@ export default function Header() {
     apiServices.getCurrentUser().then(setUser);
     apiServices.getNotifications().then(setNotifications);
   }, []);
+
+  if (pathname === '/login') return null;
 
   const unreadCount = notifications.filter(n => !n.read).length;
 

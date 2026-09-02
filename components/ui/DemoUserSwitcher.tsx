@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { DEMO_PRESETS } from '@/lib/constants';
 import { User } from '@/types';
 import { UserCheck, Shield, Repeat, Sparkles } from 'lucide-react';
 
 export default function DemoUserSwitcher({ onUserChanged }: { onUserChanged?: () => void }) {
+  const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export default function DemoUserSwitcher({ onUserChanged }: { onUserChanged?: ()
     window.location.reload();
   };
 
-  if (!currentUser) return null;
+  if (pathname === '/login' || !currentUser) return null;
 
   return (
     <div className="bg-primary text-white text-xs py-2 px-4 shadow-md flex flex-wrap items-center justify-between gap-2 border-b border-primary-container z-50">
