@@ -96,6 +96,17 @@ export default function ProfilePage() {
           </div>
           <ChevronRight className="w-5 h-5 text-slate-400" />
         </Link>
+
+        <Link href="/login" className="p-4 flex items-center justify-between hover:bg-rose-50/50 transition">
+          <div className="flex items-center gap-3">
+            <LogOut className="w-5 h-5 text-rose-600" />
+            <div>
+              <div className="text-sm font-bold text-rose-700">Log Out / Switch Member Account</div>
+              <div className="text-xs text-rose-500">Sign in with phone number code or switch active role</div>
+            </div>
+          </div>
+          <ChevronRight className="w-5 h-5 text-rose-400" />
+        </Link>
       </div>
     </div>
   );

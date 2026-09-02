@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { apiServices } from '@/services/apiServices';
 import { User, AppNotification } from '@/types';
-import { Bell, ShieldCheck, User as UserIcon, Building2, Package, Truck, LayoutDashboard } from 'lucide-react';
+import { Bell, ShieldCheck, User as UserIcon, Building2, Package, Truck, LayoutDashboard, LogIn } from 'lucide-react';
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
@@ -100,6 +100,15 @@ export default function Header() {
               </div>
             )}
           </div>
+
+          {/* Login / Switch Account Link */}
+          <Link
+            href="/login"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-extrabold text-primary bg-primary/10 hover:bg-primary/20 rounded-full transition border border-primary/20"
+          >
+            <LogIn className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Login / Switch</span>
+          </Link>
 
           {/* User Profile Badge */}
           {user && (
