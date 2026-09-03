@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { Delivery } from '@/types';
 import { AlertTriangle, Upload, CheckCircle2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-export default function ReportIssuePage() {
+function ReportIssueContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const deliveryId = searchParams.get('deliveryId') || 'RD784521';
@@ -97,5 +97,13 @@ export default function ReportIssuePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ReportIssuePage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center font-bold text-slate-500">Loading dispute form...</div>}>
+      <ReportIssueContent />
+    </Suspense>
   );
 }

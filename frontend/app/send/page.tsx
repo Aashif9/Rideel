@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CITIES } from '@/lib/constants';
 import { MapPin, Calendar, ArrowRight, ShieldCheck, UserCheck, ChevronRight } from 'lucide-react';
 
-export default function SendParcelRoutePage() {
+function SendParcelRouteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -188,5 +188,13 @@ export default function SendParcelRoutePage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function SendParcelRoutePage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center font-bold text-slate-500">Loading route settings...</div>}>
+      <SendParcelRouteContent />
+    </Suspense>
   );
 }

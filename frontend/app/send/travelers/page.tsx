@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { Trip } from '@/types';
@@ -15,7 +15,7 @@ interface RankedMatch {
   reasons: string[];
 }
 
-export default function AvailableTravelersPage() {
+function AvailableTravelersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const parcelId = searchParams.get('parcelId');
@@ -195,5 +195,13 @@ export default function AvailableTravelersPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AvailableTravelersPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center font-bold text-slate-500">Loading travelers...</div>}>
+      <AvailableTravelersContent />
+    </Suspense>
   );
 }

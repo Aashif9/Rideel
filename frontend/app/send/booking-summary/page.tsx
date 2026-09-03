@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { Delivery, Trip, Parcel } from '@/types';
 import PaymentModal from '@/components/ui/PaymentModal';
 import { ShieldCheck, Lock, CheckCircle2, ChevronRight, Package, Truck, Calendar } from 'lucide-react';
 
-export default function BookingSummaryPage() {
+function BookingSummaryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const parcelId = searchParams.get('parcelId');
@@ -168,5 +168,13 @@ export default function BookingSummaryPage() {
         }}
       />
     </div>
+  );
+}
+
+export default function BookingSummaryPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center font-bold text-slate-500">Loading booking summary...</div>}>
+      <BookingSummaryContent />
+    </Suspense>
   );
 }

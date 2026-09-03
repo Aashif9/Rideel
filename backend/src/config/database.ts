@@ -1,0 +1,26 @@
+import { Pool } from 'pg';
+import { env } from './env';
+
+export const pool = new Pool({
+  connectionString: env.DATABASE_URL,
+  ssl:
+    env.NODE_ENV === 'production' ||
+    env.DATABASE_URL.includes('supabase') ||
+    env.DATABASE_URL.includes('neon')
+      ? { rejectUnauthorized: false }
+      : undefined,
+});
+
+export async function query(text: string, params?: any[]) {
+  const start = Date.now();
+  const res = await pool.query(text, params);
+  const duration = Date.now() - start;
+  if (env.NODE_ENV === 'development') {
+    console.log('Executed SQL query', {
+      text: text.substring(0, 80),
+      duration,
+      rows: res.rowCount,
+    });
+  }
+  return res;
+}

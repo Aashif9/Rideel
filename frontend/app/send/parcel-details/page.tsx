@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { PROHIBITED_ITEMS, FEE_CONFIG } from '@/lib/constants';
 import { Package, Shield, AlertTriangle, ArrowRight, ChevronRight, CheckSquare } from 'lucide-react';
 import { ParcelType } from '@/types';
 
-export default function ParcelDetailsPage() {
+function ParcelDetailsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -254,5 +254,13 @@ export default function ParcelDetailsPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function ParcelDetailsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center font-bold text-slate-500">Loading parcel details...</div>}>
+      <ParcelDetailsContent />
+    </Suspense>
   );
 }
