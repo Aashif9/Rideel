@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
-import { User } from '@/types';
+import { User, UserRole } from '@/types';
 import {
   Truck, Globe, ArrowRight, ShieldCheck, CheckCircle2,
   User as UserIcon, Mail, Building, Package, Car, Camera,
@@ -29,7 +29,7 @@ function LoginContent() {
   const [fullName, setFullName] = useState('Rohan Sharma');
   const [email, setEmail] = useState('rohan@example.com');
   const [city, setCity] = useState('Mumbai');
-  const [selectedRoles, setSelectedRoles] = useState<string[]>(['sender', 'traveler']);
+  const [selectedRoles, setSelectedRoles] = useState<UserRole[]>(['sender', 'traveler']);
 
   // Onboarding Carousel State (Image 3)
   const [onboardingSlide, setOnboardingSlide] = useState(0);
@@ -107,23 +107,32 @@ function LoginContent() {
     }
   };
 
-  const handleProfileSubmit = (e: React.FormEvent) => {
+  const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim()) {
       setError('Please enter your full name.');
       return;
     }
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      await apiServices.updateUserProfile({
+        full_name: fullName,
+        email: email,
+        city: city,
+        role: selectedRoles
+      });
       setIsLoading(false);
       setScreen('success');
       setTimeout(() => {
         router.push('/');
       }, 1000);
-    }, 600);
+    } catch (err) {
+      setIsLoading(false);
+      setError('Failed to save profile to PostgreSQL database.');
+    }
   };
 
-  const toggleRole = (role: string) => {
+  const toggleRole = (role: UserRole) => {
     if (selectedRoles.includes(role)) {
       if (selectedRoles.length > 1) {
         setSelectedRoles(selectedRoles.filter(r => r !== role));

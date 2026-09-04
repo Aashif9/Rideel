@@ -46,26 +46,65 @@ class RideelServices {
     return db.currentUser;
   }
 
-  async loginWithOTP(phone: string, otp: string): Promise<{ success: boolean; user?: User; message?: string }> {
+  async loginWithOTP(phone: string, otp: string, userData?: { full_name?: string; email?: string; city?: string; role?: string[] }): Promise<{ success: boolean; user?: User; message?: string }> {
     if (otp !== '123456' && otp !== '000000') {
       return { success: false, message: 'Invalid OTP code. Use 123456 for demo login.' };
     }
+    const cleanPhone = phone.replace(/\D/g, '');
+
+    try {
+      // Connect to Backend PostgreSQL Database REST API
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/auth/register-or-login` : `${baseUrl}/api/auth/register-or-login`;
+
+      const response = await fetch(targetUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: cleanPhone,
+          full_name: userData?.full_name || 'Aarav Sharma',
+          email: userData?.email || 'aarav@example.com',
+          city: userData?.city || 'Chennai',
+          role: userData?.role || ['sender', 'traveler']
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.user) {
+          const db = this.getDb();
+          db.currentUser = data.user;
+          const idx = db.users.findIndex(u => u.phone === cleanPhone);
+          if (idx !== -1) {
+            db.users[idx] = data.user;
+          } else {
+            db.users.push(data.user);
+          }
+          this.saveDb(db);
+          return { success: true, user: data.user, message: data.message };
+        }
+      }
+    } catch (err) {
+      console.warn('Backend server connection failed, using local database fallback.', err);
+    }
+
+    // Fallback if backend offline
     const db = this.getDb();
-    let user = db.users.find(u => u.phone === phone);
+    let user = db.users.find(u => u.phone === cleanPhone);
     if (!user) {
       user = {
         id: `usr_${Date.now()}`,
-        full_name: 'New Rideel User',
-        phone,
-        email: `user_${Date.now().toString().slice(-4)}@rideel.in`,
-        profile_photo: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=250',
-        city: 'Vijayawada',
+        full_name: userData?.full_name || 'Aarav Sharma',
+        phone: cleanPhone,
+        email: userData?.email || `user_${Date.now().toString().slice(-4)}@rideel.in`,
+        profile_photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+        city: userData?.city || 'Chennai',
         rating: 5.0,
         completed_deliveries: 0,
         role: ['sender', 'traveler'],
         active_mode: 'sender',
         account_status: 'active',
-        is_kyc_verified: false,
+        is_kyc_verified: true,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
@@ -82,6 +121,27 @@ class RideelServices {
     const idx = db.users.findIndex(u => u.id === db.currentUser.id);
     if (idx !== -1) db.users[idx] = db.currentUser;
     this.saveDb(db);
+
+    // Sync profile updates to PostgreSQL Database
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/auth/register-or-login` : `${baseUrl}/api/auth/register-or-login`;
+
+      await fetch(targetUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: db.currentUser.phone,
+          full_name: updates.full_name || db.currentUser.full_name,
+          email: updates.email || db.currentUser.email,
+          city: updates.city || db.currentUser.city,
+          role: updates.role || db.currentUser.role
+        })
+      });
+    } catch (e) {
+      console.warn('Could not sync user profile update to PostgreSQL backend:', e);
+    }
+
     return db.currentUser;
   }
 
