@@ -1,27 +1,53 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { User } from '@/types';
 import {
-  Smartphone, ShieldCheck, CheckCircle2, ArrowRight, RefreshCw,
-  AlertCircle, Lock, ArrowLeft
+  Truck, Globe, ArrowRight, ShieldCheck, CheckCircle2,
+  User as UserIcon, Mail, Building, Package, Car, Camera,
+  RefreshCw, AlertCircle, ArrowLeft, ChevronRight, Lock
 } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
-  const [step, setStep] = useState<'phone' | 'otp' | 'success'>('phone');
+  const searchParams = useSearchParams();
+  const initialMode = searchParams.get('mode') || 'login';
+
+  // Screen Flow: 'splash' | 'onboarding' | 'login' | 'otp' | 'profile' | 'success'
+  const [screen, setScreen] = useState<string>(initialMode === 'onboarding' ? 'onboarding' : 'login');
+  
+  // Login Form States
   const [phone, setPhone] = useState('9876543210');
   const [otp, setOtp] = useState(['1', '2', '3', '4', '5', '6']);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    apiServices.getCurrentUser().then(setCurrentUser);
-  }, []);
+  // Profile Setup States (Image 4)
+  const [fullName, setFullName] = useState('Rohan Sharma');
+  const [email, setEmail] = useState('rohan@example.com');
+  const [city, setCity] = useState('Mumbai');
+  const [selectedRoles, setSelectedRoles] = useState<string[]>(['sender', 'traveler']);
+
+  // Onboarding Carousel State (Image 3)
+  const [onboardingSlide, setOnboardingSlide] = useState(0);
+
+  const onboardingSlides = [
+    {
+      title: "Send it today.",
+      description: "Send parcels between cities using travelers already heading your way.",
+    },
+    {
+      title: "Earn while traveling.",
+      description: "Monetize unused vehicle luggage space on your intercity trips.",
+    },
+    {
+      title: "100% Escrow Protection.",
+      description: "Payments are safely locked until receiver verifies delivery OTP.",
+    }
+  ];
 
   const handlePhoneSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,8 +60,8 @@ export default function LoginPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setStep('otp');
-    }, 400);
+      setScreen('otp');
+    }, 500);
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -44,16 +70,15 @@ export default function LoginPage() {
     newOtp[index] = value.slice(-1);
     setOtp(newOtp);
 
-    // Auto-focus next box
     if (value && index < 5) {
-      const nextInput = document.getElementById(`clean-otp-${index + 1}`);
+      const nextInput = document.getElementById(`rideel-otp-${index + 1}`);
       if (nextInput) nextInput.focus();
     }
   };
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      const prevInput = document.getElementById(`clean-otp-${index - 1}`);
+      const prevInput = document.getElementById(`rideel-otp-${index - 1}`);
       if (prevInput) prevInput.focus();
     }
   };
@@ -71,185 +96,519 @@ export default function LoginPage() {
     try {
       const result = await apiServices.loginWithOTP(phone, code);
       setIsLoading(false);
-
-      if (result.success && result.user) {
-        setCurrentUser(result.user);
-        setStep('success');
-        setTimeout(() => {
-          router.push('/');
-        }, 1200);
+      if (result.success) {
+        setScreen('profile');
       } else {
-        setError(result.message || 'Invalid code. Use 123456 as demo OTP.');
+        setError(result.message || 'Invalid code. Use 123456 as demo code.');
       }
     } catch (err) {
       setIsLoading(false);
-      setError('An error occurred during login. Please try again.');
+      setError('An error occurred during verification.');
+    }
+  };
+
+  const handleProfileSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!fullName.trim()) {
+      setError('Please enter your full name.');
+      return;
+    }
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setScreen('success');
+      setTimeout(() => {
+        router.push('/');
+      }, 1000);
+    }, 600);
+  };
+
+  const toggleRole = (role: string) => {
+    if (selectedRoles.includes(role)) {
+      if (selectedRoles.length > 1) {
+        setSelectedRoles(selectedRoles.filter(r => r !== role));
+      }
+    } else {
+      setSelectedRoles([...selectedRoles, role]);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center py-12 px-4">
-      <div className="w-full max-w-md">
-        {/* Brand Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white font-extrabold text-2xl shadow-lg">
-              R
-            </div>
-            <div className="text-left">
-              <span className="font-extrabold text-2xl tracking-tight text-primary block leading-none">RIDEEL</span>
-              <span className="text-[11px] text-slate-500 font-bold tracking-wider uppercase block">Peer-to-Peer Logistics</span>
-            </div>
-          </Link>
-        </div>
+    <div className="min-h-screen bg-[#f4f6fa] flex flex-col items-center justify-center p-4 font-sans select-none">
+      
+      {/* Dev Screen Switcher Bar (Quickly Preview Any Image Screen) */}
+      <div className="mb-4 bg-white/80 backdrop-blur border border-slate-200 shadow-xs px-4 py-2 rounded-full flex items-center gap-2 text-xs font-bold text-slate-600">
+        <span className="text-slate-400 uppercase text-[10px]">Preview Screen:</span>
+        <button
+          onClick={() => setScreen('splash')}
+          className={`px-2.5 py-1 rounded-full transition ${screen === 'splash' ? 'bg-[#002b5c] text-white' : 'hover:bg-slate-100'}`}
+        >
+          Splash (Image 2)
+        </button>
+        <button
+          onClick={() => setScreen('onboarding')}
+          className={`px-2.5 py-1 rounded-full transition ${screen === 'onboarding' ? 'bg-[#002b5c] text-white' : 'hover:bg-slate-100'}`}
+        >
+          Onboarding (Image 3)
+        </button>
+        <button
+          onClick={() => setScreen('login')}
+          className={`px-2.5 py-1 rounded-full transition ${screen === 'login' ? 'bg-[#002b5c] text-white' : 'hover:bg-slate-100'}`}
+        >
+          Login (Image 1)
+        </button>
+        <button
+          onClick={() => setScreen('profile')}
+          className={`px-2.5 py-1 rounded-full transition ${screen === 'profile' ? 'bg-[#002b5c] text-white' : 'hover:bg-slate-100'}`}
+        >
+          Profile Setup (Image 4)
+        </button>
+      </div>
 
-        {/* Clean Login Card */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-200/80 backdrop-blur-sm">
-          {/* STEP 1: PHONE NUMBER INPUT */}
-          {step === 'phone' && (
-            <form onSubmit={handlePhoneSubmit} className="space-y-6">
+      {/* MOBILE DEVICE CONTAINER */}
+      <div className="w-full max-w-[400px] min-h-[680px] bg-white rounded-[36px] shadow-2xl overflow-hidden relative border border-slate-200/60 flex flex-col justify-between transition-all duration-300">
+        
+        {/* ========================================================================= */}
+        {/* SCREEN 1: SPLASH SCREEN (IMAGE 2) */}
+        {/* ========================================================================= */}
+        {screen === 'splash' && (
+          <div className="w-full h-full min-h-[680px] bg-[#002b5c] flex flex-col items-center justify-between p-8 text-white text-center animate-in fade-in duration-300">
+            <div className="w-full"></div>
+            
+            {/* Center Brand Icon */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-20 h-20 bg-white rounded-3xl shadow-xl flex items-center justify-center text-[#002b5c]">
+                <Truck className="w-10 h-10" />
+              </div>
               <div>
-                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Login or Sign Up</h1>
-                <p className="text-sm text-slate-500 mt-1">Enter your phone number to receive a verification code</p>
+                <h1 className="text-2xl font-black tracking-widest text-white uppercase">RIDEEL</h1>
+                <p className="text-xs text-blue-200/80 font-medium mt-1">Your route. Their parcel. Same day.</p>
+              </div>
+            </div>
+
+            {/* Bottom Loader */}
+            <div className="flex flex-col items-center gap-2 pb-4">
+              <div className="w-8 h-8 border-3 border-blue-400/30 border-t-white rounded-full animate-spin"></div>
+              <span className="text-[10px] font-bold tracking-widest text-blue-200/60 uppercase mt-2">
+                INITIALIZING SECURE NETWORK
+              </span>
+              <button
+                onClick={() => setScreen('onboarding')}
+                className="mt-2 text-xs font-bold text-blue-200 underline opacity-80 hover:opacity-100"
+              >
+                Proceed to Onboarding →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* SCREEN 2: ONBOARDING SLIDER (IMAGE 3) */}
+        {/* ========================================================================= */}
+        {screen === 'onboarding' && (
+          <div className="w-full h-full min-h-[680px] bg-[#f8fafc] flex flex-col justify-between p-6 animate-in fade-in duration-300">
+            {/* Top Bar with Skip */}
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => setScreen('login')}
+                className="text-xs font-bold text-slate-500 hover:text-slate-900 transition"
+              >
+                Skip
+              </button>
+            </div>
+
+            {/* Center Graphic Card */}
+            <div className="my-auto space-y-6">
+              <div className="w-full bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex items-center justify-center relative overflow-hidden min-h-[220px]">
+                {/* 3D Intercity Parcel Route Graphic SVG */}
+                <svg viewBox="0 0 320 180" className="w-full h-auto">
+                  <defs>
+                    <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#38bdf8" />
+                      <stop offset="100%" stopColor="#0284c7" />
+                    </linearGradient>
+                    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                      <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#002b5c" floodOpacity="0.15" />
+                    </filter>
+                  </defs>
+                  
+                  {/* Subtle Map Grid */}
+                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="#e2e8f0" />
+                  </pattern>
+                  <rect width="320" height="180" fill="url(#grid)" opacity="0.6" />
+
+                  {/* Intercity Arc Path */}
+                  <path d="M 60,130 Q 160,20 260,130" fill="none" stroke="url(#arcGrad)" strokeWidth="4" strokeLinecap="round" filter="url(#shadow)" />
+                  
+                  {/* Origin Pin */}
+                  <g transform="translate(60, 130)">
+                    <path d="M 0,0 C -12,-15 -12,-30 0,-30 C 12,-30 12,-15 0,0 Z" fill="#002b5c" />
+                    <circle cx="0" cy="-20" r="4" fill="white" />
+                  </g>
+
+                  {/* Destination Pin */}
+                  <g transform="translate(260, 130)">
+                    <path d="M 0,0 C -12,-15 -12,-30 0,-30 C 12,-30 12,-15 0,0 Z" fill="#002b5c" />
+                    <circle cx="0" cy="-20" r="4" fill="white" />
+                  </g>
+
+                  {/* Moving Parcel Box on Arc */}
+                  <g transform="translate(160, 68)">
+                    <rect x="-12" y="-12" width="24" height="24" rx="4" fill="#002b5c" />
+                    <path d="M -12,-4 L 12,-4 M -4,-12 L -4,12" stroke="#38bdf8" strokeWidth="1.5" />
+                  </g>
+                </svg>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">
-                  Mobile Phone Number
-                </label>
-                <div className="relative flex items-center">
-                  <div className="absolute left-4 flex items-center gap-2 text-slate-700 font-bold text-sm border-r border-slate-200 pr-3">
-                    <Smartphone className="w-4 h-4 text-primary" />
-                    <span>+91</span>
-                  </div>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Enter 10-digit number"
-                    maxLength={10}
-                    autoFocus
-                    className="w-full pl-24 pr-4 py-4 text-lg font-bold text-slate-900 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-slate-50/50 shadow-xs tracking-wide"
+              {/* Text Info */}
+              <div className="text-center space-y-2 px-2">
+                <h2 className="text-2xl font-black text-[#0f172a] tracking-tight">
+                  {onboardingSlides[onboardingSlide].title}
+                </h2>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed max-w-xs mx-auto">
+                  {onboardingSlides[onboardingSlide].description}
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom Controls */}
+            <div className="space-y-6 pb-2">
+              {/* Pagination Dots */}
+              <div className="flex items-center justify-center gap-1.5">
+                {onboardingSlides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setOnboardingSlide(idx)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      onboardingSlide === idx ? 'w-6 bg-[#002b5c]' : 'w-2 bg-slate-300'
+                    }`}
                   />
-                </div>
+                ))}
               </div>
-
-              {error && (
-                <div className="flex items-center gap-2 text-xs font-bold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{error}</span>
-                </div>
-              )}
 
               <button
-                type="submit"
+                onClick={() => setScreen('login')}
+                className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-4 rounded-2xl font-bold text-sm shadow-md transition"
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* SCREEN 3: WELCOME & MOBILE ENTRY (IMAGE 1) */}
+        {/* ========================================================================= */}
+        {screen === 'login' && (
+          <div className="w-full h-full min-h-[680px] bg-white flex flex-col justify-between p-6 animate-in fade-in duration-300 relative">
+            
+            {/* Top Background Pattern Card Header */}
+            <div className="space-y-6">
+              <div className="w-full bg-gradient-to-b from-blue-50/80 to-blue-50/20 rounded-2xl p-6 relative overflow-hidden border border-blue-100/40">
+                {/* Dotted pattern overlay */}
+                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#002b5c 1px, transparent 1px)', backgroundSize: '12px 12px' }}></div>
+                
+                {/* Brand Logo Badge */}
+                <div className="inline-flex items-center gap-2 bg-[#002b5c] text-white px-3.5 py-2 rounded-xl shadow-sm relative z-10">
+                  <Truck className="w-5 h-5" />
+                  <span className="font-extrabold text-sm tracking-wider uppercase">RIDEEL</span>
+                </div>
+              </div>
+
+              {/* Title & Headline */}
+              <div className="space-y-1.5 px-1">
+                <h1 className="text-2xl font-black text-[#002b5c] tracking-tight">Welcome to Rideel</h1>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                  Enter your mobile number to securely log in or create a new account.
+                </p>
+              </div>
+
+              {/* Mobile Input Form */}
+              <form onSubmit={handlePhoneSubmit} className="space-y-4 pt-2">
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-1.5">
+                    MOBILE NUMBER
+                  </label>
+                  <div className="flex border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50 focus-within:border-[#002b5c] focus-within:ring-1 focus-within:ring-[#002b5c] transition">
+                    <div className="flex items-center gap-1.5 px-3.5 bg-slate-100/80 border-r border-slate-200 text-slate-700 font-bold text-xs shrink-0">
+                      <Globe className="w-4 h-4 text-slate-500" />
+                      <span>+91</span>
+                    </div>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Enter mobile number"
+                      maxLength={10}
+                      className="w-full px-4 py-3.5 text-sm font-semibold text-slate-900 bg-transparent focus:outline-none placeholder:text-slate-400 placeholder:font-normal"
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                  <div className="text-xs font-bold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">
+                    {error}
+                  </div>
+                )}
+              </form>
+            </div>
+
+            {/* Bottom Submit Action & Terms */}
+            <div className="space-y-4 pt-6 pb-2">
+              <button
+                type="button"
+                onClick={handlePhoneSubmit}
                 disabled={isLoading}
-                className="w-full py-4 px-6 rounded-2xl bg-primary text-white font-extrabold text-base shadow-lg shadow-primary/20 hover:bg-primary-dark transition flex items-center justify-center gap-2 group disabled:opacity-50"
+                className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-4 rounded-2xl font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2 group disabled:opacity-50"
               >
                 {isLoading ? (
-                  <RefreshCw className="w-5 h-5 animate-spin" />
+                  <RefreshCw className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    <span>Get OTP Code</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
+                    <span>Continue</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
                   </>
                 )}
               </button>
-            </form>
-          )}
 
-          {/* STEP 2: ENTER OTP */}
-          {step === 'otp' && (
-            <form onSubmit={handleVerifyOtp} className="space-y-6">
-              <div className="flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setStep('phone')}
-                  className="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-900 transition"
-                >
-                  <ArrowLeft className="w-4 h-4" /> Change Number
-                </button>
-                <span className="text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full">
+              <p className="text-[11px] text-center text-slate-500 font-medium px-4">
+                By continuing, you agree to Rideel's{' '}
+                <a href="#" className="font-bold text-slate-800 underline">Terms</a> &{' '}
+                <a href="#" className="font-bold text-slate-800 underline">Privacy Policy</a>.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* SCREEN 4: OTP VERIFICATION CODE */}
+        {/* ========================================================================= */}
+        {screen === 'otp' && (
+          <div className="w-full h-full min-h-[680px] bg-white flex flex-col justify-between p-6 animate-in fade-in duration-300">
+            <div className="space-y-6">
+              <button
+                type="button"
+                onClick={() => setScreen('login')}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition"
+              >
+                <ArrowLeft className="w-4 h-4" /> Back to Mobile Input
+              </button>
+
+              <div>
+                <span className="text-xs font-bold text-[#002b5c] bg-blue-50 px-3 py-1 rounded-full inline-block mb-2">
                   +91 {phone}
                 </span>
+                <h1 className="text-2xl font-black text-[#0f172a]">Verify OTP Code</h1>
+                <p className="text-xs text-slate-500 mt-1">We sent a 6-digit verification code to your number.</p>
               </div>
 
-              <div>
-                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Enter OTP Code</h1>
-                <p className="text-sm text-slate-500 mt-1">We sent a 6-digit code to +91 {phone}</p>
-              </div>
-
-              {/* 6 Digit Input */}
-              <div>
-                <div className="flex items-center justify-between gap-2 my-4">
+              {/* 6 Digit Box */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2 my-2">
                   {otp.map((digit, idx) => (
                     <input
                       key={idx}
-                      id={`clean-otp-${idx}`}
+                      id={`rideel-otp-${idx}`}
                       type="text"
                       inputMode="numeric"
                       maxLength={1}
                       value={digit}
                       onChange={(e) => handleOtpChange(idx, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(idx, e)}
-                      autoFocus={idx === 0}
-                      className="w-12 h-14 text-center text-2xl font-extrabold text-primary border-2 border-slate-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none bg-slate-50/50 shadow-xs"
+                      className="w-11 h-13 text-center text-xl font-black text-[#002b5c] border-2 border-slate-200 rounded-xl focus:border-[#002b5c] focus:outline-none bg-slate-50/50"
                     />
                   ))}
                 </div>
-                <p className="text-xs text-center text-slate-400 font-medium">
-                  Demo Code: <span className="font-bold text-slate-600 font-mono">123456</span>
+                <p className="text-[11px] text-slate-400 font-medium text-center">
+                  Demo Code: <strong className="text-slate-700 font-mono">123456</strong>
                 </p>
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 text-xs font-bold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{error}</span>
+                <div className="text-xs font-bold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">
+                  {error}
                 </div>
               )}
+            </div>
 
+            <div className="space-y-3 pb-2">
               <button
-                type="submit"
+                type="button"
+                onClick={handleVerifyOtp}
                 disabled={isLoading}
-                className="w-full py-4 px-6 rounded-2xl bg-primary text-white font-extrabold text-base shadow-lg shadow-primary/20 hover:bg-primary-dark transition flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-4 rounded-2xl font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2"
               >
                 {isLoading ? (
-                  <RefreshCw className="w-5 h-5 animate-spin" />
+                  <RefreshCw className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    <ShieldCheck className="w-5 h-5" />
-                    <span>Verify & Login</span>
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>Verify & Continue</span>
                   </>
                 )}
               </button>
-            </form>
-          )}
 
-          {/* STEP 3: SUCCESS STATE */}
-          {step === 'success' && (
-            <div className="py-8 text-center space-y-4">
-              <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
-                <CheckCircle2 className="w-10 h-10 animate-bounce" />
-              </div>
-              <div>
-                <h3 className="text-xl font-extrabold text-slate-900">Login Successful!</h3>
-                <p className="text-xs text-slate-500 mt-1">Welcome back to Rideel</p>
-              </div>
-              <div className="pt-2 flex items-center justify-center gap-2 text-xs font-bold text-slate-400">
-                <RefreshCw className="w-4 h-4 animate-spin text-primary" />
-                <span>Redirecting...</span>
-              </div>
+              <button
+                type="button"
+                onClick={() => setError('A new OTP has been sent: 123456')}
+                className="w-full text-xs font-bold text-slate-500 hover:text-slate-800 text-center py-1"
+              >
+                Didn't receive code? <span className="text-[#002b5c] underline">Resend OTP</span>
+              </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Security Footer */}
-        <div className="mt-8 text-center text-xs text-slate-400 flex items-center justify-center gap-1.5">
-          <Lock className="w-3.5 h-3.5 text-slate-400" />
-          <span>Secure Encrypted OTP Authentication</span>
-        </div>
+        {/* ========================================================================= */}
+        {/* SCREEN 5: PROFILE SETUP (IMAGE 4) */}
+        {/* ========================================================================= */}
+        {screen === 'profile' && (
+          <div className="w-full h-full min-h-[680px] bg-[#f8fafc] flex flex-col justify-between p-6 animate-in fade-in duration-300">
+            <div className="space-y-5">
+              {/* Header */}
+              <div className="text-center space-y-1">
+                <h1 className="text-2xl font-black text-[#0f172a] tracking-tight">Let's set up your profile</h1>
+                <p className="text-xs text-slate-500 font-medium">Complete your details to start using Rideel.</p>
+              </div>
+
+              {/* Profile Photo Upload Avatar */}
+              <div className="flex justify-center py-1">
+                <div className="w-20 h-20 rounded-full border-2 border-dashed border-blue-300 bg-blue-50/50 flex flex-col items-center justify-center text-blue-600 relative cursor-pointer hover:bg-blue-100/50 transition">
+                  <Camera className="w-6 h-6 text-slate-500" />
+                  <span className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#002b5c] text-white flex items-center justify-center text-xs font-bold shadow-md">+</span>
+                </div>
+              </div>
+
+              {/* Form Inputs */}
+              <form onSubmit={handleProfileSubmit} className="space-y-3.5">
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                    FULL NAME
+                  </label>
+                  <div className="relative">
+                    <UserIcon className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                    <input
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="e.g. Rohan Sharma"
+                      className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                    EMAIL ADDRESS
+                  </label>
+                  <div className="relative">
+                    <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="rohan@example.com"
+                      className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                    CITY
+                  </label>
+                  <div className="relative">
+                    <Building className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                    <input
+                      type="text"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      placeholder="e.g. Mumbai"
+                      className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+                    />
+                  </div>
+                </div>
+
+                {/* Role Selector Section */}
+                <div className="pt-2 space-y-2">
+                  <div>
+                    <h3 className="text-sm font-extrabold text-[#0f172a]">How will you use Rideel?</h3>
+                    <p className="text-[11px] text-slate-500 font-medium">Select all that apply.</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => toggleRole('sender')}
+                      className={`p-4 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-2 ${
+                        selectedRoles.includes('sender')
+                          ? 'border-[#002b5c] bg-white ring-2 ring-[#002b5c]/10 text-[#002b5c]'
+                          : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                      }`}
+                    >
+                      <Package className="w-6 h-6" />
+                      <span className="text-xs font-extrabold">Send Parcels</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => toggleRole('traveler')}
+                      className={`p-4 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-2 ${
+                        selectedRoles.includes('traveler')
+                          ? 'border-[#002b5c] bg-white ring-2 ring-[#002b5c]/10 text-[#002b5c]'
+                          : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                      }`}
+                    >
+                      <Car className="w-6 h-6" />
+                      <span className="text-xs font-extrabold">Travel & Earn</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div className="pt-4 pb-2">
+              <button
+                type="button"
+                onClick={handleProfileSubmit}
+                disabled={isLoading}
+                className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-4 rounded-2xl font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2"
+              >
+                {isLoading ? (
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                ) : (
+                  <span>Continue</span>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* SUCCESS SCREEN */}
+        {/* ========================================================================= */}
+        {screen === 'success' && (
+          <div className="w-full h-full min-h-[680px] bg-white flex flex-col items-center justify-center p-8 text-center animate-in zoom-in duration-300">
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shadow-inner mb-4">
+              <CheckCircle2 className="w-10 h-10" />
+            </div>
+            <h2 className="text-2xl font-black text-[#0f172a]">Setup Complete!</h2>
+            <p className="text-xs text-slate-500 mt-1 max-w-xs">
+              Welcome to Rideel, <strong>{fullName}</strong>. Redirecting to dashboard...
+            </p>
+          </div>
+        )}
+
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center font-bold text-slate-500">Loading authentication screen...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
