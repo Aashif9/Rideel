@@ -9,7 +9,7 @@ import MapComponent from '@/components/tracking/MapComponent';
 import OTPModal from '@/components/tracking/OTPModal';
 import {
   Package, Truck, CheckCircle2, KeyRound, ShieldCheck,
-  MessageSquare, AlertTriangle, ArrowLeft, Clock, MapPin, DollarSign, Star
+  MessageSquare, AlertTriangle, ArrowLeft, Clock, MapPin, DollarSign, Star, Lock, Eye, EyeOff
 } from 'lucide-react';
 
 import { useLiveLocation } from '@/hooks/useLiveLocation';
@@ -22,6 +22,9 @@ export default function DeliveryDetailPage() {
   const [delivery, setDelivery] = useState<Delivery | null>(null);
   const [loading, setLoading] = useState(true);
   const [otpModalType, setOtpModalType] = useState<'pickup' | 'delivery' | null>(null);
+
+  const [revealPickupOtp, setRevealPickupOtp] = useState(false);
+  const [revealDeliveryOtp, setRevealDeliveryOtp] = useState(false);
 
   // Real-Time Socket.IO GPS Live Tracking Hook
   const { currentLocation, isLive, isStale, lastUpdatedAgo, error: gpsError } = useLiveLocation({
@@ -61,7 +64,7 @@ export default function DeliveryDetailPage() {
   const timelineSteps = [
     { title: 'Booking Confirmed', status: 'BOOKED', done: true },
     { title: 'Escrow Payment Held', status: 'ACCEPTED', done: delivery.status !== 'BOOKED' },
-    { title: 'Parcel Picked Up (OTP Verified)', status: 'PICKED_UP', done: ['PICKED_UP', 'IN_TRANSIT', 'DELIVERY_PENDING', 'DELIVERED'].includes(delivery.status) },
+    { title: 'Parcel Picked Up (Pickup OTP Verified)', status: 'PICKED_UP', done: ['PICKED_UP', 'IN_TRANSIT', 'DELIVERY_PENDING', 'DELIVERED'].includes(delivery.status) },
     { title: 'In Transit along Intercity Highway', status: 'IN_TRANSIT', done: ['IN_TRANSIT', 'DELIVERY_PENDING', 'DELIVERED'].includes(delivery.status) },
     { title: 'Delivered (Receiver OTP Verified)', status: 'DELIVERED', done: delivery.status === 'DELIVERED' }
   ];
@@ -117,6 +120,51 @@ export default function DeliveryDetailPage() {
           accuracy={currentLocation?.accuracy}
           lastUpdatedAgo={lastUpdatedAgo}
         />
+
+        {/* Sender Security OTP Box (2 OTPs: Pickup & Delivery) */}
+        <div className="p-4 bg-amber-50/80 border border-amber-200/80 rounded-2xl space-y-3 shadow-xs">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-black text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+              <Lock className="w-4 h-4 text-amber-700" />
+              <span>Sender Verification OTPs</span>
+            </h3>
+            <span className="text-[10px] text-amber-800 font-bold">Share with traveler at handover</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            {/* 1. Pickup OTP (Start of Ride) */}
+            <div className="bg-white p-3 rounded-xl border border-amber-200 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase block">1. Pickup OTP (Start of Ride)</span>
+                <span className="text-base font-mono font-black text-slate-900 tracking-wider">
+                  {revealPickupOtp ? delivery.pickup_otp : '••••••'}
+                </span>
+              </div>
+              <button
+                onClick={() => setRevealPickupOtp(!revealPickupOtp)}
+                className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition"
+              >
+                {revealPickupOtp ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+
+            {/* 2. Delivery OTP (Package Handover Time) */}
+            <div className="bg-white p-3 rounded-xl border border-amber-200 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase block">2. Receiver OTP (Package Arrival)</span>
+                <span className="text-base font-mono font-black text-slate-900 tracking-wider">
+                  {revealDeliveryOtp ? delivery.delivery_otp : '••••••'}
+                </span>
+              </div>
+              <button
+                onClick={() => setRevealDeliveryOtp(!revealDeliveryOtp)}
+                className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition"
+              >
+                {revealDeliveryOtp ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Action Buttons: Chat & OTP verification */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
@@ -186,7 +234,7 @@ export default function DeliveryDetailPage() {
           isOpen={true}
           onClose={() => setOtpModalType(null)}
           title="Pickup Verification OTP"
-          subtitle="Provide this OTP code to the traveler when handing over the parcel."
+          subtitle="Provide this OTP code to the traveler when handing over the parcel at pickup."
           expectedOtp={delivery.pickup_otp}
           isTraveler={false}
           onVerify={async () => ({ success: true, message: 'Pickup code displayed.' })}

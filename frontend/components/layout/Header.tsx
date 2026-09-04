@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { User, AppNotification } from '@/types';
-import { Bell, ShieldCheck, User as UserIcon, Building2, Package, Truck, LayoutDashboard, LogIn } from 'lucide-react';
+import { Bell, ShieldCheck, User as UserIcon, Building2, Package, Truck, LayoutDashboard, LogIn, Inbox } from 'lucide-react';
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -22,11 +23,21 @@ export default function Header() {
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
+  const handleModeSwitch = async (newMode: 'sender' | 'traveler') => {
+    const updatedUser = await apiServices.switchUserMode(newMode);
+    setUser({ ...updatedUser });
+    if (newMode === 'traveler') {
+      router.push('/traveler');
+    } else {
+      router.push('/');
+    }
+  };
+
   return (
     <header className="sticky top-0 bg-white border-b border-surface-container-high z-40 px-4 py-3 shadow-xs">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
+      <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href={user?.active_mode === 'traveler' ? '/traveler' : '/'} className="flex items-center gap-2 group shrink-0">
           <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-extrabold text-xl shadow-md group-hover:scale-105 transition">
             R
           </div>
@@ -36,39 +47,79 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* Central Mode Switcher / Links */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link
-            href="/"
-            className="text-sm font-semibold text-slate-700 hover:text-primary transition flex items-center gap-1.5"
+        {/* Central Mode Switcher Pill */}
+        <div className="flex items-center bg-slate-100 p-1 rounded-full border border-slate-200 shadow-inner">
+          <button
+            onClick={() => handleModeSwitch('sender')}
+            className={`px-3 py-1.5 text-xs font-black rounded-full transition-all flex items-center gap-1.5 ${
+              user?.active_mode !== 'traveler'
+                ? 'bg-[#002b5c] text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
           >
-            <Package className="w-4 h-4 text-primary-container" /> Deliveries
-          </Link>
-          <Link
-            href="/trips"
-            className="text-sm font-semibold text-slate-700 hover:text-primary transition flex items-center gap-1.5"
+            <Package className="w-3.5 h-3.5" />
+            <span>Sender Mode</span>
+          </button>
+
+          <button
+            onClick={() => handleModeSwitch('traveler')}
+            className={`px-3 py-1.5 text-xs font-black rounded-full transition-all flex items-center gap-1.5 ${
+              user?.active_mode === 'traveler'
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
           >
-            <Truck className="w-4 h-4 text-emerald-600" /> Travel & Earn
-          </Link>
-          <Link
-            href="/business"
-            className="text-sm font-semibold text-slate-700 hover:text-primary transition flex items-center gap-1.5"
-          >
-            <Building2 className="w-4 h-4 text-indigo-600" /> Business B2B
-          </Link>
-          {user?.role.includes('admin') && (
+            <Truck className="w-3.5 h-3.5" />
+            <span>Traveler Mode</span>
+          </button>
+        </div>
+
+        {/* Navigation Links according to persona */}
+        <div className="hidden lg:flex items-center gap-5">
+          {user?.active_mode === 'traveler' ? (
+            <>
+              <Link href="/traveler" className="text-xs font-bold text-slate-700 hover:text-emerald-700 transition">
+                Dashboard
+              </Link>
+              <Link href="/trips" className="text-xs font-bold text-slate-700 hover:text-emerald-700 transition">
+                Post Route
+              </Link>
+              <Link href="/traveler/requests" className="text-xs font-bold text-slate-700 hover:text-emerald-700 transition flex items-center gap-1">
+                <Inbox className="w-3.5 h-3.5" /> Incoming Requests
+              </Link>
+              <Link href="/wallet" className="text-xs font-bold text-slate-700 hover:text-emerald-700 transition">
+                Earnings
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/" className="text-xs font-bold text-slate-700 hover:text-primary transition">
+                Deliveries
+              </Link>
+              <Link href="/send" className="text-xs font-bold text-slate-700 hover:text-primary transition">
+                Send Parcel
+              </Link>
+              <Link href="/send/travelers" className="text-xs font-bold text-slate-700 hover:text-primary transition">
+                Find Travelers
+              </Link>
+              <Link href="/business" className="text-xs font-bold text-slate-700 hover:text-primary transition">
+                B2B Logistics
+              </Link>
+            </>
+          )}
+
+          {user?.role?.includes('admin') && (
             <Link
               href="/admin"
-              className="text-sm font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200 hover:bg-amber-100 transition flex items-center gap-1.5"
+              className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 hover:bg-amber-100 transition flex items-center gap-1"
             >
-              <LayoutDashboard className="w-4 h-4" /> Admin Portal
+              <LayoutDashboard className="w-3.5 h-3.5" /> Admin
             </Link>
           )}
         </div>
 
-        {/* Right Action Icons & User Profile */}
+        {/* Right Action Icons & Profile */}
         <div className="flex items-center gap-3">
-          {/* Notifications button */}
           <div className="relative">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
@@ -105,7 +156,6 @@ export default function Header() {
             )}
           </div>
 
-          {/* Login / Switch Account Link */}
           <Link
             href="/login"
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-extrabold text-primary bg-primary/10 hover:bg-primary/20 rounded-full transition border border-primary/20"
@@ -114,7 +164,6 @@ export default function Header() {
             <span className="hidden sm:inline">Login / Switch</span>
           </Link>
 
-          {/* User Profile Badge */}
           {user && (
             <Link href="/profile" className="flex items-center gap-2 p-1 pl-2 pr-3 rounded-full hover:bg-surface-container transition border border-surface-container-high">
               <img

@@ -107,6 +107,46 @@ function ParcelDetailsContent() {
     }
   };
 
+  const [quote, setQuote] = useState<any>(null);
+  const [isCalculatingQuote, setIsCalculatingQuote] = useState(false);
+  const [quoteError, setQuoteError] = useState('');
+
+  // Real-time Pricing Quote Effect
+  React.useEffect(() => {
+    let isMounted = true;
+    const fetchQuote = async () => {
+      if (!origin || !destination) return;
+      setIsCalculatingQuote(true);
+      setQuoteError('');
+      try {
+        const res = await apiServices.getPricingQuote({
+          pickup: { name: origin },
+          dropoff: { name: destination },
+          weightKg: Number(weightKg) || 1,
+          packageType: parcelType.toUpperCase(),
+          deliverySpeed: 'SAME_DAY',
+          insuranceSelected,
+          declaredValue: Number(declaredValue) || 1000,
+        });
+
+        if (!isMounted) return;
+        if (res.success && res.quote) {
+          setQuote(res.quote);
+        } else {
+          setQuoteError(res.message || 'Unable to calculate delivery price. Please check your pickup and dropoff locations.');
+        }
+      } catch (err: any) {
+        if (!isMounted) return;
+        setQuoteError('Unable to calculate delivery price. Please check your pickup and dropoff locations.');
+      } finally {
+        if (isMounted) setIsCalculatingQuote(false);
+      }
+    };
+
+    fetchQuote();
+    return () => { isMounted = false; };
+  }, [origin, destination, weightKg, parcelType, insuranceSelected, declaredValue]);
+
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in select-none p-2 sm:p-4">
       {/* Back Button Header */}
@@ -330,6 +370,89 @@ function ParcelDetailsContent() {
                 className="w-5 h-5 accent-[#002b5c] rounded cursor-pointer"
               />
             </div>
+          </div>
+
+          {/* DYNAMIC DELIVERY PRICE BREAKDOWN CARD */}
+          <div className="p-5 bg-gradient-to-br from-slate-900 via-slate-850 to-[#002b5c] text-white rounded-3xl shadow-xl space-y-4 border border-slate-700">
+            <div className="flex items-center justify-between border-b border-slate-700/80 pb-3">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">
+                  DELIVERY PRICE BREAKDOWN
+                </span>
+                <span className="text-xs text-slate-300 font-medium">Authoritative calculation engine</span>
+              </div>
+              {isCalculatingQuote ? (
+                <span className="text-xs font-bold text-amber-300 animate-pulse">Calculating fare...</span>
+              ) : quoteError ? (
+                <span className="text-[10px] font-bold text-rose-300 max-w-[140px] text-right block">{quoteError}</span>
+              ) : (
+                <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+                  {quote?.distanceKm} km route
+                </span>
+              )}
+            </div>
+
+            {quote ? (
+              <div className="space-y-2 text-xs font-medium text-slate-200">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Route:</span>
+                  <span className="font-extrabold text-white">{origin} → {destination}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Road Distance:</span>
+                  <span className="font-bold">{quote.distanceKm} km</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Base fee:</span>
+                  <span>{quote.formatted.baseFee}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Distance ({quote.distanceKm} km):</span>
+                  <span>{quote.formatted.distanceCharge}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Package ({weightKg} kg):</span>
+                  <span>{quote.formatted.weightCharge}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Same-Day / Express speed:</span>
+                  <span>{quote.formatted.speedCharge}</span>
+                </div>
+                {insuranceSelected && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400">Optional Insurance:</span>
+                    <span className="text-emerald-400 font-semibold">{quote.formatted.insuranceCharge}</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">RIDEEL service fee (10%):</span>
+                  <span>{quote.formatted.platformFee}</span>
+                </div>
+
+                <div className="border-t border-slate-700/80 pt-3 mt-3 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block">
+                      ESTIMATED TOTAL SENDER PRICE
+                    </span>
+                    <span className="text-xl font-black text-amber-400">{quote.formatted.total}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block">
+                      TRAVELER PAYOUT
+                    </span>
+                    <span className="text-lg font-black text-emerald-400">{quote.formatted.travelerPayout}</span>
+                  </div>
+                </div>
+              </div>
+            ) : isCalculatingQuote ? (
+              <div className="py-6 text-center text-xs text-slate-400 font-bold animate-pulse">
+                Calculating road route distance & dynamic fare breakdown...
+              </div>
+            ) : (
+              <div className="py-4 text-center text-xs text-rose-300 font-bold">
+                {quoteError || 'Unable to calculate delivery price. Please check your pickup and dropoff locations.'}
+              </div>
+            )}
           </div>
 
           {/* Prohibited Items Confirmation */}

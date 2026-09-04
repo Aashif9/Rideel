@@ -131,6 +131,18 @@ class RideelServices {
         }
         const db = this.getDb();
         db.currentUser = data.user;
+
+        // Clear stale local browser cache for fresh accounts
+        if (data.isNewUser) {
+          db.trips = [];
+          db.parcels = [];
+          db.deliveries = [];
+          db.notifications = [];
+          db.matchRequests = [];
+          db.payments = [];
+          db.walletTransactions = [];
+        }
+
         const idx = db.users.findIndex(u => u.id === data.user.id);
         if (idx !== -1) {
           db.users[idx] = data.user;
@@ -649,6 +661,73 @@ class RideelServices {
     const db = this.getDb();
     const userId = db.currentUser?.id || 'usr_guest_session';
     return db.notifications.filter(n => n.user_id === userId);
+  }
+
+  /**
+   * Fetch authoritative delivery pricing quote breakdown from backend Express API
+   * Shared Traveler Trip / Capacity Model
+   */
+  async getPricingQuote(params: {
+    pickup: any;
+    dropoff: any;
+    weightKg: number;
+    packageType?: string;
+    deliverySpeed?: string;
+    pickupAssistance?: boolean;
+    dropAssistance?: boolean;
+    insuranceSelected?: boolean;
+    insurance?: boolean;
+    declaredValue?: number;
+    travelerCapacityKg?: number;
+  }): Promise<{
+    success: boolean;
+    quote?: {
+      distanceKm: number;
+      parcelWeightKg: number;
+      travelerCapacityKg: number;
+      remainingCapacityKg: number;
+      tripPool: number;
+      costPerKg: number;
+      travelerAllocation: number;
+      platformFee: number;
+      urgencyFee: number;
+      pickupFee: number;
+      dropFee: number;
+      insuranceFee: number;
+      subtotal: number;
+      senderPrice: number;
+      travelerPayout: number;
+      currency: string;
+      formatted: {
+        tripPool: string;
+        costPerKg: string;
+        travelerAllocation: string;
+        platformFee: string;
+        urgencyFee: string;
+        pickupFee: string;
+        dropFee: string;
+        insuranceFee: string;
+        subtotal: string;
+        senderPrice: string;
+        travelerPayout: string;
+      };
+    };
+    message?: string;
+  }> {
+    try {
+      const res = await fetch(`${this.getAuthBaseUrl()}/pricing/quote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+      });
+      const data = await res.json();
+      return data;
+    } catch (err: any) {
+      return {
+        success: false,
+        message: err.message || 'Unable to calculate delivery price.',
+      };
+    }
   }
 }
 

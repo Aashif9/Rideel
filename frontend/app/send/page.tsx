@@ -9,14 +9,21 @@ import {
   ChevronRight, Plus, Minus, Info, ArrowRight, ShieldCheck, Clock, Calendar
 } from 'lucide-react';
 
+import { apiServices } from '@/services/apiServices';
+
 function SendParcelRouteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [pickupLoc, setPickupLoc] = useState(searchParams.get('origin') || 'Anna Nagar, Chennai');
+  const [pickupLoc, setPickupLoc] = useState(searchParams.get('origin') || 'Bhimavaram');
   const [deliveryLoc, setDeliveryLoc] = useState(searchParams.get('dest') || 'T. Nagar, Chennai');
   const [parcelType, setParcelType] = useState('1 kg • Document');
   const [selectedOption, setSelectedOption] = useState<'express' | 'standard' | 'large'>('express');
+
+  // Dynamic Pricing Quote States
+  const [quote, setQuote] = useState<any>(null);
+  const [isCalculatingQuote, setIsCalculatingQuote] = useState(false);
+  const [quoteError, setQuoteError] = useState('');
 
   // Location Picker Modal States
   const [activePickerTarget, setActivePickerTarget] = useState<'pickup' | 'delivery' | null>(null);
@@ -46,31 +53,88 @@ function SendParcelRouteContent() {
   const deliveryOptions = [
     {
       id: 'express',
-      title: 'Express ⚡',
+      title: 'Small Parcel 📄',
+      sizeLabel: 'Small Size',
+      weight: 'Up to 1 kg',
+      dimensions: '25 × 18 × 2 cm',
+      example: 'Documents, Keys, Phone, Small Pouch',
+      description: 'Up to 1 kg • 25 × 18 × 2 cm',
       priceRange: '₹80 – ₹120',
-      description: 'Fastest delivery • Same day',
       eta: 'ETA 1-2 hours',
-      icon: Bike,
+      icon: Package,
     },
     {
       id: 'standard',
-      title: 'Standard',
-      priceRange: '₹60 – ₹90',
-      description: 'Cost effective • Reliable',
+      title: 'Medium Package 🧳',
+      sizeLabel: 'Medium Size',
+      weight: '1 – 5 kg',
+      dimensions: '30 × 20 × 10 cm',
+      example: 'Laptops, Shoes, Clothes, Books',
+      description: '1 – 5 kg • 30 × 20 × 10 cm',
+      priceRange: '₹120 – ₹250',
       eta: 'ETA 3-5 hours',
       icon: Car,
     },
     {
       id: 'large',
-      title: 'Large Parcel',
-      priceRange: '₹150 – ₹300',
-      description: 'For heavier items',
+      title: 'Large Cargo 🚚',
+      sizeLabel: 'Large Size',
+      weight: '5 – 15 kg',
+      dimensions: '45 × 35 × 25 cm',
+      example: 'Suitcases, Heavy Boxes, Equipment',
+      description: '5 – 15 kg • 45 × 35 × 25 cm',
+      priceRange: '₹250 – ₹500',
       eta: 'ETA 4-8 hours',
       icon: Truck,
     },
   ];
 
   const activeOptionObj = deliveryOptions.find(o => o.id === selectedOption) || deliveryOptions[0];
+
+  // Real-time Pricing Recalculation Effect
+  useEffect(() => {
+    let isMounted = true;
+    const fetchQuote = async () => {
+      if (!pickupLoc || !deliveryLoc) return;
+      setIsCalculatingQuote(true);
+      setQuoteError('');
+      try {
+        const speedMap: Record<string, string> = {
+          express: 'EXPRESS',
+          standard: 'FLEXIBLE',
+          large: 'SAME_DAY',
+        };
+        const weightMap: Record<string, number> = {
+          express: 1.0,
+          standard: 2.5,
+          large: 10.0,
+        };
+        const res = await apiServices.getPricingQuote({
+          pickup: { name: pickupLoc },
+          dropoff: { name: deliveryLoc },
+          weightKg: weightMap[selectedOption] || 1.0,
+          packageType: selectedOption === 'large' ? 'LARGE' : 'DOCUMENT',
+          deliverySpeed: speedMap[selectedOption] || 'SAME_DAY',
+          insuranceSelected: false,
+        });
+
+        if (!isMounted) return;
+        if (res.success && res.quote) {
+          setQuote(res.quote);
+        } else {
+          setQuoteError(res.message || 'Unable to calculate delivery price. Please check your pickup and dropoff locations.');
+        }
+      } catch (err: any) {
+        if (!isMounted) return;
+        setQuoteError('Unable to calculate delivery price. Please check your pickup and dropoff locations.');
+      } finally {
+        if (isMounted) setIsCalculatingQuote(false);
+      }
+    };
+
+    fetchQuote();
+    return () => { isMounted = false; };
+  }, [pickupLoc, deliveryLoc, selectedOption]);
 
   const handleProceed = () => {
     const finalPickupTime = pickupTime === 'Custom' ? customPickupTime || 'Custom Specified Time' : pickupTime;
@@ -82,7 +146,7 @@ function SendParcelRouteContent() {
       pickupTime: finalPickupTime,
       dropoffTime: finalDropoffTime,
       option: selectedOption,
-      fare: activeOptionObj.priceRange
+      fare: quote ? quote.formatted.total : '₹649'
     }).toString();
     router.push(`/send/parcel-details?${query}`);
   };
@@ -303,24 +367,52 @@ function SendParcelRouteContent() {
           </div>
 
           <div className="space-y-2">
-            {dropoffTimeSlots.map((slot) => {
-              const isSelected = dropoffTime === slot.id;
-              return (
-                <button
-                  key={slot.id}
-                  type="button"
-                  onClick={() => setDropoffTime(slot.id)}
-                  className={`w-full p-3 rounded-xl border text-left text-xs font-bold transition flex items-center justify-between ${
-                    isSelected
-                      ? 'border-emerald-600 bg-emerald-50/40 text-emerald-900 ring-1 ring-emerald-600/20'
-                      : 'border-slate-200 text-slate-700 hover:border-slate-300'
-                  }`}
-                >
-                  <span className="truncate">{slot.label}</span>
-                  {isSelected && <span className="w-2 h-2 rounded-full bg-emerald-600"></span>}
-                </button>
-              );
-            })}
+            {quote && quote.availableSpeedOptions ? (
+              quote.availableSpeedOptions.map((slot: any) => {
+                const isSelected = dropoffTime === slot.id;
+                return (
+                  <button
+                    key={slot.id}
+                    type="button"
+                    onClick={() => setDropoffTime(slot.id)}
+                    className={`w-full p-3 rounded-2xl border text-left text-xs font-bold transition flex items-center justify-between ${
+                      isSelected
+                        ? 'border-emerald-600 bg-emerald-50/40 text-emerald-900 ring-1 ring-emerald-600/20 shadow-2xs'
+                        : 'border-slate-200/90 text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-black text-slate-900 flex items-center gap-1.5">
+                        <span>{slot.label}</span>
+                      </div>
+                      <div className="text-[10px] text-slate-500 font-medium mt-0.5">{slot.description}</div>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 shrink-0">
+                      {slot.feeFormatted}
+                    </span>
+                  </button>
+                );
+              })
+            ) : (
+              dropoffTimeSlots.map((slot) => {
+                const isSelected = dropoffTime === slot.id;
+                return (
+                  <button
+                    key={slot.id}
+                    type="button"
+                    onClick={() => setDropoffTime(slot.id)}
+                    className={`w-full p-3 rounded-xl border text-left text-xs font-bold transition flex items-center justify-between ${
+                      isSelected
+                        ? 'border-emerald-600 bg-emerald-50/40 text-emerald-900 ring-1 ring-emerald-600/20'
+                        : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    <span className="truncate">{slot.label}</span>
+                    {isSelected && <span className="w-2 h-2 rounded-full bg-emerald-600"></span>}
+                  </button>
+                );
+              })
+            )}
           </div>
 
           {dropoffTime === 'Custom' && (
@@ -354,6 +446,50 @@ function SendParcelRouteContent() {
           initialValue={activePickerTarget === 'pickup' ? pickupLoc : deliveryLoc}
         />
 
+        {/* DYNAMIC PRICING BREAKDOWN CARD V2 */}
+        <div className="bg-slate-900 text-white rounded-3xl p-5 border border-slate-800 space-y-4 shadow-xl">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+              <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider block">ESTIMATED DELIVERY PRICE</span>
+              <span className="text-xs text-slate-300 font-medium">{pickupLoc} → {deliveryLoc}</span>
+            </div>
+            <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-500/30">
+              {isCalculatingQuote ? 'Calculating...' : quote ? `~${quote.distanceKm} km • ${selectedOption === 'large' ? '10' : selectedOption === 'standard' ? '2.5' : '1'} kg` : 'Road Route'}
+            </span>
+          </div>
+
+          {quote ? (
+            <div className="space-y-2 text-xs text-slate-300">
+              <div className="flex justify-between items-center">
+                <span>Traveler payout</span>
+                <span className="font-extrabold text-white">{quote.formatted.travelerPayout}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>RIDEEL service fee (15%)</span>
+                <span>{quote.formatted.platformFee}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Delivery speed fee</span>
+                <span>{quote.formatted.deliverySpeedFee}</span>
+              </div>
+              {quote.detourFee > 0 && (
+                <div className="flex justify-between items-center text-amber-300">
+                  <span>Pickup/Drop detour fee ({quote.detourDistanceKm} km)</span>
+                  <span>{quote.formatted.detourFee}</span>
+                </div>
+              )}
+              <div className="border-t border-slate-800 pt-2.5 mt-2 flex justify-between items-center font-extrabold text-sm text-white">
+                <span className="text-amber-400">Total Sender Price</span>
+                <span className="text-amber-400 text-base">{quote.formatted.senderPrice}</span>
+              </div>
+            </div>
+          ) : isCalculatingQuote ? (
+            <div className="text-xs text-slate-400 py-3 text-center animate-pulse">Calculating road route distance & fare...</div>
+          ) : (
+            <div className="text-xs text-rose-300 py-2 text-center">{quoteError || 'Unable to calculate price.'}</div>
+          )}
+        </div>
+
         {/* 5. CHOOSE A DELIVERY OPTION */}
         <div className="space-y-2.5">
           <div className="flex items-center justify-between">
@@ -369,31 +505,46 @@ function SendParcelRouteContent() {
                 <div
                   key={opt.id}
                   onClick={() => setSelectedOption(opt.id as any)}
-                  className={`bg-white rounded-2xl p-3.5 shadow-xs border transition cursor-pointer flex items-center justify-between ${
+                  className={`bg-white rounded-2xl p-4 shadow-xs border transition cursor-pointer flex items-center justify-between ${
                     isSelected
                       ? 'border-[#002b5c] ring-2 ring-[#002b5c]/10 bg-blue-50/20'
                       : 'border-slate-200/80 hover:border-slate-300'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? 'bg-[#002b5c] text-white' : 'bg-slate-100 text-slate-700'}`}>
+                  <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                    <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 mt-0.5 ${isSelected ? 'bg-[#002b5c] text-white shadow-xs' : 'bg-slate-100 text-slate-700'}`}>
                       <IconComp className="w-5 h-5" />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-xs text-slate-900">{opt.title}</span>
-                        <span className="text-xs font-black text-slate-900">{opt.priceRange}</span>
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-black text-xs sm:text-sm text-slate-900">{opt.title}</span>
+                          <span className="text-[9px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            {opt.sizeLabel}
+                          </span>
+                        </div>
+                        <span className="text-xs font-black text-[#002b5c] shrink-0">
+                          {isSelected && quote ? quote.formatted.senderPrice : opt.priceRange}
+                        </span>
                       </div>
-                      <div className="flex items-center gap-2 text-[10px] text-slate-500 font-medium">
-                        <span>{opt.description}</span>
-                        <span>•</span>
-                        <span>{opt.eta}</span>
+
+                      <div className="flex items-center gap-1.5 flex-wrap text-[10px] font-bold text-slate-600">
+                        <span className="bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-md border border-emerald-200/80">
+                          Weight: {opt.weight}
+                        </span>
+                        <span className="bg-blue-50 text-blue-900 px-2 py-0.5 rounded-md border border-blue-200/80">
+                          Dim: {opt.dimensions}
+                        </span>
+                      </div>
+
+                      <div className="text-[10px] text-slate-500 font-medium truncate pt-0.5">
+                        <span className="font-bold text-slate-600">Examples:</span> {opt.example}
                       </div>
                     </div>
                   </div>
 
                   {/* Radio Indicator */}
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-[#002b5c] bg-white' : 'border-slate-300'}`}>
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3 ${isSelected ? 'border-[#002b5c] bg-white' : 'border-slate-300'}`}>
                     {isSelected && <span className="w-2.5 h-2.5 rounded-full bg-[#002b5c]"></span>}
                   </div>
                 </div>
@@ -407,11 +558,11 @@ function SendParcelRouteContent() {
       {/* 6. STICKY BOTTOM ACTION BAR */}
       <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur border-t border-slate-100 px-5 py-3.5 flex items-center justify-between z-50 shadow-xl">
         <div>
-          <div className="text-base font-black text-[#0f172a] leading-tight">
-            {activeOptionObj.priceRange}
+          <div className="text-lg font-black text-[#0f172a] leading-tight">
+            {isCalculatingQuote ? '...' : quote ? quote.formatted.senderPrice : '₹90'}
           </div>
           <div className="text-[10px] text-slate-500 font-bold flex items-center gap-1">
-            <span>Estimated fare</span>
+            <span>Authoritative Sender Fare</span>
             <Info className="w-3 h-3 text-slate-400" />
           </div>
         </div>
