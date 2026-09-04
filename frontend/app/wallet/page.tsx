@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { User, WalletTransaction } from '@/types';
-import { Wallet, ArrowDownRight, Lock, CheckCircle2, Building2, Sparkles, X } from 'lucide-react';
+import { Wallet, ArrowDownRight, Lock, CheckCircle2, Building2, Sparkles, X, ArrowLeft } from 'lucide-react';
 
 export default function WalletPage() {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [walletData, setWalletData] = useState<{ available: number; escrow: number; transactions: WalletTransaction[] }>({
     available: 0,
@@ -49,16 +51,25 @@ export default function WalletPage() {
   if (loading) {
     return (
       <div className="max-w-xl mx-auto text-center py-16">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <div className="w-12 h-12 border-4 border-[#002b5c] border-t-amber-400 rounded-full animate-spin mx-auto"></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in">
-      <div>
-        <h1 className="text-2xl font-extrabold text-primary tracking-tight">Wallet & Financials</h1>
-        <p className="text-xs text-slate-500">Track escrow balance, delivery earnings payouts, and bank withdrawals.</p>
+    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in p-2 sm:p-4">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => router.push('/')}
+          className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-all shadow-xs active:scale-90 border border-slate-200/80 shrink-0"
+          aria-label="Go to Home"
+        >
+          <ArrowLeft className="w-5 h-5 text-slate-700" />
+        </button>
+        <div>
+          <h1 className="text-2xl font-black text-[#0f172a] tracking-tight">Wallet & Financials</h1>
+          <p className="text-xs text-slate-500 font-medium">Manage earnings, escrow protection balance, and instant payout withdrawals.</p>
+        </div>
       </div>
 
       {/* Wallet Card Hero */}
@@ -89,9 +100,9 @@ export default function WalletPage() {
         <button
           onClick={() => setShowWithdrawModal(true)}
           disabled={walletData.available <= 0}
-          className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-3.5 rounded-xl font-extrabold text-sm transition shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 py-4 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all transform active:scale-98 shadow-lg shadow-amber-400/25 flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          <ArrowDownRight className="w-4 h-4 stroke-[3px]" />
+          <ArrowDownRight className="w-4 h-4 stroke-[3px] text-slate-950" />
           <span>Withdraw Balance to Bank</span>
         </button>
       </div>

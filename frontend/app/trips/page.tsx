@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { Trip, User } from '@/types';
 import { CITIES } from '@/lib/constants';
-import { Navigation, Plus, MapPin, Calendar, Clock, Truck, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Navigation, Plus, MapPin, Calendar, Clock, Truck, ShieldCheck, ChevronRight, ArrowLeft } from 'lucide-react';
 
 export default function TripsDashboardPage() {
+  const router = useRouter();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [showPostModal, setShowPostModal] = useState(false);
@@ -63,18 +65,27 @@ export default function TripsDashboardPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in">
+    <div className="space-y-6 animate-in fade-in max-w-4xl mx-auto p-2 sm:p-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-extrabold text-primary tracking-tight">Traveler Trips & Earnings</h1>
-          <p className="text-xs text-slate-500">Post your intercity travel routes and earn money delivering parcels.</p>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => router.push('/')}
+            className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-all shadow-xs active:scale-90 border border-slate-200/80 shrink-0"
+            aria-label="Go to Home"
+          >
+            <ArrowLeft className="w-5 h-5 text-slate-700" />
+          </button>
+          <div>
+            <h1 className="text-2xl font-black text-[#0f172a] tracking-tight">Traveler Trips & Earnings</h1>
+            <p className="text-xs text-slate-500 font-medium">Post your intercity travel routes and earn money delivering parcels.</p>
+          </div>
         </div>
 
         <button
           onClick={() => setShowPostModal(true)}
-          className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-3 rounded-xl text-xs font-extrabold shadow-lg transition flex items-center gap-2 self-start"
+          className="bg-amber-400 hover:bg-amber-500 text-slate-950 px-5 py-3 rounded-2xl text-xs font-black shadow-lg shadow-amber-400/20 active:scale-95 transition-all transform flex items-center gap-2 self-start uppercase tracking-wider"
         >
-          <Plus className="w-4 h-4 stroke-[3px]" />
+          <Plus className="w-4 h-4 stroke-[3px] text-slate-950" />
           <span>Post a New Trip</span>
         </button>
       </div>

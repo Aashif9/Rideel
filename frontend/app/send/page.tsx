@@ -94,10 +94,11 @@ function SendParcelRouteContent() {
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur px-4 py-3 border-b border-slate-100 flex items-center justify-between shadow-2xs">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => router.back()}
-            className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition"
+            onClick={() => router.push('/')}
+            className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-all shadow-xs active:scale-90 border border-slate-200/80 shrink-0"
+            aria-label="Go to Home"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-5 h-5 text-slate-700" />
           </button>
 
           <div className="flex items-center gap-2">
@@ -132,7 +133,10 @@ function SendParcelRouteContent() {
         </div>
 
         {/* 3. INTERACTIVE MAP BOX WITH CLEAN ROUTE PREVIEW */}
-        <div className="relative w-full h-56 bg-slate-100 rounded-3xl overflow-hidden shadow-sm border border-slate-200/80">
+        <div 
+          onClick={() => setActivePickerTarget('pickup')}
+          className="relative w-full h-56 bg-slate-100 rounded-3xl overflow-hidden shadow-sm border border-slate-200/80 cursor-pointer group hover:border-[#002b5c]/30 transition-all"
+        >
           <iframe
             title="Route Map Preview"
             width="100%"
@@ -140,8 +144,14 @@ function SendParcelRouteContent() {
             frameBorder="0"
             scrolling="no"
             src={`https://maps.google.com/maps?q=${encodeURIComponent(pickupLoc + ' to ' + deliveryLoc)}&output=embed`}
-            className="w-full h-full opacity-100"
+            className="w-full h-full opacity-100 pointer-events-none select-none"
           />
+
+          {/* Tap to Expand Badge */}
+          <div className="absolute top-3 right-3 bg-[#002b5c]/90 text-white backdrop-blur-md rounded-xl px-2.5 py-1 text-[10px] font-black flex items-center gap-1 shadow-md pointer-events-none">
+            <MapPin className="w-3 h-3 text-amber-400" />
+            <span>Tap Map to Pin</span>
+          </div>
 
           {/* Pickup Marker Box */}
           <div className="absolute left-4 top-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-md px-3.5 py-2 border border-slate-200/80 flex items-center gap-2 pointer-events-none">
@@ -408,10 +418,10 @@ function SendParcelRouteContent() {
 
         <button
           onClick={handleProceed}
-          className="bg-[#002b5c] hover:bg-[#001f44] text-white px-7 py-3.5 rounded-2xl font-extrabold text-xs shadow-md transition flex items-center gap-2"
+          className="bg-amber-400 hover:bg-amber-500 text-slate-950 px-8 py-3.5 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-amber-400/25 active:scale-95 transition-all transform flex items-center gap-2"
         >
           <span>Proceed</span>
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-4 h-4 text-slate-950 stroke-[3px]" />
         </button>
       </div>
 

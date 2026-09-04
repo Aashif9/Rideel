@@ -80,7 +80,7 @@ router.post('/auth/register-or-login', async (req: Request, res: Response) => {
 router.get('/users/phone/:phone', async (req: Request, res: Response) => {
   try {
     const { phone } = req.params;
-    const cleanPhone = phone.replace(/\D/g, '');
+    const cleanPhone = String(phone).replace(/\D/g, '');
     const userRes = await query('SELECT * FROM users WHERE phone = $1', [cleanPhone]);
 
     if (userRes.rows.length === 0) {

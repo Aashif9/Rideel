@@ -59,29 +59,37 @@ export default function DeliveryDetailPage() {
   ];
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in">
+    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in p-2 sm:p-4">
       <div className="flex items-center justify-between">
-        <button
-          onClick={() => router.push('/deliveries')}
-          className="text-xs font-bold text-slate-600 hover:text-primary flex items-center gap-1"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to Deliveries
-        </button>
-        <span className="text-xs font-mono font-bold text-slate-400">ID: {delivery.id}</span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => router.push('/deliveries')}
+            className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-all shadow-xs active:scale-90 border border-slate-200/80 shrink-0"
+            aria-label="Back to Deliveries"
+          >
+            <ArrowLeft className="w-5 h-5 text-slate-700" />
+          </button>
+          <div>
+            <h1 className="text-xl font-black text-[#0f172a] tracking-tight">Shipment Tracking</h1>
+            <span className="text-[10px] font-mono font-extrabold text-slate-400">ID: {delivery.id}</span>
+          </div>
+        </div>
       </div>
 
       {/* Header Info */}
-      <div className="rideel-card p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b pb-4">
+      <div className="bg-white rounded-3xl p-6 space-y-4 border border-slate-200/80 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
           <div>
-            <h1 className="text-2xl font-extrabold text-primary">
-              {delivery.parcel?.origin} → {delivery.parcel?.destination}
-            </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h2 className="text-2xl font-black text-[#0f172a] flex items-center gap-1.5">
+              <span>{delivery.parcel?.origin}</span>
+              <span className="text-amber-500 font-bold">→</span>
+              <span>{delivery.parcel?.destination}</span>
+            </h2>
+            <p className="text-xs text-slate-500 font-medium mt-0.5">
               Parcel: {delivery.parcel?.description} ({delivery.parcel?.weight_kg} kg)
             </p>
           </div>
-          <span className="bg-emerald-100 text-emerald-800 font-black text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider self-start">
+          <span className="bg-emerald-100 text-emerald-800 font-black text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider self-start border border-emerald-200 shadow-xs">
             {delivery.status.replace('_', ' ')}
           </span>
         </div>
@@ -99,34 +107,34 @@ export default function DeliveryDetailPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           <Link
             href={`/chat/${delivery.id}`}
-            className="bg-surface-container hover:bg-surface-container-high text-primary p-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition"
+            className="bg-slate-100 hover:bg-slate-200 text-slate-900 p-3.5 rounded-2xl text-xs font-black flex items-center justify-center gap-2 transition-all active:scale-95 border border-slate-200/60"
           >
-            <MessageSquare className="w-4 h-4 text-primary-container" />
+            <MessageSquare className="w-4 h-4 text-amber-500" />
             <span>Chat with Traveler</span>
           </Link>
 
           {delivery.status === 'ACCEPTED' || delivery.status === 'PICKUP_PENDING' ? (
             <button
               onClick={() => setOtpModalType('pickup')}
-              className="bg-primary text-white p-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 hover:bg-primary-container transition shadow-md"
+              className="bg-amber-400 hover:bg-amber-500 text-slate-950 p-3.5 rounded-2xl text-xs font-black flex items-center justify-center gap-2 transition-all transform active:scale-95 shadow-md shadow-amber-400/20 uppercase tracking-wider"
             >
-              <KeyRound className="w-4 h-4 text-amber-300" />
+              <KeyRound className="w-4 h-4 text-slate-950" />
               <span>Show Pickup OTP</span>
             </button>
           ) : delivery.status === 'IN_TRANSIT' || delivery.status === 'DELIVERY_PENDING' ? (
             <button
               onClick={() => setOtpModalType('delivery')}
-              className="bg-emerald-600 text-white p-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 hover:bg-emerald-700 transition shadow-md"
+              className="bg-emerald-600 text-white p-3.5 rounded-2xl text-xs font-black flex items-center justify-center gap-2 hover:bg-emerald-700 transition-all transform active:scale-95 shadow-md uppercase tracking-wider"
             >
-              <KeyRound className="w-4 h-4" />
-              <span>Show Receiver Delivery OTP</span>
+              <KeyRound className="w-4 h-4 text-white" />
+              <span>Show Receiver OTP</span>
             </button>
           ) : delivery.status === 'DELIVERED' ? (
             <Link
               href={`/safety/dispute?deliveryId=${delivery.id}`}
-              className="bg-amber-50 text-amber-800 border border-amber-200 p-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
+              className="bg-amber-50 text-amber-900 border border-amber-200 p-3.5 rounded-2xl text-xs font-black flex items-center justify-center gap-2 hover:bg-amber-100 transition-all"
             >
-              <AlertTriangle className="w-4 h-4" />
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
               <span>Report Issue / Rate</span>
             </Link>
           ) : null}

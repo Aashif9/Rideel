@@ -2,14 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { User } from '@/types';
 import {
   User as UserIcon, ShieldCheck, Truck, Wallet, Shield, AlertTriangle,
-  ChevronRight, LogOut, FileText, Settings, HelpCircle, Star
+  ChevronRight, LogOut, FileText, Settings, HelpCircle, Star, ArrowLeft
 } from 'lucide-react';
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -19,7 +21,21 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in">
+    <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in p-2 sm:p-4">
+      {/* Top Header with Back Button */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => router.push('/')}
+          className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-all shadow-xs active:scale-90 border border-slate-200/80 shrink-0"
+          aria-label="Go to Home"
+        >
+          <ArrowLeft className="w-5 h-5 text-slate-700" />
+        </button>
+        <div>
+          <h1 className="text-2xl font-black text-[#0f172a] tracking-tight">User Account</h1>
+          <p className="text-xs text-slate-500 font-medium">KYC verification, trust badges, and settings</p>
+        </div>
+      </div>
       {/* Profile Header */}
       <div className="rideel-card p-6 flex items-center justify-between">
         <div className="flex items-center gap-4">

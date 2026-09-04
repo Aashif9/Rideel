@@ -4,7 +4,7 @@ import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { PROHIBITED_ITEMS, FEE_CONFIG } from '@/lib/constants';
-import { Package, Shield, AlertTriangle, ArrowRight, ChevronRight, CheckSquare } from 'lucide-react';
+import { Package, Shield, AlertTriangle, ArrowRight, ArrowLeft, ChevronRight, CheckSquare } from 'lucide-react';
 import { ParcelType } from '@/types';
 
 function ParcelDetailsContent() {
@@ -108,9 +108,24 @@ function ParcelDetailsContent() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in select-none p-4">
+    <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in select-none p-2 sm:p-4">
+      {/* Back Button Header */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => router.back()}
+          className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-all shadow-xs active:scale-90 border border-slate-200/80 shrink-0"
+          aria-label="Go Back"
+        >
+          <ArrowLeft className="w-5 h-5 text-slate-700" />
+        </button>
+        <div>
+          <h1 className="text-xl font-black text-[#0f172a] tracking-tight">Parcel Details</h1>
+          <p className="text-xs text-slate-500 font-medium">Step 2 of 4 • Set parcel size & insurance</p>
+        </div>
+      </div>
+
       {/* Timeline Header */}
-      <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-b pb-4">
+      <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-b border-slate-200/80 pb-4">
         <span className="text-slate-500">Route & Handoff</span>
         <ChevronRight className="w-4 h-4" />
         <span className="text-[#002b5c] font-extrabold flex items-center gap-1.5">
@@ -128,7 +143,7 @@ function ParcelDetailsContent() {
           <span className="text-xs font-mono text-emerald-700 bg-emerald-50 font-bold px-2.5 py-1 rounded-full border border-emerald-200 inline-block mb-1">
             {origin} → {destination} ({travelDate})
           </span>
-          <h1 className="text-2xl font-black text-[#0f172a] tracking-tight">Parcel & Cargo Details</h1>
+          <h2 className="text-2xl font-black text-[#0f172a] tracking-tight">Parcel & Cargo Details</h2>
           <p className="text-xs text-slate-500 font-medium">Provide accurate weight and dimensions for traveler matching.</p>
         </div>
 
@@ -350,10 +365,10 @@ function ParcelDetailsContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-4 rounded-2xl font-extrabold text-xs transition shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 py-4 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all transform active:scale-98 shadow-lg shadow-amber-400/25 flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <span>{loading ? 'Finding Travelers...' : 'Find Matching Travelers'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-slate-950" />
           </button>
         </form>
       </div>

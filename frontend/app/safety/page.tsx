@@ -2,15 +2,27 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { PROHIBITED_ITEMS } from '@/lib/constants';
-import { Shield, KeyRound, AlertTriangle, PhoneCall, CheckCircle2, Lock } from 'lucide-react';
+import { Shield, KeyRound, AlertTriangle, PhoneCall, CheckCircle2, Lock, ArrowLeft } from 'lucide-react';
 
 export default function SafetyCenterPage() {
+  const router = useRouter();
+
   return (
-    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in">
-      <div>
-        <h1 className="text-2xl font-extrabold text-primary tracking-tight">Rideel Safety & Trust Center</h1>
-        <p className="text-xs text-slate-500">Security protocols, OTP protection, prohibited items, and insurance coverage.</p>
+    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in p-2 sm:p-4">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => router.push('/')}
+          className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-all shadow-xs active:scale-90 border border-slate-200/80 shrink-0"
+          aria-label="Go to Home"
+        >
+          <ArrowLeft className="w-5 h-5 text-slate-700" />
+        </button>
+        <div>
+          <h1 className="text-2xl font-black text-[#0f172a] tracking-tight">Safety & Trust Center</h1>
+          <p className="text-xs text-slate-500 font-medium">Security protocols, OTP protection, prohibited items, and insurance coverage.</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

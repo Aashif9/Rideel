@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { Delivery, Trip, Parcel } from '@/types';
 import PaymentModal from '@/components/ui/PaymentModal';
-import { ShieldCheck, Lock, CheckCircle2, ChevronRight, Package, Truck, Calendar } from 'lucide-react';
+import { ShieldCheck, Lock, CheckCircle2, ChevronRight, Package, Truck, Calendar, ArrowLeft } from 'lucide-react';
 
 function BookingSummaryContent() {
   const router = useRouter();
@@ -35,7 +35,7 @@ function BookingSummaryContent() {
   if (loading) {
     return (
       <div className="max-w-xl mx-auto text-center py-16 space-y-3">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <div className="w-12 h-12 border-4 border-[#002b5c] border-t-amber-400 rounded-full animate-spin mx-auto"></div>
         <p className="text-xs font-bold text-slate-500">Reserving traveler capacity slot & generating escrow summary...</p>
       </div>
     );
@@ -43,12 +43,12 @@ function BookingSummaryContent() {
 
   if (error || !delivery) {
     return (
-      <div className="max-w-xl mx-auto rideel-card p-8 text-center space-y-4">
-        <h3 className="text-lg font-bold text-rose-700">Booking Reservation Error</h3>
-        <p className="text-xs text-slate-500">{error || 'Could not finalize booking reservation.'}</p>
+      <div className="max-w-xl mx-auto bg-white rounded-3xl p-8 text-center space-y-4 border border-slate-200/80 shadow-sm">
+        <h3 className="text-lg font-black text-rose-700">Booking Reservation Error</h3>
+        <p className="text-xs text-slate-500 font-medium">{error || 'Could not finalize booking reservation.'}</p>
         <button
           onClick={() => router.push('/send')}
-          className="bg-primary text-white text-xs font-bold px-6 py-2.5 rounded-xl"
+          className="bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs font-black px-6 py-3 rounded-2xl shadow-md uppercase tracking-wider"
         >
           Return to Parcel Search
         </button>
@@ -57,17 +57,32 @@ function BookingSummaryContent() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in">
+    <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in p-2 sm:p-4">
+      {/* Top Header with Back Button */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => router.back()}
+          className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-all shadow-xs active:scale-90 border border-slate-200/80 shrink-0"
+          aria-label="Go Back"
+        >
+          <ArrowLeft className="w-5 h-5 text-slate-700" />
+        </button>
+        <div>
+          <h1 className="text-xl font-black text-[#0f172a] tracking-tight">Booking Summary</h1>
+          <p className="text-xs text-slate-500 font-medium">Step 4 of 4 • Escrow payment & confirmation</p>
+        </div>
+      </div>
+
       {/* Timeline Header */}
-      <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-b pb-4">
+      <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-b border-slate-200/80 pb-4">
         <span className="text-slate-500">Route & Handoff</span>
         <ChevronRight className="w-4 h-4" />
         <span className="text-slate-500">Parcel Details</span>
         <ChevronRight className="w-4 h-4" />
         <span className="text-slate-500">Match Traveler</span>
         <ChevronRight className="w-4 h-4" />
-        <span className="text-primary font-extrabold flex items-center gap-1.5">
-          <span className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs">4</span>
+        <span className="text-[#002b5c] font-extrabold flex items-center gap-1.5">
+          <span className="w-6 h-6 rounded-full bg-[#002b5c] text-white flex items-center justify-center text-xs">4</span>
           Payment & Escrow
         </span>
       </div>
@@ -152,9 +167,9 @@ function BookingSummaryContent() {
 
         <button
           onClick={() => setIsPaymentOpen(true)}
-          className="w-full bg-primary hover:bg-primary-container text-white py-4 rounded-xl font-extrabold text-sm transition shadow-lg flex items-center justify-center gap-2"
+          className="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-all transform active:scale-98 shadow-lg shadow-amber-400/25 flex items-center justify-center gap-2"
         >
-          <Lock className="w-4 h-4" />
+          <Lock className="w-4 h-4 text-slate-950" />
           <span>Proceed to Pay ₹{delivery.total_amount}</span>
         </button>
       </div>
