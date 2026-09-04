@@ -17,6 +17,8 @@ function SendParcelRouteContent() {
 
   const [pickupLoc, setPickupLoc] = useState(searchParams.get('origin') || 'Bhimavaram');
   const [deliveryLoc, setDeliveryLoc] = useState(searchParams.get('dest') || 'T. Nagar, Chennai');
+  const [pickupCoords, setPickupCoords] = useState<{lat: number, lng: number} | null>(null);
+  const [deliveryCoords, setDeliveryCoords] = useState<{lat: number, lng: number} | null>(null);
   const [parcelType, setParcelType] = useState('1 kg • Document');
   const [selectedOption, setSelectedOption] = useState<'express' | 'standard' | 'large'>('express');
 
@@ -110,8 +112,8 @@ function SendParcelRouteContent() {
           large: 10.0,
         };
         const res = await apiServices.getPricingQuote({
-          pickup: { name: pickupLoc },
-          dropoff: { name: deliveryLoc },
+          pickup: { name: pickupLoc, lat: pickupCoords?.lat, lng: pickupCoords?.lng },
+          dropoff: { name: deliveryLoc, lat: deliveryCoords?.lat, lng: deliveryCoords?.lng },
           weightKg: weightMap[selectedOption] || 1.0,
           packageType: selectedOption === 'large' ? 'LARGE' : 'DOCUMENT',
           deliverySpeed: speedMap[selectedOption] || 'SAME_DAY',
@@ -134,7 +136,7 @@ function SendParcelRouteContent() {
 
     fetchQuote();
     return () => { isMounted = false; };
-  }, [pickupLoc, deliveryLoc, selectedOption]);
+  }, [pickupLoc, deliveryLoc, pickupCoords, deliveryCoords, selectedOption]);
 
   const handleProceed = () => {
     const finalPickupTime = pickupTime === 'Custom' ? customPickupTime || 'Custom Specified Time' : pickupTime;
@@ -197,10 +199,7 @@ function SendParcelRouteContent() {
         </div>
 
         {/* 3. INTERACTIVE MAP BOX WITH CLEAN ROUTE PREVIEW */}
-        <div 
-          onClick={() => setActivePickerTarget('pickup')}
-          className="relative w-full h-56 bg-slate-100 rounded-3xl overflow-hidden shadow-sm border border-slate-200/80 cursor-pointer group hover:border-[#002b5c]/30 transition-all"
-        >
+        <div className="relative w-full h-56 bg-slate-100 rounded-3xl overflow-hidden shadow-sm border border-slate-200/80 transition-all">
           <iframe
             title="Route Map Preview"
             width="100%"
@@ -208,14 +207,17 @@ function SendParcelRouteContent() {
             frameBorder="0"
             scrolling="no"
             src={`https://maps.google.com/maps?q=${encodeURIComponent(pickupLoc + ' to ' + deliveryLoc)}&output=embed`}
-            className="w-full h-full opacity-100 pointer-events-none select-none"
+            className="w-full h-full opacity-100"
           />
 
-          {/* Tap to Expand Badge */}
-          <div className="absolute top-3 right-3 bg-[#002b5c]/90 text-white backdrop-blur-md rounded-xl px-2.5 py-1 text-[10px] font-black flex items-center gap-1 shadow-md pointer-events-none">
+          {/* Open Picker Badge */}
+          <button 
+            onClick={() => setActivePickerTarget('pickup')}
+            className="absolute top-3 right-3 bg-[#002b5c]/90 text-white backdrop-blur-md rounded-xl px-2.5 py-1.5 text-[10px] font-black flex items-center gap-1 shadow-md hover:bg-[#002b5c] transition z-10"
+          >
             <MapPin className="w-3 h-3 text-amber-400" />
-            <span>Tap Map to Pin</span>
-          </div>
+            <span>Pick Exact Location</span>
+          </button>
 
           {/* Pickup Marker Box */}
           <div className="absolute left-4 top-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-md px-3.5 py-2 border border-slate-200/80 flex items-center gap-2 pointer-events-none">
@@ -439,8 +441,10 @@ function SendParcelRouteContent() {
             const formatted = loc.fullAddress || (loc.city ? `${loc.name}, ${loc.city}` : loc.name);
             if (activePickerTarget === 'pickup') {
               setPickupLoc(formatted);
+              if (loc.lat && loc.lng) setPickupCoords({ lat: loc.lat, lng: loc.lng });
             } else if (activePickerTarget === 'delivery') {
               setDeliveryLoc(formatted);
+              if (loc.lat && loc.lng) setDeliveryCoords({ lat: loc.lat, lng: loc.lng });
             }
           }}
           initialValue={activePickerTarget === 'pickup' ? pickupLoc : deliveryLoc}

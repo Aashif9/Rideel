@@ -5,6 +5,7 @@ import {
   MapPin, Search, Navigation, X, Check, Globe, Crosshair,
   Loader2, Map, CheckCircle2, ArrowRight
 } from 'lucide-react';
+import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
 
 interface LocationItem {
   name: string;
@@ -55,6 +56,73 @@ export default function LocationPickerModal({
     state: 'Andhra Pradesh',
     name: 'Ongole Town'
   });
+
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const [apiKey, setApiKey] = useState<string>(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '');
+  const [mapsApiLoaded, setMapsApiLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!apiKey) {
+      fetch('/api/config')
+        .then(res => res.json())
+        .then(data => {
+          if (data.googleMapsApiKey) setApiKey(data.googleMapsApiKey);
+        })
+        .catch(console.error);
+    }
+  }, [apiKey]);
+
+  // Google Maps Initialization
+  useEffect(() => {
+    if (activeTab !== 'map' || !apiKey || !mapRef.current) return;
+
+    if (!mapsApiLoaded) {
+      setOptions({ key: apiKey, v: 'weekly' });
+      importLibrary('maps')
+        .then(({ Map }) => {
+          setMapsApiLoaded(true);
+          initMap(Map);
+        })
+        .catch(console.error);
+    } else if (!mapInstanceRef.current && window.google?.maps) {
+      initMap(window.google.maps.Map);
+    }
+
+    function initMap(MapClass: any) {
+      if (!mapRef.current || mapInstanceRef.current) return;
+      const map = new MapClass(mapRef.current, {
+        center: selectedMapCoords,
+        zoom: 14,
+        disableDefaultUI: false,
+        zoomControl: true,
+        gestureHandling: "greedy",
+      });
+
+      mapInstanceRef.current = map;
+
+      map.addListener('idle', () => {
+        const center = map.getCenter();
+        if (center) {
+          const lat = center.lat();
+          const lng = center.lng();
+          setSelectedMapCoords({ lat, lng });
+          fetchMapAddress(lat, lng);
+        }
+      });
+    }
+  }, [activeTab, apiKey, mapsApiLoaded]);
+
+  // Sync map center when selectedMapCoords changes externally (e.g. clicking Quick City)
+  useEffect(() => {
+    if (mapInstanceRef.current && activeTab === 'map') {
+      const center = mapInstanceRef.current.getCenter();
+      // Only pan if it's significantly different to prevent infinite loops from 'idle' event
+      if (center && (Math.abs(center.lat() - selectedMapCoords.lat) > 0.0001 || Math.abs(center.lng() - selectedMapCoords.lng) > 0.0001)) {
+        mapInstanceRef.current.panTo(selectedMapCoords);
+      }
+    }
+  }, [selectedMapCoords, activeTab]);
 
   // Debounced Place Search (Photon / OpenStreetMap Geocoding matching Google Maps places)
   useEffect(() => {
@@ -375,18 +443,10 @@ export default function LocationPickerModal({
 
               {/* Interactive Google Maps Embed Canvas */}
               <div className="w-full h-40 sm:h-48 rounded-2xl border border-slate-200 overflow-hidden relative shadow-inner bg-slate-900 shrink-0">
-                <iframe
-                  title="Google Maps Location Picker"
-                  width="100%"
-                  height="100%"
-                  frameBorder="0"
-                  scrolling="no"
-                  src={`https://maps.google.com/maps?q=${selectedMapCoords.lat},${selectedMapCoords.lng}&z=14&output=embed`}
-                  className="w-full h-full opacity-100"
-                />
+                <div ref={mapRef} className="w-full h-full bg-slate-200" />
 
                 {/* Map Center Location Pin Marker */}
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center pb-6">
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center pb-6 z-10">
                   <div className="flex flex-col items-center animate-bounce">
                     <div className="w-8 h-8 rounded-full bg-[#002b5c] text-white flex items-center justify-center shadow-lg border-2 border-white">
                       <MapPin className="w-4 h-4 text-amber-300" />

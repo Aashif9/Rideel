@@ -98,8 +98,9 @@ export default function MapComponent({
           const map = new Map(mapRef.current, {
             center: { lat: initialLat, lng: initialLng },
             zoom: currentLat && currentLng ? 12 : 7,
-            disableDefaultUI: true,
+            disableDefaultUI: false,
             zoomControl: true,
+            gestureHandling: "greedy",
             styles: [
               { elementType: 'geometry', stylers: [{ color: '#0b1c30' }] },
               { elementType: 'labels.text.stroke', stylers: [{ color: '#0b1c30' }] },
