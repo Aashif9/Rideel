@@ -14,10 +14,10 @@ import {
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialMode = searchParams.get('mode') || 'login';
+  const initialMode = searchParams.get('mode') || 'splash';
 
   // Screen Flow: 'splash' | 'onboarding' | 'login' | 'otp' | 'profile' | 'success'
-  const [screen, setScreen] = useState<string>(initialMode === 'onboarding' ? 'onboarding' : 'login');
+  const [screen, setScreen] = useState<string>(initialMode);
   
   // Login Form States
   const [phone, setPhone] = useState('9876543210');
@@ -48,6 +48,26 @@ function LoginContent() {
       description: "Payments are safely locked until receiver verifies delivery OTP.",
     }
   ];
+
+  // Automatic transition from Splash screen after loading animation (2.2s)
+  useEffect(() => {
+    if (screen === 'splash') {
+      const splashTimer = setTimeout(() => {
+        setScreen('onboarding');
+      }, 2200);
+      return () => clearTimeout(splashTimer);
+    }
+  }, [screen]);
+
+  // Automatic slide rotation on onboarding screen every 3.5s
+  useEffect(() => {
+    if (screen === 'onboarding') {
+      const slideInterval = setInterval(() => {
+        setOnboardingSlide((prev) => (prev + 1) % onboardingSlides.length);
+      }, 3500);
+      return () => clearInterval(slideInterval);
+    }
+  }, [screen, onboardingSlides.length]);
 
   const handlePhoneSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -186,7 +206,7 @@ function LoginContent() {
             
             {/* Center Brand Icon */}
             <div className="flex flex-col items-center gap-4">
-              <div className="w-20 h-20 bg-white rounded-3xl shadow-xl flex items-center justify-center text-[#002b5c]">
+              <div className="w-20 h-20 bg-white rounded-3xl shadow-xl flex items-center justify-center text-[#002b5c] animate-bounce duration-1000">
                 <Truck className="w-10 h-10" />
               </div>
               <div>
@@ -195,17 +215,23 @@ function LoginContent() {
               </div>
             </div>
 
-            {/* Bottom Loader */}
-            <div className="flex flex-col items-center gap-2 pb-4">
+            {/* Bottom Automatic Loader */}
+            <div className="w-full flex flex-col items-center gap-3 pb-6">
               <div className="w-8 h-8 border-3 border-blue-400/30 border-t-white rounded-full animate-spin"></div>
-              <span className="text-[10px] font-bold tracking-widest text-blue-200/60 uppercase mt-2">
-                INITIALIZING SECURE NETWORK
+              
+              <div className="w-full max-w-[200px] h-1.5 bg-blue-950/60 rounded-full overflow-hidden border border-blue-400/20">
+                <div className="h-full bg-gradient-to-r from-sky-400 to-blue-300 rounded-full animate-pulse transition-all duration-2000 w-full" style={{ animationDuration: '2.2s' }}></div>
+              </div>
+
+              <span className="text-[10px] font-extrabold tracking-widest text-blue-200/70 uppercase">
+                INITIALIZING SECURE NETWORK...
               </span>
+
               <button
                 onClick={() => setScreen('onboarding')}
-                className="mt-2 text-xs font-bold text-blue-200 underline opacity-80 hover:opacity-100"
+                className="text-[11px] font-bold text-blue-200/90 underline hover:text-white transition mt-1"
               >
-                Proceed to Onboarding →
+                Skip wait →
               </button>
             </div>
           </div>
