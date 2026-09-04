@@ -10,10 +10,14 @@ import {
   User as UserIcon
 } from 'lucide-react';
 
+import LocationPickerModal from '@/components/ui/LocationPickerModal';
+
 export default function HomePage() {
   const [user, setUser] = useState<User | null>(null);
   const [activeDeliveries, setActiveDeliveries] = useState<Delivery[]>([]);
   const [selectedCity, setSelectedCity] = useState('Chennai, TN');
+  const [selectedAddress, setSelectedAddress] = useState('Chennai Central, Tamil Nadu');
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
   useEffect(() => {
     apiServices.getCurrentUser().then(setUser);
@@ -74,32 +78,47 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* 3. LOCATION SEARCH BAR */}
-        <div className="bg-white rounded-2xl p-3 shadow-sm border border-slate-200/80 space-y-2">
-          <div className="flex items-center gap-3 px-1">
-            <Search className="w-4 h-4 text-slate-400 shrink-0" />
-            <input
-              type="text"
-              placeholder="Where do you want to go?"
-              className="w-full text-xs font-semibold text-slate-800 placeholder:text-slate-400 placeholder:font-normal focus:outline-none bg-transparent"
-            />
+        {/* 3. INTERACTIVE GOOGLE MAPS & GPS LOCATION PICKER BAR */}
+        <div 
+          onClick={() => setIsLocationModalOpen(true)}
+          className="bg-white rounded-2xl p-3 shadow-sm border border-slate-200/80 space-y-2 cursor-pointer hover:border-[#002b5c]/40 transition group"
+        >
+          <div className="flex items-center justify-between gap-3 px-1">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <Search className="w-4 h-4 text-slate-400 shrink-0 group-hover:text-[#002b5c] transition" />
+              <div className="text-xs font-semibold text-slate-800 truncate">
+                {selectedAddress || "Where do you want to go?"}
+              </div>
+            </div>
+            <span className="text-[10px] font-bold text-[#002b5c] bg-blue-50 px-2 py-1 rounded-full shrink-0">
+              Change
+            </span>
           </div>
 
-          <div className="pt-2 border-t border-slate-100 flex items-center gap-1.5 text-xs text-slate-600">
-            <MapPin className="w-3.5 h-3.5 text-[#002b5c]" />
-            <select
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              className="bg-transparent font-bold text-xs text-[#002b5c] focus:outline-none cursor-pointer"
-            >
-              <option value="Chennai, TN">Chennai, TN</option>
-              <option value="Hyderabad, TS">Hyderabad, TS</option>
-              <option value="Vijayawada, AP">Vijayawada, AP</option>
-              <option value="Bangalore, KA">Bangalore, KA</option>
-              <option value="Mumbai, MH">Mumbai, MH</option>
-            </select>
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <MapPin className="w-3.5 h-3.5 text-[#002b5c] shrink-0" />
+              <span className="font-extrabold text-xs text-[#002b5c] truncate">
+                {selectedCity}
+              </span>
+            </div>
+            <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+              <span>GPS • Google Places • Map</span>
+              <ChevronRight className="w-3 h-3" />
+            </span>
           </div>
         </div>
+
+        {/* LOCATION PICKER MODAL */}
+        <LocationPickerModal
+          isOpen={isLocationModalOpen}
+          onClose={() => setIsLocationModalOpen(false)}
+          onSelectLocation={(loc) => {
+            setSelectedCity(loc.city ? `${loc.city}, ${loc.state || 'IN'}` : loc.name);
+            setSelectedAddress(loc.fullAddress || loc.name);
+          }}
+          initialValue={selectedCity}
+        />
 
         {/* 4. FOUR FEATURE ACTION CARDS GRID */}
         <div className="grid grid-cols-4 gap-2.5">
