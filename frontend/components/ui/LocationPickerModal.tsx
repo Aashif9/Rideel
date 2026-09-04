@@ -24,12 +24,13 @@ interface LocationPickerModalProps {
 }
 
 const POPULAR_CITIES: LocationItem[] = [
-  { name: 'Chennai Central', city: 'Chennai', state: 'Tamil Nadu', fullAddress: 'Chennai Central, Park Town, Chennai, Tamil Nadu' },
-  { name: 'Hyderabad Hitec City', city: 'Hyderabad', state: 'Telangana', fullAddress: 'Hitec City, Madhapur, Hyderabad, Telangana' },
-  { name: 'Vijayawada Junction', city: 'Vijayawada', state: 'Andhra Pradesh', fullAddress: 'Vijayawada Railway Station, Vijayawada, Andhra Pradesh' },
-  { name: 'Bangalore Indiranagar', city: 'Bangalore', state: 'Karnataka', fullAddress: '100 Feet Rd, Indiranagar, Bengaluru, Karnataka' },
-  { name: 'Mumbai BKC', city: 'Mumbai', state: 'Maharashtra', fullAddress: 'Bandra Kurla Complex, Mumbai, Maharashtra' },
-  { name: 'Delhi Connaught Place', city: 'Delhi', state: 'Delhi', fullAddress: 'Connaught Place, New Delhi, Delhi' },
+  { name: 'Ongole Town', city: 'Ongole', state: 'Andhra Pradesh', fullAddress: 'Ongole, Prakasam District, Andhra Pradesh, 523001, India', lat: 15.5057, lng: 80.0499 },
+  { name: 'Chennai Central', city: 'Chennai', state: 'Tamil Nadu', fullAddress: 'Chennai Central, Park Town, Chennai, Tamil Nadu', lat: 13.0827, lng: 80.2707 },
+  { name: 'Vijayawada Junction', city: 'Vijayawada', state: 'Andhra Pradesh', fullAddress: 'Vijayawada Railway Station, Vijayawada, Andhra Pradesh', lat: 16.5062, lng: 80.6480 },
+  { name: 'Hyderabad Hitec City', city: 'Hyderabad', state: 'Telangana', fullAddress: 'Hitec City, Madhapur, Hyderabad, Telangana', lat: 17.3850, lng: 78.4867 },
+  { name: 'Bangalore Indiranagar', city: 'Bangalore', state: 'Karnataka', fullAddress: '100 Feet Rd, Indiranagar, Bengaluru, Karnataka', lat: 12.9716, lng: 77.5946 },
+  { name: 'Mumbai BKC', city: 'Mumbai', state: 'Maharashtra', fullAddress: 'Bandra Kurla Complex, Mumbai, Maharashtra', lat: 19.0760, lng: 72.8777 },
+  { name: 'Delhi Connaught Place', city: 'Delhi', state: 'Delhi', fullAddress: 'Connaught Place, New Delhi, Delhi', lat: 28.6139, lng: 77.2090 },
 ];
 
 export default function LocationPickerModal({
@@ -45,9 +46,15 @@ export default function LocationPickerModal({
   const [isSearching, setIsSearching] = useState(false);
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
   const [detectedLocation, setDetectedLocation] = useState<LocationItem | null>(null);
-  const [selectedMapCoords, setSelectedMapCoords] = useState<{ lat: number; lng: number }>({ lat: 13.0827, lng: 80.2707 }); // Chennai default
-  const [mapAddress, setMapAddress] = useState<string>('Chennai, Tamil Nadu');
+  const [selectedMapCoords, setSelectedMapCoords] = useState<{ lat: number; lng: number }>({ lat: 15.5057, lng: 80.0499 }); // Ongole / AP default
+  const [mapAddress, setMapAddress] = useState<string>('Ongole, Prakasam, Andhra Pradesh, India');
   const [isReverseGeocoding, setIsReverseGeocoding] = useState(false);
+
+  const [mapAddressDetails, setMapAddressDetails] = useState<{ city: string; state: string; name: string }>({
+    city: 'Ongole',
+    state: 'Andhra Pradesh',
+    name: 'Ongole Town'
+  });
 
   // Debounced Place Search (Photon / OpenStreetMap Geocoding matching Google Maps places)
   useEffect(() => {
@@ -154,11 +161,6 @@ export default function LocationPickerModal({
     );
   };
 
-  const [mapAddressDetails, setMapAddressDetails] = useState<{ city: string; state: string; name: string }>({
-    city: 'Chennai',
-    state: 'Tamil Nadu',
-    name: 'Chennai Central'
-  });
 
   // Reverse Geocode when map coordinates change
   const fetchMapAddress = async (lat: number, lng: number) => {
@@ -409,9 +411,10 @@ export default function LocationPickerModal({
             <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
               <span className="text-[10px] font-bold text-slate-400 shrink-0">Jump to:</span>
               {[
+                { name: 'Ongole', lat: 15.5057, lng: 80.0499 },
+                { name: 'Vijayawada', lat: 16.5062, lng: 80.6480 },
                 { name: 'Chennai', lat: 13.0827, lng: 80.2707 },
                 { name: 'Hyderabad', lat: 17.3850, lng: 78.4867 },
-                { name: 'Vijayawada', lat: 16.5062, lng: 80.6480 },
                 { name: 'Bangalore', lat: 12.9716, lng: 77.5946 },
                 { name: 'Mumbai', lat: 19.0760, lng: 72.8777 }
               ].map((c, i) => (
