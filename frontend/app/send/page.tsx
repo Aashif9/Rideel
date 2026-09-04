@@ -1,11 +1,7 @@
-'use client';
-
-import React, { useState, useEffect, Suspense } from 'react';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import LocationPickerModal from '@/components/ui/LocationPickerModal';
 import {
   ArrowLeft, Bell, MapPin, Navigation, Package, Bike, Car, Truck,
-  ChevronRight, Plus, Minus, Info, ArrowRight, ShieldCheck
+  ChevronRight, Plus, Minus, Info, ArrowRight, ShieldCheck, Clock, Calendar
 } from 'lucide-react';
 
 function SendParcelRouteContent() {
@@ -16,6 +12,31 @@ function SendParcelRouteContent() {
   const [deliveryLoc, setDeliveryLoc] = useState(searchParams.get('dest') || 'T. Nagar, Chennai');
   const [parcelType, setParcelType] = useState('1 kg • Document');
   const [selectedOption, setSelectedOption] = useState<'express' | 'standard' | 'large'>('express');
+
+  // Location Picker Modal States
+  const [activePickerTarget, setActivePickerTarget] = useState<'pickup' | 'delivery' | null>(null);
+
+  // Pickup & Dropoff Time Window States
+  const [pickupTime, setPickupTime] = useState('Now / Immediate');
+  const [dropoffTime, setDropoffTime] = useState('Express Same-Day (Within 3 hrs)');
+  const [customPickupTime, setCustomPickupTime] = useState('');
+  const [customDropoffTime, setCustomDropoffTime] = useState('');
+
+  const pickupTimeSlots = [
+    { id: 'Now / Immediate', label: '⚡ Immediate / Now' },
+    { id: 'Morning (8 AM - 12 PM)', label: '🌅 Morning (8 AM - 12 PM)' },
+    { id: 'Afternoon (12 PM - 4 PM)', label: '☀️ Afternoon (12 PM - 4 PM)' },
+    { id: 'Evening (4 PM - 8 PM)', label: '🌆 Evening (4 PM - 8 PM)' },
+    { id: 'Custom', label: '📅 Custom Time' },
+  ];
+
+  const dropoffTimeSlots = [
+    { id: 'Express Same-Day (Within 3 hrs)', label: '⚡ Same-Day Express (Within 3 hrs)' },
+    { id: 'Today Evening (by 8 PM)', label: '🌇 Today Evening (by 8 PM)' },
+    { id: 'Tomorrow Morning (by 10 AM)', label: '🌅 Tomorrow Morning (by 10 AM)' },
+    { id: 'Flexible (Within 24 hrs)', label: '📦 Flexible (Within 24 hrs)' },
+    { id: 'Custom', label: '📅 Custom Drop Time' },
+  ];
 
   const deliveryOptions = [
     {
@@ -47,9 +68,14 @@ function SendParcelRouteContent() {
   const activeOptionObj = deliveryOptions.find(o => o.id === selectedOption) || deliveryOptions[0];
 
   const handleProceed = () => {
+    const finalPickupTime = pickupTime === 'Custom' ? customPickupTime || 'Custom Specified Time' : pickupTime;
+    const finalDropoffTime = dropoffTime === 'Custom' ? customDropoffTime || 'Custom Specified Time' : dropoffTime;
+
     const query = new URLSearchParams({
       origin: pickupLoc,
       destination: deliveryLoc,
+      pickupTime: finalPickupTime,
+      dropoffTime: finalDropoffTime,
       option: selectedOption,
       fare: activeOptionObj.priceRange
     }).toString();
@@ -97,110 +123,110 @@ function SendParcelRouteContent() {
         {/* 2. TITLE */}
         <div>
           <h1 className="text-2xl font-black text-[#0f172a] tracking-tight">Send a Parcel</h1>
-          <p className="text-xs text-slate-500 font-medium">Find trusted travelers & couriers</p>
+          <p className="text-xs text-slate-500 font-medium">Select exact pickup, dropoff & time windows</p>
         </div>
 
         {/* 3. INTERACTIVE MAP BOX WITH ROUTE LINE */}
-        <div className="relative w-full h-56 bg-slate-200 rounded-3xl overflow-hidden shadow-sm border border-slate-200/80">
-          {/* Tile Background Simulation */}
-          <div
-            className="absolute inset-0 opacity-80"
-            style={{
-              backgroundImage: `url('https://maps.googleapis.com/maps/api/staticmap?center=13.0827,80.2707&zoom=12&size=600x300&sensor=false&key=')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            {/* SVG Overlay Route Line */}
-            <svg className="absolute inset-0 w-full h-full">
-              <path
-                d="M 100 60 Q 150 110 210 150"
-                fill="none"
-                stroke="#0f172a"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-            </svg>
+        <div className="relative w-full h-52 bg-slate-900 rounded-3xl overflow-hidden shadow-sm border border-slate-200/80">
+          <iframe
+            title="Route Map Preview"
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            scrolling="no"
+            src={`https://maps.google.com/maps?q=${encodeURIComponent(pickupLoc + ' to ' + deliveryLoc)}&output=embed`}
+            className="w-full h-full opacity-80"
+          />
 
-            {/* Pickup Marker Box */}
-            <div className="absolute left-16 top-6 bg-white rounded-xl shadow-md px-3 py-1.5 border border-slate-200 flex items-center gap-1.5 animate-bounce">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-              <div className="text-[10px] leading-tight">
-                <span className="text-slate-400 font-bold block text-[8px]">Pickup</span>
-                <span className="font-extrabold text-slate-900">Anna Nagar</span>
-              </div>
+          {/* SVG Overlay Route Line */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none">
+            <path
+              d="M 90 50 Q 150 110 210 140"
+              fill="none"
+              stroke="#002b5c"
+              strokeWidth="4"
+              strokeDasharray="6 4"
+              strokeLinecap="round"
+            />
+          </svg>
+
+          {/* Pickup Marker Box */}
+          <div className="absolute left-6 top-4 bg-white/95 backdrop-blur rounded-xl shadow-lg px-3 py-1.5 border border-slate-200 flex items-center gap-2 animate-bounce">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <div className="text-[10px] leading-tight max-w-[120px]">
+              <span className="text-slate-400 font-bold block text-[8px]">Pickup</span>
+              <span className="font-extrabold text-slate-900 truncate block">{pickupLoc.split(',')[0]}</span>
             </div>
+          </div>
 
-            {/* Delivery Marker Box */}
-            <div className="absolute right-12 bottom-8 bg-white rounded-xl shadow-md px-3 py-1.5 border border-slate-200 flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <div className="text-[10px] leading-tight">
-                <span className="text-slate-400 font-bold block text-[8px]">Delivery</span>
-                <span className="font-extrabold text-slate-900">T. Nagar</span>
-              </div>
-            </div>
-
-            {/* Map Controls */}
-            <div className="absolute right-3 top-3 flex flex-col gap-1.5">
-              <button className="w-8 h-8 rounded-xl bg-white/90 backdrop-blur text-slate-700 shadow-sm flex items-center justify-center font-bold">
-                <Navigation className="w-4 h-4" />
-              </button>
-              <button className="w-8 h-8 rounded-xl bg-white/90 backdrop-blur text-slate-700 shadow-sm flex items-center justify-center font-bold">
-                <Plus className="w-4 h-4" />
-              </button>
-              <button className="w-8 h-8 rounded-xl bg-white/90 backdrop-blur text-slate-700 shadow-sm flex items-center justify-center font-bold">
-                <Minus className="w-4 h-4" />
-              </button>
+          {/* Delivery Marker Box */}
+          <div className="absolute right-6 bottom-4 bg-white/95 backdrop-blur rounded-xl shadow-lg px-3 py-1.5 border border-slate-200 flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+            <div className="text-[10px] leading-tight max-w-[120px]">
+              <span className="text-slate-400 font-bold block text-[8px]">Dropoff</span>
+              <span className="font-extrabold text-slate-900 truncate block">{deliveryLoc.split(',')[0]}</span>
             </div>
           </div>
         </div>
 
-        {/* 4. ADDRESS & PARCEL SPECS CARD */}
+        {/* 4. EXACT PICKUP & DROPOFF ADDRESS CARD */}
         <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 space-y-3">
-          {/* Pickup */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-4 h-4 rounded-full border-2 border-emerald-500 bg-white flex items-center justify-center shrink-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          {/* Exact Pickup Selection */}
+          <div 
+            onClick={() => setActivePickerTarget('pickup')}
+            className="flex items-center justify-between cursor-pointer hover:bg-blue-50/50 p-2 rounded-2xl transition group"
+          >
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="w-8 h-8 rounded-full border-2 border-emerald-500 bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4" />
               </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 block uppercase">Pickup Location</span>
-                <input
-                  type="text"
-                  value={pickupLoc}
-                  onChange={(e) => setPickupLoc(e.target.value)}
-                  className="font-extrabold text-xs text-slate-900 bg-transparent focus:outline-none w-full"
-                />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider">
+                    EXACT PICKUP LOCATION
+                  </span>
+                  <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                    Change (GPS/Map)
+                  </span>
+                </div>
+                <div className="font-black text-xs text-slate-900 truncate mt-0.5 group-hover:text-[#002b5c]">
+                  {pickupLoc}
+                </div>
               </div>
             </div>
-            <Navigation className="w-4 h-4 text-slate-400 cursor-pointer hover:text-slate-700" />
           </div>
 
           <div className="border-t border-slate-100"></div>
 
-          {/* Delivery */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-4 h-4 rounded-full border-2 border-rose-500 bg-white flex items-center justify-center shrink-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+          {/* Exact Dropoff Selection */}
+          <div 
+            onClick={() => setActivePickerTarget('delivery')}
+            className="flex items-center justify-between cursor-pointer hover:bg-rose-50/50 p-2 rounded-2xl transition group"
+          >
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="w-8 h-8 rounded-full border-2 border-rose-500 bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4" />
               </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 block uppercase">Delivery Location</span>
-                <input
-                  type="text"
-                  value={deliveryLoc}
-                  onChange={(e) => setDeliveryLoc(e.target.value)}
-                  className="font-extrabold text-xs text-slate-900 bg-transparent focus:outline-none w-full"
-                />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold text-rose-600 uppercase tracking-wider">
+                    EXACT DROPOFF LOCATION
+                  </span>
+                  <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                    Change (GPS/Map)
+                  </span>
+                </div>
+                <div className="font-black text-xs text-slate-900 truncate mt-0.5 group-hover:text-[#002b5c]">
+                  {deliveryLoc}
+                </div>
               </div>
             </div>
-            <Navigation className="w-4 h-4 text-slate-400 cursor-pointer hover:text-slate-700" />
           </div>
 
           <div className="border-t border-slate-100"></div>
 
           {/* Parcel Specs */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-2">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold shrink-0">
                 <Package className="w-4 h-4" />
@@ -218,6 +244,112 @@ function SendParcelRouteContent() {
             <ChevronRight className="w-4 h-4 text-slate-400 cursor-pointer" />
           </div>
         </div>
+
+        {/* 5. PICKUP TIME WINDOW CARD */}
+        <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 space-y-3">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-[#002b5c]" />
+            <h2 className="text-xs font-black uppercase tracking-wider text-slate-900">
+              Select Pickup Time Window
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            {pickupTimeSlots.map((slot) => {
+              const isSelected = pickupTime === slot.id;
+              return (
+                <button
+                  key={slot.id}
+                  type="button"
+                  onClick={() => setPickupTime(slot.id)}
+                  className={`p-2.5 rounded-xl border text-left text-xs font-bold transition flex items-center justify-between ${
+                    isSelected
+                      ? 'border-[#002b5c] bg-blue-50/50 text-[#002b5c] ring-1 ring-[#002b5c]/20'
+                      : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                  }`}
+                >
+                  <span className="truncate">{slot.label}</span>
+                  {isSelected && <span className="w-2 h-2 rounded-full bg-[#002b5c]"></span>}
+                </button>
+              );
+            })}
+          </div>
+
+          {pickupTime === 'Custom' && (
+            <div className="pt-1">
+              <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-1">
+                Enter Custom Pickup Time:
+              </label>
+              <input
+                type="time"
+                value={customPickupTime}
+                onChange={(e) => setCustomPickupTime(e.target.value)}
+                className="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* 6. EXPECTED DROPOFF / DELIVERY TIME WINDOW CARD */}
+        <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 space-y-3">
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-emerald-600" />
+            <h2 className="text-xs font-black uppercase tracking-wider text-slate-900">
+              Select Expected Dropoff / Delivery Time
+            </h2>
+          </div>
+
+          <div className="space-y-2">
+            {dropoffTimeSlots.map((slot) => {
+              const isSelected = dropoffTime === slot.id;
+              return (
+                <button
+                  key={slot.id}
+                  type="button"
+                  onClick={() => setDropoffTime(slot.id)}
+                  className={`w-full p-3 rounded-xl border text-left text-xs font-bold transition flex items-center justify-between ${
+                    isSelected
+                      ? 'border-emerald-600 bg-emerald-50/40 text-emerald-900 ring-1 ring-emerald-600/20'
+                      : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                  }`}
+                >
+                  <span className="truncate">{slot.label}</span>
+                  {isSelected && <span className="w-2 h-2 rounded-full bg-emerald-600"></span>}
+                </button>
+              );
+            })}
+          </div>
+
+          {dropoffTime === 'Custom' && (
+            <div className="pt-1">
+              <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-1">
+                Enter Custom Dropoff Time:
+              </label>
+              <input
+                type="datetime-local"
+                value={customDropoffTime}
+                onChange={(e) => setCustomDropoffTime(e.target.value)}
+                className="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-emerald-600"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* LOCATION PICKER MODAL INSTANCE */}
+        <LocationPickerModal
+          isOpen={activePickerTarget !== null}
+          onClose={() => setActivePickerTarget(null)}
+          title={activePickerTarget === 'pickup' ? 'Select Exact Pickup Location' : 'Select Exact Dropoff Location'}
+          onSelectLocation={(loc) => {
+            const formatted = loc.fullAddress || (loc.city ? `${loc.name}, ${loc.city}` : loc.name);
+            if (activePickerTarget === 'pickup') {
+              setPickupLoc(formatted);
+            } else if (activePickerTarget === 'delivery') {
+              setDeliveryLoc(formatted);
+            }
+          }}
+          initialValue={activePickerTarget === 'pickup' ? pickupLoc : deliveryLoc}
+        />
 
         {/* 5. CHOOSE A DELIVERY OPTION */}
         <div className="space-y-2.5">
