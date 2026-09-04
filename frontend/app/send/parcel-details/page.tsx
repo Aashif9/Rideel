@@ -29,6 +29,42 @@ function ParcelDetailsContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const handleWeightChange = (newWeight: number) => {
+    const validWeight = Math.max(0.1, Math.min(50, Math.round(newWeight * 10) / 10));
+    setWeightKg(validWeight);
+
+    // Auto-update category based on weight
+    if (validWeight <= 1.0) {
+      setParcelType('document');
+    } else if (validWeight <= 5.0) {
+      setParcelType('small');
+    } else if (validWeight <= 15.0) {
+      setParcelType('medium');
+    } else {
+      setParcelType('large' as any);
+    }
+  };
+
+  const handleCategorySelect = (catType: string) => {
+    setParcelType(catType as ParcelType);
+    if (catType === 'document') {
+      setWeightKg(0.5);
+      setLengthCm(25);
+      setWidthCm(18);
+      setHeightCm(2);
+    } else if (catType === 'small') {
+      setWeightKg(2.5);
+      setLengthCm(30);
+      setWidthCm(20);
+      setHeightCm(10);
+    } else if (catType === 'medium') {
+      setWeightKg(8.0);
+      setLengthCm(45);
+      setWidthCm(35);
+      setHeightCm(25);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prohibitedAccepted) {
@@ -36,8 +72,8 @@ function ParcelDetailsContent() {
       return;
     }
 
-    if (weightKg <= 0 || weightKg > 25) {
-      setError('Parcel weight must be between 0.1 kg and 25 kg.');
+    if (weightKg <= 0 || weightKg > 50) {
+      setError('Parcel weight must be between 0.1 kg and 50 kg.');
       return;
     }
 
@@ -72,13 +108,13 @@ function ParcelDetailsContent() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in">
+    <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in select-none p-4">
       {/* Timeline Header */}
       <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-b pb-4">
         <span className="text-slate-500">Route & Handoff</span>
         <ChevronRight className="w-4 h-4" />
-        <span className="text-primary font-extrabold flex items-center gap-1.5">
-          <span className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs">2</span>
+        <span className="text-[#002b5c] font-extrabold flex items-center gap-1.5">
+          <span className="w-6 h-6 rounded-full bg-[#002b5c] text-white flex items-center justify-center text-xs">2</span>
           Parcel Details
         </span>
         <ChevronRight className="w-4 h-4" />
@@ -87,20 +123,20 @@ function ParcelDetailsContent() {
         <span>Payment & Escrow</span>
       </div>
 
-      <div className="rideel-card p-6 md:p-8 space-y-6">
+      <div className="bg-white rounded-3xl p-6 md:p-8 space-y-6 shadow-sm border border-slate-200/80">
         <div>
-          <span className="text-xs font-mono text-emerald-700 bg-emerald-50 font-bold px-2 py-0.5 rounded">
+          <span className="text-xs font-mono text-emerald-700 bg-emerald-50 font-bold px-2.5 py-1 rounded-full border border-emerald-200 inline-block mb-1">
             {origin} → {destination} ({travelDate})
           </span>
-          <h1 className="text-2xl font-extrabold text-primary tracking-tight mt-1">Parcel & Cargo Details</h1>
-          <p className="text-xs text-slate-500">Provide accurate weight and dimensions for traveler matching.</p>
+          <h1 className="text-2xl font-black text-[#0f172a] tracking-tight">Parcel & Cargo Details</h1>
+          <p className="text-xs text-slate-500 font-medium">Provide accurate weight and dimensions for traveler matching.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Category Selector */}
+          {/* Parcel Category Selector */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-              Parcel Category
+            <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">
+              PARCEL CATEGORY
             </label>
             <div className="grid grid-cols-3 gap-3">
               {[
@@ -111,114 +147,182 @@ function ParcelDetailsContent() {
                 <button
                   key={cat.type}
                   type="button"
-                  onClick={() => setParcelType(cat.type as ParcelType)}
-                  className={`p-3 rounded-xl border text-center transition ${
+                  onClick={() => handleCategorySelect(cat.type)}
+                  className={`p-3.5 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1 ${
                     parcelType === cat.type
-                      ? 'border-primary bg-primary-fixed/20 font-bold text-primary'
+                      ? 'border-[#002b5c] bg-blue-50/50 text-[#002b5c] ring-2 ring-[#002b5c]/10'
                       : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                   }`}
                 >
-                  <Package className="w-5 h-5 mx-auto mb-1" />
-                  <div className="text-xs font-extrabold">{cat.title}</div>
-                  <div className="text-[10px] text-slate-500">{cat.desc}</div>
+                  <Package className="w-5 h-5 mx-auto text-[#002b5c]" />
+                  <div className="text-xs font-black">{cat.title}</div>
+                  <div className="text-[10px] text-slate-500 font-medium">{cat.desc}</div>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Weight & Dimensions */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div>
-              <label className="block text-xs font-bold uppercase text-slate-600 mb-1">Weight (kg)</label>
-              <input
-                type="number"
-                step="0.5"
-                min="0.1"
-                max="25"
-                value={weightKg}
-                onChange={(e) => setWeightKg(parseFloat(e.target.value) || 0)}
-                className="w-full bg-surface-container-low border border-outline-variant rounded-xl p-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-primary"
-              />
+          {/* WEIGHT OPERATION CARD (STEPPER & QUICK PRESETS) */}
+          <div className="p-4 bg-slate-50/80 border border-slate-200 rounded-3xl space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="text-xs font-black uppercase text-slate-800 tracking-wider block">
+                  WEIGHT (KG)
+                </label>
+                <span className="text-[10px] text-slate-500 font-medium">
+                  Use stepper (- / +) or type exact weight
+                </span>
+              </div>
+              
+              {/* Stepper Control */}
+              <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-2xl p-1.5 shadow-xs">
+                <button
+                  type="button"
+                  onClick={() => handleWeightChange(weightKg - 0.5)}
+                  className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold flex items-center justify-center transition active:scale-95 text-base"
+                >
+                  -
+                </button>
+
+                <input
+                  type="number"
+                  step="any"
+                  min="0.1"
+                  max="50"
+                  value={weightKg}
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value);
+                    setWeightKg(isNaN(val) ? 0 : val);
+                  }}
+                  className="w-16 text-center text-base font-black text-[#002b5c] bg-transparent focus:outline-none"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => handleWeightChange(weightKg + 0.5)}
+                  className="w-8 h-8 rounded-xl bg-[#002b5c] hover:bg-[#001f44] text-white font-extrabold flex items-center justify-center transition active:scale-95 text-base"
+                >
+                  +
+                </button>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase text-slate-600 mb-1">Length (cm)</label>
-              <input
-                type="number"
-                value={lengthCm}
-                onChange={(e) => setLengthCm(parseInt(e.target.value) || 0)}
-                className="w-full bg-surface-container-low border border-outline-variant rounded-xl p-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-primary"
-              />
+
+            {/* Quick Weight Preset Pills */}
+            <div className="pt-2 border-t border-slate-200/60">
+              <span className="text-[10px] font-extrabold uppercase text-slate-400 block mb-1.5">
+                Quick Select Weight Presets:
+              </span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {[0.5, 1.0, 2.5, 3.5, 5.0, 10.0, 15.0, 20.0].map((wt) => (
+                  <button
+                    key={wt}
+                    type="button"
+                    onClick={() => handleWeightChange(wt)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+                      weightKg === wt
+                        ? 'bg-[#002b5c] text-white shadow-xs'
+                        : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                    }`}
+                  >
+                    {wt} kg
+                  </button>
+                ))}
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase text-slate-600 mb-1">Width (cm)</label>
-              <input
-                type="number"
-                value={widthCm}
-                onChange={(e) => setWidthCm(parseInt(e.target.value) || 0)}
-                className="w-full bg-surface-container-low border border-outline-variant rounded-xl p-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase text-slate-600 mb-1">Height (cm)</label>
-              <input
-                type="number"
-                value={heightCm}
-                onChange={(e) => setHeightCm(parseInt(e.target.value) || 0)}
-                className="w-full bg-surface-container-low border border-outline-variant rounded-xl p-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-primary"
-              />
+          </div>
+
+          {/* DIMENSIONS (LENGTH x WIDTH x HEIGHT) */}
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+              DIMENSIONS (CM) & VOLUMETRIC CALCULATOR
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="block text-[10px] font-bold uppercase text-slate-500 mb-1">LENGTH (CM)</label>
+                <input
+                  type="number"
+                  step="any"
+                  value={lengthCm}
+                  onChange={(e) => setLengthCm(parseFloat(e.target.value) || 0)}
+                  className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase text-slate-500 mb-1">WIDTH (CM)</label>
+                <input
+                  type="number"
+                  step="any"
+                  value={widthCm}
+                  onChange={(e) => setWidthCm(parseFloat(e.target.value) || 0)}
+                  className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase text-slate-500 mb-1">HEIGHT (CM)</label>
+                <input
+                  type="number"
+                  step="any"
+                  value={heightCm}
+                  onChange={(e) => setHeightCm(parseFloat(e.target.value) || 0)}
+                  className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+                />
+              </div>
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-600 mb-1">Parcel Contents Description</label>
+            <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+              PARCEL CONTENTS DESCRIPTION
+            </label>
             <textarea
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="e.g. Legal documents, laptop, clothing package..."
-              className="w-full bg-surface-container-low border border-outline-variant rounded-xl p-3 text-sm text-slate-900 focus:outline-none focus:border-primary"
+              className="w-full bg-white border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#002b5c]"
             />
           </div>
 
           {/* Declared Value & Insurance Opt-in */}
-          <div className="p-4 bg-surface-container rounded-2xl border border-surface-container-high space-y-3">
+          <div className="p-4 bg-blue-50/40 rounded-2xl border border-blue-100 space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-xs font-bold uppercase text-slate-700 block">Declared Value (₹)</label>
-                <span className="text-[11px] text-slate-500">Value of items for insurance coverage</span>
+                <label className="text-xs font-bold uppercase text-slate-800 block">DECLARED VALUE (₹)</label>
+                <span className="text-[10px] text-slate-500 font-medium">Value of items for insurance coverage</span>
               </div>
               <input
                 type="number"
+                step="any"
                 value={declaredValue}
                 onChange={(e) => setDeclaredValue(parseInt(e.target.value) || 0)}
-                className="w-32 bg-white border border-outline-variant rounded-xl p-2 text-right text-sm font-extrabold text-primary"
+                className="w-32 bg-white border border-slate-200 rounded-xl p-2.5 text-right text-xs font-black text-[#002b5c]"
               />
             </div>
 
-            <div className="border-t border-slate-300 pt-3 flex items-center justify-between">
+            <div className="border-t border-blue-100 pt-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-emerald-600" />
+                <Shield className="w-5 h-5 text-emerald-600 shrink-0" />
                 <div>
                   <div className="text-xs font-bold text-slate-900">Include Rideel Parcel Protection Insurance</div>
-                  <div className="text-[10px] text-slate-500">Covers damage, loss or delay up to ₹10,000</div>
+                  <div className="text-[10px] text-slate-500 font-medium">Covers damage, loss or delay up to ₹10,000</div>
                 </div>
               </div>
               <input
                 type="checkbox"
                 checked={insuranceSelected}
                 onChange={(e) => setInsuranceSelected(e.target.checked)}
-                className="w-5 h-5 accent-primary rounded cursor-pointer"
+                className="w-5 h-5 accent-[#002b5c] rounded cursor-pointer"
               />
             </div>
           </div>
 
-          {/* Prohibited Items System Confirmation */}
-          <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl space-y-2 text-xs">
+          {/* Prohibited Items Confirmation */}
+          <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl space-y-2 text-xs">
             <div className="font-extrabold text-amber-900 flex items-center gap-1.5">
               <AlertTriangle className="w-4 h-4 text-amber-700" /> Prohibited & Restricted Cargo Warning
             </div>
-            <ul className="list-disc pl-5 text-[11px] text-amber-800 space-y-1">
+            <ul className="list-disc pl-5 text-[11px] text-amber-800 space-y-1 font-medium">
               {PROHIBITED_ITEMS.slice(0, 3).map((item, i) => (
                 <li key={i}>{item}</li>
               ))}
@@ -246,7 +350,7 @@ function ParcelDetailsContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary hover:bg-primary-container text-white py-4 rounded-xl font-extrabold text-sm transition shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-4 rounded-2xl font-extrabold text-xs transition shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <span>{loading ? 'Finding Travelers...' : 'Find Matching Travelers'}</span>
             <ArrowRight className="w-4 h-4" />
