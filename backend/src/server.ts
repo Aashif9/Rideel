@@ -3,6 +3,7 @@ import cors from 'cors';
 import { env } from './config/env';
 import routes from './routes';
 import { errorHandler } from './middleware';
+import { seedDatabaseIfEmpty } from './config/seedDatabase';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/', routes);
 app.use(errorHandler);
 
 const PORT = parseInt(env.PORT, 10);
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`🚀 RIDEEL Backend server running on http://localhost:${PORT}`);
+  await seedDatabaseIfEmpty();
 });

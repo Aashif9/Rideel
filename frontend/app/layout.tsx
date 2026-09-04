@@ -1,8 +1,5 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import DemoUserSwitcher from '@/components/ui/DemoUserSwitcher';
-import Header from '@/components/layout/Header';
-import BottomNav from '@/components/layout/BottomNav';
 import AIChatBot from '@/components/ui/AIChatBot';
 
 export const metadata: Metadata = {
@@ -17,14 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="light">
-      <body className="min-h-screen bg-background text-on-background flex flex-col antialiased">
-        <DemoUserSwitcher />
-        <Header />
-        <main className="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 pb-24 md:pb-8">
+      <body className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col antialiased selection:bg-blue-100">
+        <main className="flex-1 max-w-md w-full mx-auto">
           {children}
         </main>
         <AIChatBot />
-        <BottomNav />
       </body>
     </html>
   );
