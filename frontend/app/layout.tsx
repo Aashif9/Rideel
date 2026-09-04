@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col antialiased selection:bg-blue-100">
-        <main className="flex-1 max-w-md w-full mx-auto">
+        <main className="flex-1 w-full">
           {children}
         </main>
         <AIChatBot />
