@@ -59,14 +59,13 @@ User question: "${userQuery}"`;
     // 3. Fallback / Rule-based Assistant Logic if Gemini API key is unconfigured or rate limited
     if (!reply) {
       const queryLower = userQuery.toLowerCase();
-      if (queryLower.includes('status') || queryLower.includes('track') || queryLower.includes('rd784521')) {
-        reply = "📦 **Delivery RD784521** (Vijayawada → Hyderabad) is currently **IN_TRANSIT** on National Highway 65. Traveler **Vikram Singh** has verified the Pickup OTP (482910) and is expected to arrive in Hitech City at **12:15 PM**.";
+      if (queryLower.includes('status') || queryLower.includes('track')) {
+        reply = "📦 Enter your 8-character Delivery ID (e.g. RD102938) on the tracking page to view real-time live GPS tracking and traveler location on Google Maps.";
         quickActions = [
-          { label: 'Track Live Map', href: '/deliveries/RD784521' },
-          { label: 'Chat with Traveler', href: '/chat/RD784521' }
+          { label: 'View Deliveries', href: '/deliveries' }
         ];
       } else if (queryLower.includes('otp') || queryLower.includes('verification')) {
-        reply = "🔒 **RIDEEL Double OTP Security System**:\n\n1. **Pickup OTP**: Given by sender to traveler during parcel pickup.\n2. **Receiver Delivery OTP**: Given by receiver to traveler at destination to verify delivery & release escrow funds.\n\n(Demo testing OTP: `123456`)";
+        reply = "🔒 **RIDEEL Double OTP Security System**:\n\n1. **Pickup OTP**: Given by sender to traveler during parcel pickup.\n2. **Receiver Delivery OTP**: Given by receiver to traveler at destination to verify delivery & release escrow funds.";
         quickActions = [{ label: 'View Deliveries', href: '/deliveries' }];
       } else if (queryLower.includes('send') || queryLower.includes('parcel')) {
         reply = "🚀 **Sending a Parcel on RIDEEL**:\n\n1. Select intercity origin & destination.\n2. Enter parcel details, weight (kg) & optional protection insurance.\n3. Pick from top matched travelers ranked by RIDEEL Match Score.\n4. Pay via 100% Escrow and receive your Pickup OTP!";

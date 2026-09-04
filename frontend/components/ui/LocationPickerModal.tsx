@@ -204,23 +204,27 @@ export default function LocationPickerModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200 select-none">
-      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-slate-100">
+    <div className="fixed inset-0 z-[100] bg-slate-950/75 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200 select-none">
+      <div className="w-full max-w-md bg-white rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[85vh] border border-slate-100 animate-in slide-in-from-bottom-6 duration-300">
         
+        {/* Mobile Handle Indicator */}
+        <div className="w-12 h-1.5 bg-slate-300 rounded-full mx-auto mt-2.5 sm:hidden shrink-0"></div>
+
         {/* MODAL HEADER */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#002b5c] flex items-center justify-center">
-              <MapPin className="w-4 h-4" />
+        <div className="p-3.5 sm:p-4 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-2xl bg-blue-50 text-[#002b5c] flex items-center justify-center border border-blue-100 shadow-xs">
+              <MapPin className="w-4 h-4 text-[#002b5c]" />
             </div>
             <div>
-              <h2 className="text-sm font-black text-slate-900">{title}</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Search • GPS • Map</p>
+              <h2 className="text-sm font-black text-slate-900 tracking-tight leading-tight">{title}</h2>
+              <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Search • GPS • Google Maps</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"
+            className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition font-bold active:scale-95"
+            aria-label="Close Location Picker"
           >
             <X className="w-4 h-4" />
           </button>
@@ -360,93 +364,102 @@ export default function LocationPickerModal({
 
         {/* TAB CONTENT: PICK ON MAP */}
         {activeTab === 'map' && (
-          <div className="p-4 space-y-4 overflow-y-auto flex-1 flex flex-col">
-            <div className="text-xs font-semibold text-slate-600 flex items-center justify-between">
-              <span>Interactive Map Location Pin</span>
-              <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">
-                Drag or Click to position
-              </span>
-            </div>
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="p-3.5 space-y-3 overflow-y-auto flex-1 scrollbar-thin">
+              <div className="text-xs font-extrabold text-slate-700 flex items-center justify-between">
+                <span>Google Maps Location Pin</span>
+                <span className="text-[10px] font-bold text-[#002b5c] bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+                  Interactive Map Pin
+                </span>
+              </div>
 
-            {/* Interactive OpenStreetMap Embed Canvas */}
-            <div className="w-full h-56 rounded-2xl border border-slate-200 overflow-hidden relative shadow-inner bg-slate-900">
-              <iframe
-                title="Google Maps Location Picker"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                scrolling="no"
-                src={`https://maps.google.com/maps?q=${selectedMapCoords.lat},${selectedMapCoords.lng}&z=14&output=embed`}
-                className="w-full h-full opacity-100"
-              />
+              {/* Interactive Google Maps Embed Canvas */}
+              <div className="w-full h-40 sm:h-48 rounded-2xl border border-slate-200 overflow-hidden relative shadow-inner bg-slate-900 shrink-0">
+                <iframe
+                  title="Google Maps Location Picker"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  scrolling="no"
+                  src={`https://maps.google.com/maps?q=${selectedMapCoords.lat},${selectedMapCoords.lng}&z=14&output=embed`}
+                  className="w-full h-full opacity-100"
+                />
 
-              {/* Map Center Location Pin Marker */}
-              <div className="absolute inset-0 pointer-events-none flex items-center justify-center pb-6">
-                <div className="flex flex-col items-center animate-bounce">
-                  <div className="w-8 h-8 rounded-full bg-[#002b5c] text-white flex items-center justify-center shadow-lg border-2 border-white">
-                    <MapPin className="w-4 h-4 text-sky-300" />
+                {/* Map Center Location Pin Marker */}
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center pb-6">
+                  <div className="flex flex-col items-center animate-bounce">
+                    <div className="w-8 h-8 rounded-full bg-[#002b5c] text-white flex items-center justify-center shadow-lg border-2 border-white">
+                      <MapPin className="w-4 h-4 text-amber-300" />
+                    </div>
+                    <div className="w-2.5 h-1.5 rounded-full bg-slate-900/50 blur-[1px] mt-0.5"></div>
                   </div>
-                  <div className="w-2 h-2 rounded-full bg-slate-900/40 blur-[1px]"></div>
+                </div>
+              </div>
+
+              {/* Selected Location Address Details */}
+              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-1">
+                <span className="text-[9px] font-extrabold uppercase tracking-wider text-slate-400 block">
+                  SELECTED LOCATION ADDRESS
+                </span>
+                <div className="text-xs font-bold text-slate-900 leading-snug">
+                  {isReverseGeocoding ? (
+                    <span className="text-slate-400 flex items-center gap-1.5">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-[#002b5c]" /> Fetching location details...
+                    </span>
+                  ) : (
+                    mapAddress
+                  )}
+                </div>
+              </div>
+
+              {/* Preset City Quick Coordinates */}
+              <div className="space-y-1.5">
+                <span className="text-[9px] font-extrabold uppercase tracking-wider text-slate-400 block">
+                  JUMP TO QUICK CITY:
+                </span>
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                  {[
+                    { name: 'Ongole', lat: 15.5057, lng: 80.0499 },
+                    { name: 'Vijayawada', lat: 16.5062, lng: 80.6480 },
+                    { name: 'Chennai', lat: 13.0827, lng: 80.2707 },
+                    { name: 'Hyderabad', lat: 17.3850, lng: 78.4867 },
+                    { name: 'Bangalore', lat: 12.9716, lng: 77.5946 },
+                    { name: 'Mumbai', lat: 19.0760, lng: 72.8777 }
+                  ].map((c, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setSelectedMapCoords({ lat: c.lat, lng: c.lng });
+                        fetchMapAddress(c.lat, c.lng);
+                      }}
+                      className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-extrabold text-slate-800 shrink-0 active:scale-95 transition"
+                    >
+                      {c.name}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Selected Location Address Details */}
-            <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-1">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">
-                Selected Location Address
-              </span>
-              <div className="text-xs font-bold text-slate-800 leading-snug">
-                {isReverseGeocoding ? (
-                  <span className="text-slate-400 flex items-center gap-1.5">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" /> Fetching location details...
-                  </span>
-                ) : (
-                  mapAddress
-                )}
-              </div>
+            {/* Pinned Sticky Confirmation Footer */}
+            <div className="p-3.5 bg-white border-t border-slate-100 shrink-0 shadow-lg">
+              <button
+                onClick={() => {
+                  handleConfirmLocation({
+                    name: mapAddressDetails.name || 'Map Location',
+                    city: mapAddressDetails.city || 'Selected City',
+                    state: mapAddressDetails.state || 'India',
+                    fullAddress: mapAddress,
+                    lat: selectedMapCoords.lat,
+                    lng: selectedMapCoords.lng
+                  });
+                }}
+                className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2 active:scale-98"
+              >
+                <CheckCircle2 className="w-4 h-4 text-amber-300" />
+                <span>Confirm Map Location</span>
+              </button>
             </div>
-
-            {/* Preset City Quick Coordinates */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-              <span className="text-[10px] font-bold text-slate-400 shrink-0">Jump to:</span>
-              {[
-                { name: 'Ongole', lat: 15.5057, lng: 80.0499 },
-                { name: 'Vijayawada', lat: 16.5062, lng: 80.6480 },
-                { name: 'Chennai', lat: 13.0827, lng: 80.2707 },
-                { name: 'Hyderabad', lat: 17.3850, lng: 78.4867 },
-                { name: 'Bangalore', lat: 12.9716, lng: 77.5946 },
-                { name: 'Mumbai', lat: 19.0760, lng: 72.8777 }
-              ].map((c, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setSelectedMapCoords({ lat: c.lat, lng: c.lng });
-                    fetchMapAddress(c.lat, c.lng);
-                  }}
-                  className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 shrink-0"
-                >
-                  {c.name}
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={() => {
-                handleConfirmLocation({
-                  name: mapAddressDetails.name || 'Map Location',
-                  city: mapAddressDetails.city || 'Selected City',
-                  state: mapAddressDetails.state || 'India',
-                  fullAddress: mapAddress,
-                  lat: selectedMapCoords.lat,
-                  lng: selectedMapCoords.lng
-                });
-              }}
-              className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-3.5 rounded-2xl font-extrabold text-xs shadow-md transition flex items-center justify-center gap-2 mt-auto"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Confirm Map Location</span>
-            </button>
           </div>
         )}
 

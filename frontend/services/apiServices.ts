@@ -12,7 +12,26 @@ import { FEE_CONFIG } from '@/lib/constants';
 
 class RideelServices {
   private getDb(): AppDatabase {
-    return getInitialDatabase();
+    const db = getInitialDatabase();
+    if (!db.currentUser) {
+      db.currentUser = {
+        id: 'usr_guest_session',
+        full_name: 'Guest User',
+        phone: '9000000000',
+        email: 'guest@rideel.in',
+        profile_photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+        city: 'Chennai',
+        rating: 5.0,
+        completed_deliveries: 0,
+        role: ['sender', 'traveler'],
+        active_mode: 'sender',
+        account_status: 'active',
+        is_kyc_verified: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+    }
+    return db;
   }
 
   private saveDb(db: AppDatabase) {
@@ -27,11 +46,12 @@ class RideelServices {
 
   async switchUserMode(newMode: UserMode): Promise<User> {
     const db = this.getDb();
-    db.currentUser.active_mode = newMode;
-    // Also update in users array
-    const idx = db.users.findIndex(u => u.id === db.currentUser.id);
-    if (idx !== -1) db.users[idx].active_mode = newMode;
-    this.saveDb(db);
+    if (db.currentUser) {
+      db.currentUser.active_mode = newMode;
+      const idx = db.users.findIndex(u => u.id === db.currentUser.id);
+      if (idx !== -1) db.users[idx].active_mode = newMode;
+      this.saveDb(db);
+    }
     return db.currentUser;
   }
 
@@ -46,73 +66,107 @@ class RideelServices {
     return db.currentUser;
   }
 
-  async loginWithOTP(phone: string, otp: string, userData?: { full_name?: string; email?: string; city?: string; role?: string[] }): Promise<{ success: boolean; user?: User; message?: string }> {
-    if (otp !== '123456' && otp !== '000000') {
-      return { success: false, message: 'Invalid OTP code. Use 123456 for demo login.' };
-    }
-    const cleanPhone = phone.replace(/\D/g, '');
+  private getAuthBaseUrl(): string {
+    const envUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+    return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
+  }
 
+  /**
+   * Request MSG91 OTP from backend Express API
+   */
+  async sendOTP(phone: string): Promise<{ success: boolean; message: string }> {
     try {
-      // Connect to Backend PostgreSQL Database REST API
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/auth/register-or-login` : `${baseUrl}/api/auth/register-or-login`;
-
-      const response = await fetch(targetUrl, {
+      const res = await fetch(`${this.getAuthBaseUrl()}/auth/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: cleanPhone,
-          full_name: userData?.full_name || 'Aarav Sharma',
-          email: userData?.email || 'aarav@example.com',
-          city: userData?.city || 'Chennai',
-          role: userData?.role || ['sender', 'traveler']
-        })
+        body: JSON.stringify({ phone })
       });
+      const data = await res.json();
+      return {
+        success: data.success ?? (res.status >= 200 && res.status < 300),
+        message: data.message || 'OTP request processed.'
+      };
+    } catch (err) {
+      return { success: false, message: 'Network error connecting to authentication server.' };
+    }
+  }
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.user) {
-          const db = this.getDb();
-          db.currentUser = data.user;
-          const idx = db.users.findIndex(u => u.phone === cleanPhone);
-          if (idx !== -1) {
-            db.users[idx] = data.user;
-          } else {
-            db.users.push(data.user);
+  /**
+   * Resend MSG91 OTP respecting backend 60s cooldown
+   */
+  async resendOTP(phone: string): Promise<{ success: boolean; message: string }> {
+    try {
+      const res = await fetch(`${this.getAuthBaseUrl()}/auth/resend-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone })
+      });
+      const data = await res.json();
+      return {
+        success: data.success ?? (res.status >= 200 && res.status < 300),
+        message: data.message || 'Resend request processed.'
+      };
+    } catch (err) {
+      return { success: false, message: 'Network error requesting OTP resend.' };
+    }
+  }
+
+  /**
+   * Verify MSG91 OTP code and establish JWT authenticated session
+   */
+  async verifyOTP(phone: string, otp: string): Promise<{ success: boolean; isNewUser?: boolean; user?: User; message?: string }> {
+    try {
+      const res = await fetch(`${this.getAuthBaseUrl()}/auth/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, otp })
+      });
+      const data = await res.json();
+      if (res.ok && data.success && data.user) {
+        if (data.tokens) {
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('rideel_access_token', data.tokens.accessToken);
+            localStorage.setItem('rideel_refresh_token', data.tokens.refreshToken);
           }
-          this.saveDb(db);
-          return { success: true, user: data.user, message: data.message };
         }
+        const db = this.getDb();
+        db.currentUser = data.user;
+        const idx = db.users.findIndex(u => u.id === data.user.id);
+        if (idx !== -1) {
+          db.users[idx] = data.user;
+        } else {
+          db.users.push(data.user);
+        }
+        this.saveDb(db);
+        return { success: true, isNewUser: data.isNewUser, user: data.user, message: data.message };
+      } else {
+        return { success: false, message: data.message || 'OTP verification failed.' };
       }
     } catch (err) {
-      console.warn('Backend server connection failed, using local database fallback.', err);
+      return { success: false, message: 'Network error verifying OTP.' };
     }
+  }
 
-    // Fallback if backend offline
-    const db = this.getDb();
-    let user = db.users.find(u => u.phone === cleanPhone);
-    if (!user) {
-      user = {
-        id: `usr_${Date.now()}`,
-        full_name: userData?.full_name || 'Aarav Sharma',
-        phone: cleanPhone,
-        email: userData?.email || `user_${Date.now().toString().slice(-4)}@rideel.in`,
-        profile_photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-        city: userData?.city || 'Chennai',
-        rating: 5.0,
-        completed_deliveries: 0,
-        role: ['sender', 'traveler'],
-        active_mode: 'sender',
-        account_status: 'active',
-        is_kyc_verified: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-      db.users.push(user);
+  async loginWithOTP(phone: string, otp: string, userData?: { full_name?: string; email?: string; city?: string; role?: string[] }): Promise<{ success: boolean; isNewUser?: boolean; user?: User; message?: string }> {
+    return this.verifyOTP(phone, otp);
+  }
+
+  async logout(): Promise<{ success: boolean }> {
+    try {
+      const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('rideel_refresh_token') : null;
+      if (refreshToken) {
+        await fetch(`${this.getAuthBaseUrl()}/auth/logout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refreshToken })
+        });
+      }
+    } catch (e) {}
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('rideel_access_token');
+      localStorage.removeItem('rideel_refresh_token');
     }
-    db.currentUser = user;
-    this.saveDb(db);
-    return { success: true, user };
+    return { success: true };
   }
 
   async updateUserProfile(updates: Partial<User>): Promise<User> {
@@ -148,10 +202,11 @@ class RideelServices {
   // --- TRIP SERVICE ---
   async postTrip(tripData: Omit<Trip, 'id' | 'created_at' | 'traveler_id' | 'available_capacity_kg' | 'status'>): Promise<Trip> {
     const db = this.getDb();
+    const userId = db.currentUser?.id || 'usr_guest_session';
     const newTrip: Trip = {
       ...tripData,
       id: `trip_${Date.now()}`,
-      traveler_id: db.currentUser.id,
+      traveler_id: userId,
       available_capacity_kg: tripData.capacity_kg,
       status: 'POSTED',
       created_at: new Date().toISOString(),
@@ -187,10 +242,11 @@ class RideelServices {
   // --- PARCEL & MATCHING SERVICE ---
   async createParcel(parcelData: Omit<Parcel, 'id' | 'created_at' | 'sender_id' | 'status'>): Promise<Parcel> {
     const db = this.getDb();
+    const userId = db.currentUser?.id || 'usr_guest_session';
     const newParcel: Parcel = {
       ...parcelData,
       id: `pcl_${Date.now()}`,
-      sender_id: db.currentUser.id,
+      sender_id: userId,
       status: 'SEARCHING',
       created_at: new Date().toISOString(),
       sender: db.currentUser
@@ -341,7 +397,7 @@ class RideelServices {
     const delivery = db.deliveries.find(d => d.id === deliveryId);
     if (!delivery) return { success: false, message: 'Delivery not found' };
 
-    if (otp !== delivery.pickup_otp && otp !== '123456') {
+    if (otp !== delivery.pickup_otp) {
       return { success: false, message: 'Incorrect Pickup OTP code.' };
     }
 
@@ -372,7 +428,7 @@ class RideelServices {
     const delivery = db.deliveries.find(d => d.id === deliveryId);
     if (!delivery) return { success: false, message: 'Delivery not found' };
 
-    if (otp !== delivery.delivery_otp && otp !== '123456') {
+    if (otp !== delivery.delivery_otp) {
       return { success: false, message: 'Incorrect Delivery OTP code.' };
     }
 
@@ -442,12 +498,13 @@ class RideelServices {
   async sendMessage(deliveryId: string, messageText: string): Promise<Message> {
     const db = this.getDb();
     const delivery = db.deliveries.find(d => d.id === deliveryId);
-    const receiverId = delivery ? (db.currentUser.id === delivery.sender_id ? delivery.traveler_id : delivery.sender_id) : '';
+    const userId = db.currentUser?.id || 'usr_guest_session';
+    const receiverId = delivery ? (userId === delivery.sender_id ? delivery.traveler_id : delivery.sender_id) : '';
 
     const newMsg: Message = {
       id: `msg_${Date.now()}`,
       delivery_id: deliveryId,
-      sender_id: db.currentUser.id,
+      sender_id: userId,
       receiver_id: receiverId,
       message: messageText,
       created_at: new Date().toISOString(),
@@ -477,7 +534,8 @@ class RideelServices {
 
   async requestWithdrawal(amount: number, bankDetails: string): Promise<{ success: boolean; message: string }> {
     const db = this.getDb();
-    const wallet = await this.getWalletData(db.currentUser.id);
+    const userId = db.currentUser?.id || 'usr_guest_session';
+    const wallet = await this.getWalletData(userId);
 
     if (amount > wallet.available) {
       return { success: false, message: 'Insufficient available balance' };
@@ -485,7 +543,7 @@ class RideelServices {
 
     db.walletTransactions.unshift({
       id: `wtx_${Date.now()}`,
-      user_id: db.currentUser.id,
+      user_id: userId,
       type: 'WITHDRAWAL',
       amount,
       status: 'WITHDRAWN',
@@ -500,9 +558,10 @@ class RideelServices {
   // --- KYC SERVICE ---
   async submitKYC(documentType: any, documentNumber: string, documentUrl: string, selfieUrl: string): Promise<KYCVerification> {
     const db = this.getDb();
+    const userId = db.currentUser?.id || 'usr_guest_session';
     const kyc: KYCVerification = {
       id: `kyc_${Date.now()}`,
-      user_id: db.currentUser.id,
+      user_id: userId,
       document_type: documentType,
       document_number: documentNumber,
       document_url: documentUrl,
@@ -518,10 +577,11 @@ class RideelServices {
   // --- B2B BUSINESS SERVICE ---
   async createBulkShipment(data: Omit<BulkShipment, 'id' | 'created_at' | 'business_id' | 'status'>): Promise<BulkShipment> {
     const db = this.getDb();
+    const userId = db.currentUser?.id || 'usr_guest_session';
     const bulk: BulkShipment = {
       ...data,
       id: `blk_${Date.now()}`,
-      business_id: db.currentUser.id,
+      business_id: userId,
       status: 'PROCESSING',
       created_at: new Date().toISOString()
     };
@@ -556,7 +616,7 @@ class RideelServices {
     const kyc = db.kycVerifications.find(k => k.id === kycId);
     if (kyc) {
       kyc.status = status;
-      kyc.reviewed_by = db.currentUser.id;
+      kyc.reviewed_by = db.currentUser?.id || 'usr_admin_1';
       kyc.reviewed_at = new Date().toISOString();
       const user = db.users.find(u => u.id === kyc.user_id);
       if (user && status === 'VERIFIED') user.is_kyc_verified = true;
@@ -587,7 +647,8 @@ class RideelServices {
 
   async getNotifications(): Promise<AppNotification[]> {
     const db = this.getDb();
-    return db.notifications.filter(n => n.user_id === db.currentUser.id);
+    const userId = db.currentUser?.id || 'usr_guest_session';
+    return db.notifications.filter(n => n.user_id === userId);
   }
 }
 

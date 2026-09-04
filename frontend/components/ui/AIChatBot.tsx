@@ -96,7 +96,7 @@ export default function AIChatBot() {
   };
 
   return (
-    <div className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50">
+    <div className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-30">
       {/* Floating Toggle Button */}
       {!isOpen && (
         <button

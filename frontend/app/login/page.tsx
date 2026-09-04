@@ -20,15 +20,17 @@ function LoginContent() {
   const [screen, setScreen] = useState<string>(initialMode);
   
   // Login Form States
-  const [phone, setPhone] = useState('9876543210');
-  const [otp, setOtp] = useState(['1', '2', '3', '4', '5', '6']);
+  const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [resendTimer, setResendTimer] = useState(60);
+  const [canResend, setCanResend] = useState(false);
 
-  // Profile Setup States (Image 4)
-  const [fullName, setFullName] = useState('Rohan Sharma');
-  const [email, setEmail] = useState('rohan@example.com');
-  const [city, setCity] = useState('Mumbai');
+  // Profile Setup States
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
   const [selectedRoles, setSelectedRoles] = useState<UserRole[]>(['sender', 'traveler']);
 
   // Onboarding Carousel State (Image 3)
@@ -65,11 +67,36 @@ function LoginContent() {
       const slideInterval = setInterval(() => {
         setOnboardingSlide((prev) => (prev + 1) % onboardingSlides.length);
       }, 3500);
-      return () => clearInterval(slideInterval);
+      return () => clearTimeout(slideInterval);
     }
   }, [screen, onboardingSlides.length]);
 
-  const handlePhoneSubmit = (e: React.FormEvent) => {
+  // 60-second Resend OTP Cooldown Timer
+  useEffect(() => {
+    let interval: any = null;
+    if (screen === 'otp' && resendTimer > 0) {
+      setCanResend(false);
+      interval = setInterval(() => {
+        setResendTimer((prev) => {
+          if (prev <= 1) {
+            setCanResend(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (resendTimer === 0) {
+      setCanResend(true);
+    }
+    return () => clearInterval(interval);
+  }, [screen, resendTimer]);
+
+  const startResendTimer = () => {
+    setResendTimer(60);
+    setCanResend(false);
+  };
+
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     const cleanPhone = phone.replace(/\D/g, '');
@@ -77,11 +104,45 @@ function LoginContent() {
       setError('Please enter a valid 10-digit mobile number.');
       return;
     }
+
+    const formattedPhone = cleanPhone.length === 10 ? `+91${cleanPhone}` : `+${cleanPhone}`;
     setIsLoading(true);
-    setTimeout(() => {
+
+    try {
+      const res = await apiServices.sendOTP(formattedPhone);
       setIsLoading(false);
-      setScreen('otp');
-    }, 500);
+      if (res.success) {
+        setScreen('otp');
+        startResendTimer();
+      } else {
+        setError(res.message || 'Failed to send OTP. Please try again.');
+      }
+    } catch (err) {
+      setIsLoading(false);
+      setError('Network error sending OTP. Please check your connection.');
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (!canResend) return;
+    setError(null);
+    const cleanPhone = phone.replace(/\D/g, '');
+    const formattedPhone = cleanPhone.length === 10 ? `+91${cleanPhone}` : `+${cleanPhone}`;
+
+    setIsLoading(true);
+    try {
+      const res = await apiServices.resendOTP(formattedPhone);
+      setIsLoading(false);
+      if (res.success) {
+        startResendTimer();
+        setError('A new OTP has been dispatched to your phone number via MSG91.');
+      } else {
+        setError(res.message || 'Failed to resend OTP.');
+      }
+    } catch (err) {
+      setIsLoading(false);
+      setError('Network error requesting OTP resend.');
+    }
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -112,14 +173,24 @@ function LoginContent() {
       return;
     }
 
+    const cleanPhone = phone.replace(/\D/g, '');
+    const formattedPhone = cleanPhone.length === 10 ? `+91${cleanPhone}` : `+${cleanPhone}`;
+
     setIsLoading(true);
     try {
-      const result = await apiServices.loginWithOTP(phone, code);
+      const result = await apiServices.loginWithOTP(formattedPhone, code);
       setIsLoading(false);
       if (result.success) {
-        setScreen('profile');
+        if (result.isNewUser) {
+          setScreen('profile');
+        } else {
+          setScreen('success');
+          setTimeout(() => {
+            router.push('/');
+          }, 800);
+        }
       } else {
-        setError(result.message || 'Invalid code. Use 123456 as demo code.');
+        setError(result.message || 'Invalid or expired verification code.');
       }
     } catch (err) {
       setIsLoading(false);
@@ -165,35 +236,6 @@ function LoginContent() {
   return (
     <div className="min-h-screen bg-[#f4f6fa] flex flex-col items-center justify-center p-4 font-sans select-none">
       
-      {/* Dev Screen Switcher Bar (Quickly Preview Any Image Screen) */}
-      <div className="mb-4 bg-white/80 backdrop-blur border border-slate-200 shadow-xs px-4 py-2 rounded-full flex items-center gap-2 text-xs font-bold text-slate-600">
-        <span className="text-slate-400 uppercase text-[10px]">Preview Screen:</span>
-        <button
-          onClick={() => setScreen('splash')}
-          className={`px-2.5 py-1 rounded-full transition ${screen === 'splash' ? 'bg-[#002b5c] text-white' : 'hover:bg-slate-100'}`}
-        >
-          Splash (Image 2)
-        </button>
-        <button
-          onClick={() => setScreen('onboarding')}
-          className={`px-2.5 py-1 rounded-full transition ${screen === 'onboarding' ? 'bg-[#002b5c] text-white' : 'hover:bg-slate-100'}`}
-        >
-          Onboarding (Image 3)
-        </button>
-        <button
-          onClick={() => setScreen('login')}
-          className={`px-2.5 py-1 rounded-full transition ${screen === 'login' ? 'bg-[#002b5c] text-white' : 'hover:bg-slate-100'}`}
-        >
-          Login (Image 1)
-        </button>
-        <button
-          onClick={() => setScreen('profile')}
-          className={`px-2.5 py-1 rounded-full transition ${screen === 'profile' ? 'bg-[#002b5c] text-white' : 'hover:bg-slate-100'}`}
-        >
-          Profile Setup (Image 4)
-        </button>
-      </div>
-
       {/* MOBILE DEVICE CONTAINER */}
       <div className="w-full max-w-[400px] min-h-[680px] bg-white rounded-[36px] shadow-2xl overflow-hidden relative border border-slate-200/60 flex flex-col justify-between transition-all duration-300">
         
@@ -456,7 +498,7 @@ function LoginContent() {
                   ))}
                 </div>
                 <p className="text-[11px] text-slate-400 font-medium text-center">
-                  Demo Code: <strong className="text-slate-700 font-mono">123456</strong>
+                  Enter the 6-digit verification code
                 </p>
               </div>
 
@@ -486,10 +528,15 @@ function LoginContent() {
 
               <button
                 type="button"
-                onClick={() => setError('A new OTP has been sent: 123456')}
-                className="w-full text-xs font-bold text-slate-500 hover:text-slate-800 text-center py-1"
+                onClick={handleResendOtp}
+                disabled={!canResend || isLoading}
+                className="w-full text-xs font-bold text-slate-500 hover:text-slate-800 text-center py-1 disabled:opacity-60"
               >
-                Didn't receive code? <span className="text-[#002b5c] underline">Resend OTP</span>
+                {canResend ? (
+                  <span>Didn't receive code? <span className="text-[#002b5c] underline font-black">Resend OTP</span></span>
+                ) : (
+                  <span>Resend OTP available in <strong className="text-[#002b5c]">{resendTimer}s</strong></span>
+                )}
               </button>
             </div>
           </div>

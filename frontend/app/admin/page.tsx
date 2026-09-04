@@ -107,9 +107,9 @@ export default function AdminDashboardPage() {
               {stats.deliveries.map((del: any) => (
                 <tr key={del.id} className="hover:bg-surface-container-low">
                   <td className="py-3 font-mono font-bold text-primary">{del.id}</td>
-                  <td className="py-3 font-bold">{del.parcel?.origin || 'Vijayawada'} → {del.parcel?.destination || 'Hyderabad'}</td>
-                  <td className="py-3">{del.sender?.full_name || 'Aarav Mehta'}</td>
-                  <td className="py-3">{del.traveler?.full_name || 'Vikram Singh'}</td>
+                  <td className="py-3 font-bold">{del.parcel?.origin || del.pickup_location || 'N/A'} → {del.parcel?.destination || del.delivery_location || 'N/A'}</td>
+                  <td className="py-3">{del.sender?.full_name || 'N/A'}</td>
+                  <td className="py-3">{del.traveler?.full_name || 'N/A'}</td>
                   <td className="py-3 font-bold text-slate-900">₹{del.total_amount}</td>
                   <td className="py-3 font-extrabold text-emerald-700">₹{del.service_fee}</td>
                   <td className="py-3">

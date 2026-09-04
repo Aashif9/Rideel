@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { apiServices } from '@/services/apiServices';
 import { Trip, User } from '@/types';
-import { CITIES } from '@/lib/constants';
-import { Navigation, Plus, MapPin, Calendar, Clock, Truck, ShieldCheck, ChevronRight, ArrowLeft } from 'lucide-react';
+import { CITIES, CITY_COORDINATES } from '@/lib/constants';
+import LocationPickerModal from '@/components/ui/LocationPickerModal';
+import { Navigation, Plus, MapPin, Calendar, Clock, Truck, ShieldCheck, ChevronRight, ArrowLeft, Search, Globe, Crosshair } from 'lucide-react';
 
 export default function TripsDashboardPage() {
   const router = useRouter();
@@ -14,9 +15,14 @@ export default function TripsDashboardPage() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [showPostModal, setShowPostModal] = useState(false);
 
+  // Location Picker Modal States
+  const [activeLocationPicker, setActiveLocationPicker] = useState<'origin' | 'destination' | null>(null);
+
   // Post Trip Form State
   const [origin, setOrigin] = useState('Vijayawada');
   const [destination, setDestination] = useState('Hyderabad');
+  const [originCoords, setOriginCoords] = useState<[number, number]>([16.5062, 80.6480]);
+  const [destCoords, setDestCoords] = useState<[number, number]>([17.3850, 78.4867]);
   const [travelDate, setTravelDate] = useState('2026-09-02');
   const [departureTime, setDepartureTime] = useState('07:30');
   const [estimatedArrival, setEstimatedArrival] = useState('12:00');
@@ -30,9 +36,23 @@ export default function TripsDashboardPage() {
     apiServices.getTrips().then(setTrips);
   }, []);
 
+  const handleOriginChange = (val: string) => {
+    setOrigin(val);
+    if (CITY_COORDINATES[val]) {
+      setOriginCoords(CITY_COORDINATES[val]);
+    }
+  };
+
+  const handleDestinationChange = (val: string) => {
+    setDestination(val);
+    if (CITY_COORDINATES[val]) {
+      setDestCoords(CITY_COORDINATES[val]);
+    }
+  };
+
   const handlePostTrip = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (origin === destination) {
+    if (origin.trim().toLowerCase() === destination.trim().toLowerCase()) {
       alert('Origin and Destination cities must be different intercity locations.');
       return;
     }
@@ -42,8 +62,8 @@ export default function TripsDashboardPage() {
       const created = await apiServices.postTrip({
         origin,
         destination,
-        origin_coordinates: [16.5, 80.6],
-        destination_coordinates: [17.3, 78.4],
+        origin_coordinates: originCoords,
+        destination_coordinates: destCoords,
         travel_date: travelDate,
         departure_time: departureTime,
         estimated_arrival: estimatedArrival,
@@ -65,7 +85,7 @@ export default function TripsDashboardPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in max-w-4xl mx-auto p-2 sm:p-4">
+    <div className="space-y-6 animate-in fade-in max-w-4xl mx-auto p-2 sm:p-4 select-none font-sans">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <button
@@ -137,116 +157,254 @@ export default function TripsDashboardPage() {
         ))}
       </div>
 
-      {/* Post Trip Modal */}
-      {showPostModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-surface-container-high max-h-[90vh] overflow-y-auto">
-            <h3 className="text-xl font-extrabold text-primary mb-1">Post Intercity Travel Route</h3>
-            <p className="text-xs text-slate-500 mb-6">Specify your travel route and available luggage space.</p>
+      {/* Post Trip Modal with Interactive Google Maps Location & Route Selector */}
+      {showPostModal && !activeLocationPicker && (
+        <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 z-50 animate-in fade-in select-none">
+          <div className="bg-white rounded-t-[32px] sm:rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-100 max-h-[92vh] overflow-y-auto space-y-4 animate-in slide-in-from-bottom-4 duration-300">
+            
+            {/* Mobile Drag Handle Bar */}
+            <div className="w-12 h-1.5 bg-slate-300 rounded-full mx-auto sm:hidden -mt-1 mb-1"></div>
+
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 className="text-lg sm:text-xl font-black text-[#002b5c] tracking-tight">Post Intercity Travel Route</h3>
+                <p className="text-xs text-slate-500 font-medium">Select places directly from Google Maps or search places.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPostModal(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center font-bold text-sm"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Interactive Google Maps Embedded Route Preview */}
+            <div 
+              onClick={() => setActiveLocationPicker('origin')}
+              className="relative w-full h-44 sm:h-48 bg-slate-100 rounded-2xl overflow-hidden shadow-xs border border-slate-200 cursor-pointer group hover:border-[#002b5c]/40 transition"
+            >
+              <iframe
+                title="Interactive Route Map"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                scrolling="no"
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(origin + ' to ' + destination)}&output=embed`}
+                className="w-full h-full pointer-events-none select-none"
+              />
+              <div className="absolute top-2.5 right-2.5 bg-[#002b5c]/95 text-white px-3 py-1 rounded-xl text-[10px] font-black flex items-center gap-1.5 shadow-md backdrop-blur">
+                <MapPin className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
+                <span>Tap Map to Change Route</span>
+              </div>
+              <div className="absolute bottom-2.5 left-2.5 right-2.5 bg-white/95 backdrop-blur border border-slate-200/80 rounded-xl p-2.5 flex items-center justify-between text-xs font-extrabold text-slate-900 shadow-sm">
+                <span className="text-emerald-700 flex items-center gap-1 truncate max-w-[130px]">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span> {origin}
+                </span>
+                <span className="text-slate-400 font-normal">➔</span>
+                <span className="text-rose-700 flex items-center gap-1 truncate max-w-[130px]">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span> {destination}
+                </span>
+              </div>
+            </div>
 
             <form onSubmit={handlePostTrip} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Origin City</label>
+              {/* Origin & Destination Selectors with Direct Google Maps Buttons */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+                      ORIGIN (FROM)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setActiveLocationPicker('origin')}
+                      className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full hover:bg-emerald-100 transition flex items-center gap-1"
+                    >
+                      <MapPin className="w-3 h-3" /> Map Picker
+                    </button>
+                  </div>
                   <select
                     value={origin}
-                    onChange={(e) => setOrigin(e.target.value)}
-                    className="w-full bg-surface-container-low border rounded-xl p-2.5 text-xs font-bold text-slate-900"
+                    onChange={(e) => handleOriginChange(e.target.value)}
+                    className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
                   >
                     {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                    {!CITIES.includes(origin) && <option value={origin}>{origin}</option>}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Destination City</label>
+
+                <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+                      DESTINATION (TO)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setActiveLocationPicker('destination')}
+                      className="text-[10px] font-black text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full hover:bg-rose-100 transition flex items-center gap-1"
+                    >
+                      <MapPin className="w-3 h-3" /> Map Picker
+                    </button>
+                  </div>
                   <select
                     value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                    className="w-full bg-surface-container-low border rounded-xl p-2.5 text-xs font-bold text-slate-900"
+                    onChange={(e) => handleDestinationChange(e.target.value)}
+                    className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
                   >
                     {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                    {!CITIES.includes(destination) && <option value={destination}>{destination}</option>}
                   </select>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              {/* Date & Time Settings */}
+              <div className="space-y-2.5">
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Travel Date</label>
+                  <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                    TRAVEL DATE
+                  </label>
                   <input
                     type="date"
                     value={travelDate}
                     onChange={(e) => setTravelDate(e.target.value)}
-                    className="w-full bg-surface-container-low border rounded-xl p-2 text-xs font-bold"
+                    className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Departure Time</label>
-                  <input
-                    type="time"
-                    value={departureTime}
-                    onChange={(e) => setDepartureTime(e.target.value)}
-                    className="w-full bg-surface-container-low border rounded-xl p-2 text-xs font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Est Arrival</label>
-                  <input
-                    type="time"
-                    value={estimatedArrival}
-                    onChange={(e) => setEstimatedArrival(e.target.value)}
-                    className="w-full bg-surface-container-low border rounded-xl p-2 text-xs font-bold"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Capacity (kg)</label>
-                  <input
-                    type="number"
-                    value={capacityKg}
-                    onChange={(e) => setCapacityKg(parseInt(e.target.value) || 0)}
-                    className="w-full bg-surface-container-low border rounded-xl p-2.5 text-xs font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Max Weight / Item</label>
-                  <input
-                    type="number"
-                    value={maxWeightKg}
-                    onChange={(e) => setMaxWeightKg(parseInt(e.target.value) || 0)}
-                    className="w-full bg-surface-container-low border rounded-xl p-2.5 text-xs font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Price / kg (₹)</label>
-                  <input
-                    type="number"
-                    value={pricePerKg}
-                    onChange={(e) => setPricePerKg(parseInt(e.target.value) || 0)}
-                    className="w-full bg-surface-container-low border rounded-xl p-2.5 text-xs font-bold text-primary"
-                  />
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                      DEPARTURE TIME
+                    </label>
+                    <input
+                      type="time"
+                      value={departureTime}
+                      onChange={(e) => setDepartureTime(e.target.value)}
+                      className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                      EST ARRIVAL TIME
+                    </label>
+                    <input
+                      type="time"
+                      value={estimatedArrival}
+                      onChange={(e) => setEstimatedArrival(e.target.value)}
+                      className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#002b5c]"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-4 border-t">
+              {/* Capacity Stepper & Price Controls */}
+              <div className="space-y-2.5 pt-1">
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
+                    <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-500 mb-1.5">
+                      AVAILABLE CAPACITY
+                    </label>
+                    <div className="flex items-center justify-between bg-white border border-slate-200 rounded-xl p-1">
+                      <button
+                        type="button"
+                        onClick={() => setCapacityKg(Math.max(1, capacityKg - 1))}
+                        className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 font-black text-base hover:bg-slate-200 flex items-center justify-center active:scale-95 transition"
+                      >
+                        -
+                      </button>
+                      <span className="text-xs font-black text-slate-900">{capacityKg} kg</span>
+                      <button
+                        type="button"
+                        onClick={() => setCapacityKg(capacityKg + 1)}
+                        className="w-8 h-8 rounded-lg bg-[#002b5c] text-white font-black text-base hover:bg-[#001f44] flex items-center justify-center active:scale-95 transition"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
+                    <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-500 mb-1.5">
+                      MAX SINGLE ITEM
+                    </label>
+                    <div className="flex items-center justify-between bg-white border border-slate-200 rounded-xl p-1">
+                      <button
+                        type="button"
+                        onClick={() => setMaxWeightKg(Math.max(1, maxWeightKg - 1))}
+                        className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 font-black text-base hover:bg-slate-200 flex items-center justify-center active:scale-95 transition"
+                      >
+                        -
+                      </button>
+                      <span className="text-xs font-black text-slate-900">{maxWeightKg} kg</span>
+                      <button
+                        type="button"
+                        onClick={() => setMaxWeightKg(maxWeightKg + 1)}
+                        className="w-8 h-8 rounded-lg bg-[#002b5c] text-white font-black text-base hover:bg-[#001f44] flex items-center justify-center active:scale-95 transition"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
+                  <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                    EXPECTED RATE PER KG (₹)
+                  </label>
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 font-black text-[#002b5c] text-xs">₹</span>
+                    <input
+                      type="number"
+                      value={pricePerKg}
+                      onChange={(e) => setPricePerKg(parseInt(e.target.value) || 0)}
+                      className="w-full bg-white border border-slate-200 rounded-xl py-2.5 pl-8 pr-12 text-xs font-black text-[#002b5c] focus:outline-none focus:border-[#002b5c]"
+                    />
+                    <span className="absolute right-3 font-bold text-slate-400 text-[10px]">/ kg</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowPostModal(false)}
-                  className="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-900"
+                  className="px-4 py-3 rounded-2xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-2.5 rounded-xl text-xs font-extrabold shadow-md"
+                  className="flex-1 bg-[#002b5c] hover:bg-[#001f44] text-white py-3.5 rounded-2xl text-xs font-extrabold shadow-md transition flex items-center justify-center gap-2"
                 >
-                  {loading ? 'Posting...' : 'Publish Trip'}
+                  {loading ? 'Publishing Route...' : 'Publish Travel Route'}
                 </button>
               </div>
             </form>
           </div>
         </div>
+      )}
+
+      {/* Interactive Google Maps Location Picker Modal */}
+      {activeLocationPicker && (
+        <LocationPickerModal
+          isOpen={!!activeLocationPicker}
+          onClose={() => setActiveLocationPicker(null)}
+          title={activeLocationPicker === 'origin' ? 'Pick Origin (From) on Google Maps' : 'Pick Destination (To) on Google Maps'}
+          initialValue={activeLocationPicker === 'origin' ? origin : destination}
+          onSelectLocation={(loc) => {
+            const cityName = loc.city || loc.name;
+            if (activeLocationPicker === 'origin') {
+              setOrigin(cityName);
+              if (loc.lat && loc.lng) setOriginCoords([loc.lat, loc.lng]);
+            } else {
+              setDestination(cityName);
+              if (loc.lat && loc.lng) setDestCoords([loc.lat, loc.lng]);
+            }
+            setActiveLocationPicker(null);
+          }}
+        />
       )}
     </div>
   );

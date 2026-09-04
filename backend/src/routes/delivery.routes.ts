@@ -31,37 +31,11 @@ router.get('/deliveries/active', async (req: Request, res: Response) => {
       LIMIT 10
     `);
 
-    // If database tables are empty, return structured live data with sample schema fallback
     if (bookingRes.rows.length === 0) {
       return res.json({
         success: true,
-        source: 'PostgreSQL (live ready)',
-        deliveries: [
-          {
-            id: 'RD399812',
-            origin: 'Jaipur',
-            destination: 'Chennai',
-            status: 'in_transit',
-            status_step: 2,
-            traveler_name: 'Priya Reddy',
-            traveler_photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
-            date_time: '12 May, 5:20 PM',
-            weight_kg: 2.5,
-            item_category: 'Document'
-          },
-          {
-            id: 'RD498412',
-            origin: 'Delhi',
-            destination: 'Bangalore',
-            status: 'delivered',
-            status_step: 4,
-            traveler_name: 'Arjun Kumar',
-            traveler_photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
-            date_time: '10 May, 8:45 PM',
-            weight_kg: 1.0,
-            item_category: 'Package'
-          }
-        ]
+        source: 'PostgreSQL',
+        deliveries: []
       });
     }
 
@@ -73,6 +47,39 @@ router.get('/deliveries/active', async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('PostgreSQL Active Deliveries Error:', error);
     res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// GET /api/deliveries/:deliveryId/location
+// Fetches the latest known GPS location for a specific delivery
+router.get('/deliveries/:deliveryId/location', async (req: Request, res: Response) => {
+  try {
+    const deliveryId = String(req.params.deliveryId);
+    const { trackingService } = await import('../tracking/tracking.service');
+    const location = await trackingService.getLatestLocation(deliveryId);
+
+    if (!location) {
+      return res.json({
+        success: true,
+        location: null,
+        message: 'No GPS location updates recorded yet for this delivery.',
+      });
+    }
+
+    res.json({
+      success: true,
+      location: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        accuracy: location.accuracy,
+        speed: location.speed,
+        heading: location.heading,
+        timestamp: location.timestamp,
+        travelerId: location.travelerId,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 

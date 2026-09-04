@@ -12,6 +12,8 @@ import {
   MessageSquare, AlertTriangle, ArrowLeft, Clock, MapPin, DollarSign, Star
 } from 'lucide-react';
 
+import { useLiveLocation } from '@/hooks/useLiveLocation';
+
 export default function DeliveryDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -20,6 +22,12 @@ export default function DeliveryDetailPage() {
   const [delivery, setDelivery] = useState<Delivery | null>(null);
   const [loading, setLoading] = useState(true);
   const [otpModalType, setOtpModalType] = useState<'pickup' | 'delivery' | null>(null);
+
+  // Real-Time Socket.IO GPS Live Tracking Hook
+  const { currentLocation, isLive, isStale, lastUpdatedAgo, error: gpsError } = useLiveLocation({
+    deliveryId,
+    role: 'sender',
+  });
 
   useEffect(() => {
     if (deliveryId) {
@@ -94,13 +102,20 @@ export default function DeliveryDetailPage() {
           </span>
         </div>
 
-        {/* Live GPS Simulation Map */}
+        {/* Real-Time Live GPS Google Map */}
         <MapComponent
           origin={delivery.parcel?.origin || 'Vijayawada'}
           destination={delivery.parcel?.destination || 'Hyderabad'}
           travelerName={delivery.traveler?.full_name || 'Vikram Singh'}
           status={delivery.status}
           eta={delivery.expected_delivery_time || '12:15 PM'}
+          currentLat={currentLocation?.latitude}
+          currentLng={currentLocation?.longitude}
+          isLive={isLive}
+          isStale={isStale}
+          speed={currentLocation?.speed}
+          accuracy={currentLocation?.accuracy}
+          lastUpdatedAgo={lastUpdatedAgo}
         />
 
         {/* Action Buttons: Chat & OTP verification */}

@@ -12,6 +12,8 @@ import {
   ArrowLeft, DollarSign, Package, User, Clock
 } from 'lucide-react';
 
+import { useLiveLocation } from '@/hooks/useLiveLocation';
+
 export default function ActiveTripControlPage() {
   const params = useParams();
   const router = useRouter();
@@ -21,8 +23,29 @@ export default function ActiveTripControlPage() {
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [gmapsRouteInfo, setGmapsRouteInfo] = useState<{ durationText: string; distanceText: string; calculatedEta: string } | null>(null);
+
   const [activeOtpDelivery, setActiveOtpDelivery] = useState<Delivery | null>(null);
   const [otpModalMode, setOtpModalMode] = useState<'pickup' | 'delivery' | null>(null);
+
+  const activeDeliveryId = deliveries[0]?.id || tripId;
+
+  // Real-Time Socket.IO GPS Live Location Publisher Hook for Travelers
+  const {
+    currentLocation,
+    isTracking,
+    isLive,
+    isStale,
+    lastUpdatedAgo,
+    error: gpsError,
+    startTracking,
+    stopTracking,
+  } = useLiveLocation({
+    deliveryId: activeDeliveryId,
+    travelerId: trip?.traveler_id || 'traveler_1',
+    role: 'traveler',
+    isTraveler: true,
+  });
 
   useEffect(() => {
     if (tripId) {
@@ -102,13 +125,75 @@ export default function ActiveTripControlPage() {
           </span>
         </div>
 
-        {/* Route Tracking Map */}
+        {/* Google Maps Dynamic Estimated Travel Time Banner */}
+        <div className="p-4 bg-blue-50/80 border border-blue-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-[#002b5c] text-white flex items-center justify-center shadow-xs shrink-0">
+              <Clock className="w-5 h-5 text-amber-300" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black text-[#002b5c] uppercase tracking-wider">
+                  GOOGLE MAPS ESTIMATED TIME
+                </span>
+                {isTracking && (
+                  <span className="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 border border-emerald-200">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    Live GPS Active
+                  </span>
+                )}
+              </div>
+              <div className="text-sm font-black text-slate-900 mt-0.5">
+                {gmapsRouteInfo ? (
+                  <span>
+                    Est. Arrival: <strong className="text-[#002b5c]">{gmapsRouteInfo.calculatedEta}</strong> ({gmapsRouteInfo.durationText} • {gmapsRouteInfo.distanceText})
+                  </span>
+                ) : (
+                  <span>Est. Arrival: <strong className="text-[#002b5c]">{trip.estimated_arrival}</strong> (Calculating live traffic...)</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Clean GPS Broadcast Controls */}
+          {isTracking ? (
+            <button
+              onClick={stopTracking}
+              className="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl text-xs font-black transition active:scale-95 shadow-sm uppercase tracking-wider shrink-0"
+            >
+              Stop GPS
+            </button>
+          ) : (
+            <button
+              onClick={startTracking}
+              className="bg-[#002b5c] hover:bg-[#001f44] text-white px-5 py-2.5 rounded-xl text-xs font-black transition active:scale-95 shadow-sm uppercase tracking-wider shrink-0 flex items-center gap-1.5"
+            >
+              <span>Start Live GPS</span>
+            </button>
+          )}
+        </div>
+
+        {gpsError && (
+          <div className="p-2.5 bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold rounded-xl flex items-center gap-2">
+            <span>⚠️ {gpsError}</span>
+          </div>
+        )}
+
+        {/* Route Tracking Map with Live Google Maps Directions */}
         <MapComponent
           origin={trip.origin}
           destination={trip.destination}
           travelerName={trip.traveler?.full_name || 'You'}
           status={trip.status}
-          eta={trip.estimated_arrival}
+          eta={gmapsRouteInfo?.calculatedEta || trip.estimated_arrival}
+          currentLat={currentLocation?.latitude}
+          currentLng={currentLocation?.longitude}
+          isLive={isLive}
+          isStale={isStale}
+          speed={currentLocation?.speed}
+          accuracy={currentLocation?.accuracy}
+          lastUpdatedAgo={lastUpdatedAgo}
+          onRouteCalculated={(info) => setGmapsRouteInfo(info)}
         />
       </div>
 

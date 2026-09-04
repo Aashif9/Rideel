@@ -2,17 +2,19 @@
 -- Existing Database Schema - Source of Truth
 
 CREATE TABLE IF NOT EXISTS users (
-  id VARCHAR(64) PRIMARY KEY,
-  full_name VARCHAR(255) NOT NULL,
-  phone VARCHAR(20) NOT NULL UNIQUE,
-  email VARCHAR(255),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(255) NOT NULL,
+  full_name VARCHAR(255),
+  phone VARCHAR(20) UNIQUE,
+  email VARCHAR(255) NOT NULL,
+  password_hash TEXT NOT NULL,
+  role VARCHAR(50) DEFAULT 'passenger',
+  is_active BOOLEAN DEFAULT TRUE,
   profile_photo TEXT,
   city VARCHAR(100),
   rating NUMERIC(3, 2) DEFAULT 5.0,
   completed_deliveries INT DEFAULT 0,
-  role TEXT[] DEFAULT ARRAY['sender', 'traveler'],
   active_mode VARCHAR(20) DEFAULT 'sender',
-  account_status VARCHAR(20) DEFAULT 'active',
   is_kyc_verified BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -20,7 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS drivers (
   id VARCHAR(64) PRIMARY KEY,
-  user_id VARCHAR(64) REFERENCES users(id),
+  user_id UUID REFERENCES users(id),
   license_number VARCHAR(100),
   verification_status VARCHAR(30) DEFAULT 'APPROVED',
   rating NUMERIC(3, 2) DEFAULT 5.0,
@@ -52,7 +54,7 @@ CREATE TABLE IF NOT EXISTS rides (
 CREATE TABLE IF NOT EXISTS bookings (
   id VARCHAR(64) PRIMARY KEY,
   ride_id VARCHAR(64) REFERENCES rides(id),
-  sender_id VARCHAR(64) REFERENCES users(id),
+  sender_id UUID REFERENCES users(id),
   weight_kg NUMERIC(6, 2) NOT NULL,
   total_price NUMERIC(10, 2) NOT NULL,
   pickup_otp VARCHAR(6),
@@ -64,7 +66,7 @@ CREATE TABLE IF NOT EXISTS bookings (
 CREATE TABLE IF NOT EXISTS payments (
   id VARCHAR(64) PRIMARY KEY,
   booking_id VARCHAR(64) REFERENCES bookings(id),
-  payer_id VARCHAR(64) REFERENCES users(id),
+  payer_id UUID REFERENCES users(id),
   amount NUMERIC(10, 2) NOT NULL,
   escrow_status VARCHAR(30) DEFAULT 'HELD',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -72,8 +74,8 @@ CREATE TABLE IF NOT EXISTS payments (
 
 CREATE TABLE IF NOT EXISTS reviews (
   id VARCHAR(64) PRIMARY KEY,
-  reviewer_id VARCHAR(64) REFERENCES users(id),
-  reviewee_id VARCHAR(64) REFERENCES users(id),
+  reviewer_id UUID REFERENCES users(id),
+  reviewee_id UUID REFERENCES users(id),
   rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
   comment TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -81,7 +83,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 
 CREATE TABLE IF NOT EXISTS notifications (
   id VARCHAR(64) PRIMARY KEY,
-  user_id VARCHAR(64) REFERENCES users(id),
+  user_id UUID REFERENCES users(id),
   title VARCHAR(255) NOT NULL,
   message TEXT NOT NULL,
   is_read BOOLEAN DEFAULT FALSE,
@@ -90,7 +92,7 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 CREATE TABLE IF NOT EXISTS password_reset_tokens (
   id VARCHAR(64) PRIMARY KEY,
-  user_id VARCHAR(64) REFERENCES users(id),
+  user_id UUID REFERENCES users(id),
   token VARCHAR(255) NOT NULL,
   expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

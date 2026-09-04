@@ -139,7 +139,7 @@ export default function OTPModal({
 
             <div className="bg-slate-50 p-2.5 rounded-xl text-[11px] text-slate-500 text-center flex items-center justify-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>For demo, you can also enter <strong className="text-slate-800">123456</strong></span>
+              <span>Enter the 6-digit OTP code sent to the recipient's phone</span>
             </div>
 
             <button

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
-import { Navigation, MapPin, Truck, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Navigation, MapPin, Truck, ShieldCheck, AlertCircle, Signal, Clock, Gauge } from 'lucide-react';
 import { CITY_COORDINATES } from '@/lib/constants';
 
 interface MapProps {
@@ -13,6 +13,12 @@ interface MapProps {
   eta?: string;
   currentLat?: number;
   currentLng?: number;
+  isLive?: boolean;
+  isStale?: boolean;
+  accuracy?: number;
+  speed?: number;
+  lastUpdatedAgo?: string;
+  onRouteCalculated?: (info: { durationText: string; distanceText: string; calculatedEta: string }) => void;
 }
 
 export default function MapComponent({
@@ -20,16 +26,30 @@ export default function MapComponent({
   destination = 'Hyderabad',
   travelerName = 'Vikram Singh',
   status = 'IN_TRANSIT',
-  eta = '12:15 PM'
+  eta = '12:15 PM',
+  currentLat,
+  currentLng,
+  isLive = false,
+  isStale = false,
+  accuracy,
+  speed,
+  lastUpdatedAgo = 'Just now',
+  onRouteCalculated,
 }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const travelerMarkerRef = useRef<any>(null);
+
   const [apiKey, setApiKey] = useState<string>(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '');
   const [loaderStarted, setLoaderStarted] = useState(false);
   const [mapsApiLoaded, setMapsApiLoaded] = useState(false);
   const [mapInitialized, setMapInitialized] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
 
-  // Fetch API key dynamically from server route if client-side environment variable is not inlined
+  // Dynamic Route ETA and Distance from Google Maps
+  const [routeInfo, setRouteInfo] = useState<{ durationText: string; distanceText: string; calculatedEta: string } | null>(null);
+
+  // Fetch API key dynamically if not inlined
   useEffect(() => {
     if (!apiKey) {
       fetch('/api/config')
@@ -38,18 +58,17 @@ export default function MapComponent({
           if (data.googleMapsApiKey) {
             setApiKey(data.googleMapsApiKey);
           } else {
-            setInitError('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not defined in environment variables.');
+            setInitError('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not defined.');
           }
         })
-        .catch(err => setInitError('Failed to fetch API key from /api/config.'));
+        .catch(() => setInitError('Failed to fetch API key from /api/config.'));
     }
   }, [apiKey]);
 
-  // Load Google Maps using official @googlemaps/js-api-loader functional API
+  // Load Google Maps & Render Base Map
   useEffect(() => {
     if (!apiKey) return;
 
-    console.log('Maps loader started');
     setLoaderStarted(true);
 
     try {
@@ -63,12 +82,9 @@ export default function MapComponent({
         importLibrary('routes')
       ])
         .then(([mapsLib, routesLib]) => {
-          console.log('Maps API loaded');
           setMapsApiLoaded(true);
 
           if (!mapRef.current) return;
-
-          console.log('Maps initialization started');
 
           const originCoords = CITY_COORDINATES[origin] || [16.5062, 80.6480];
           const destCoords = CITY_COORDINATES[destination] || [17.3850, 78.4867];
@@ -76,9 +92,12 @@ export default function MapComponent({
           const { Map } = mapsLib;
           const { DirectionsService, DirectionsRenderer } = routesLib;
 
+          const initialLat = currentLat || (originCoords[0] + destCoords[0]) / 2;
+          const initialLng = currentLng || (originCoords[1] + destCoords[1]) / 2;
+
           const map = new Map(mapRef.current, {
-            center: { lat: (originCoords[0] + destCoords[0]) / 2, lng: (originCoords[1] + destCoords[1]) / 2 },
-            zoom: 7,
+            center: { lat: initialLat, lng: initialLng },
+            zoom: currentLat && currentLng ? 12 : 7,
             disableDefaultUI: true,
             zoomControl: true,
             styles: [
@@ -92,8 +111,10 @@ export default function MapComponent({
             ]
           });
 
-          // Add Markers for Pickup (A), Destination (B), and Traveler Courier
-          if (window.google && window.google.maps && window.google.maps.Marker) {
+          mapInstanceRef.current = map;
+
+          // Add Markers for Pickup (A) & Destination (B)
+          if (window.google && window.google.maps) {
             new window.google.maps.Marker({
               position: { lat: originCoords[0], lng: originCoords[1] },
               map,
@@ -108,26 +129,36 @@ export default function MapComponent({
               label: { text: 'B', color: '#ffffff', fontWeight: 'bold' }
             });
 
-            // Midpoint Traveler Marker
-            const travelerLat = originCoords[0] + (destCoords[0] - originCoords[0]) * 0.45;
-            const travelerLng = originCoords[1] + (destCoords[1] - originCoords[1]) * 0.45;
+            // Initial Traveler Marker
+            const travelerLat = currentLat || (originCoords[0] + (destCoords[0] - originCoords[0]) * 0.45);
+            const travelerLng = currentLng || (originCoords[1] + (destCoords[1] - originCoords[1]) * 0.45);
 
-            new window.google.maps.Marker({
+            const travelerMarker = new window.google.maps.Marker({
               position: { lat: travelerLat, lng: travelerLng },
               map,
-              title: `Traveler: ${travelerName}`
+              title: `Live Traveler: ${travelerName}`,
+              icon: {
+                path: window.google.maps.SymbolPath.CIRCLE,
+                scale: 10,
+                fillColor: '#fbbf24',
+                fillOpacity: 1,
+                strokeColor: '#ffffff',
+                strokeWeight: 3,
+              }
             });
+
+            travelerMarkerRef.current = travelerMarker;
           }
 
-          // Directions Route
+          // Directions Route Line
           const directionsService = new DirectionsService();
           const directionsRenderer = new DirectionsRenderer({
             map,
             suppressMarkers: true,
             polylineOptions: {
               strokeColor: '#00b27b',
-              strokeWeight: 6,
-              strokeOpacity: 0.9
+              strokeWeight: 5,
+              strokeOpacity: 0.85
             }
           });
 
@@ -140,59 +171,98 @@ export default function MapComponent({
             (result: any, statusResult: any) => {
               if (statusResult === 'OK' && result) {
                 directionsRenderer.setDirections(result);
+                const leg = result.routes[0]?.legs[0];
+                if (leg) {
+                  const durText = leg.duration?.text || '3 hrs 45 mins';
+                  const distText = leg.distance?.text || '274 km';
+                  const durValSec = leg.duration?.value || 13500;
+                  const etaDate = new Date(Date.now() + durValSec * 1000);
+                  const calculatedEtaStr = etaDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  
+                  const calculatedInfo = {
+                    durationText: durText,
+                    distanceText: distText,
+                    calculatedEta: calculatedEtaStr
+                  };
+
+                  setRouteInfo(calculatedInfo);
+                  if (onRouteCalculated) {
+                    onRouteCalculated(calculatedInfo);
+                  }
+                }
               }
             }
           );
 
-          console.log('Maps initialization successful');
           setMapInitialized(true);
         })
         .catch((err: any) => {
-          console.error('Maps importLibrary failed. Error:', err);
-          setInitError(err?.message || 'Google Maps JS API failed to initialize.');
+          setInitError('Error rendering Google Maps instance.');
         });
     } catch (err: any) {
-      console.error('Maps setOptions error:', err);
-      setInitError(err?.message || 'Google Maps setOptions error.');
+      setInitError('Failed to initialize Google Maps library.');
     }
-  }, [apiKey, origin, destination, travelerName]);
+  }, [apiKey]);
+
+  // Smoothly update Google Maps traveler marker when new GPS coordinates arrive via Socket.IO
+  useEffect(() => {
+    if (currentLat !== undefined && currentLng !== undefined && travelerMarkerRef.current) {
+      const newPos = { lat: currentLat, lng: currentLng };
+      travelerMarkerRef.current.setPosition(newPos);
+
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.panTo(newPos);
+      }
+    }
+  }, [currentLat, currentLng]);
 
   return (
-    <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden bg-slate-900 border border-slate-700 shadow-inner">
+    <div className="relative w-full h-72 md:h-96 rounded-3xl overflow-hidden bg-slate-900 border border-slate-700 shadow-inner">
       {/* Real Google Map Canvas Node */}
       <div ref={mapRef} className="w-full h-full" />
 
-      {/* Explicit Failure Screen (Fallback disabled as per debug rules) */}
+      {/* Explicit Failure Screen */}
       {initError && (
         <div className="absolute inset-0 bg-slate-950/95 p-6 flex flex-col items-center justify-center text-center space-y-3 z-30">
           <AlertCircle className="w-12 h-12 text-rose-500" />
           <h3 className="text-lg font-black text-rose-400">GOOGLE MAPS INITIALIZATION FAILED</h3>
           <p className="text-xs text-slate-300 max-w-md font-mono">{initError}</p>
-          <div className="bg-slate-900 border border-slate-700 p-3 rounded-xl text-[11px] font-mono text-slate-400 text-left space-y-1">
-            <div>API Key Detected: {apiKey ? 'YES' : 'NO'}</div>
-            <div>Key Length: {apiKey ? apiKey.length : 0}</div>
-            <div>Maps Loader Started: {loaderStarted ? 'YES' : 'NO'}</div>
-            <div>Maps API Loaded: {mapsApiLoaded ? 'YES' : 'NO'}</div>
-          </div>
         </div>
       )}
 
-      {/* Top Floating Route Badge */}
-      <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-10">
-        <div className="bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700 text-xs font-semibold text-white flex items-center gap-2 shadow-lg">
+      {/* Top Floating Telemetry & Status Bar */}
+      <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-10 gap-2">
+        <div className="bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700 text-xs font-bold text-white flex items-center gap-2 shadow-lg">
           <MapPin className="w-3.5 h-3.5 text-emerald-400" />
           <span>{origin} → {destination}</span>
+          {routeInfo?.distanceText && (
+            <span className="text-slate-400 text-[11px] font-normal">({routeInfo.distanceText})</span>
+          )}
         </div>
-        <div className="bg-emerald-500/90 backdrop-blur-md px-3 py-1.5 rounded-full text-slate-950 font-bold text-xs flex items-center gap-1 shadow-lg">
-          <span className="w-2 h-2 rounded-full bg-slate-950 animate-pulse"></span>
-          <span>GOOGLE MAPS GPS</span>
-        </div>
+
+        {/* Live GPS Badge / Stale Warning */}
+        {isStale ? (
+          <div className="bg-amber-500 text-slate-950 backdrop-blur-md px-3 py-1.5 rounded-full font-black text-[10px] flex items-center gap-1 shadow-lg border border-amber-300 animate-pulse">
+            <Clock className="w-3 h-3 text-slate-950" />
+            <span>⚠️ Location update delayed ({lastUpdatedAgo})</span>
+          </div>
+        ) : isLive ? (
+          <div className="bg-emerald-500 text-slate-950 backdrop-blur-md px-3 py-1.5 rounded-full font-black text-[10px] flex items-center gap-1.5 shadow-lg uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
+            <span>🟢 LIVE GPS ({lastUpdatedAgo})</span>
+          </div>
+        ) : (
+          <div className="bg-slate-800/90 text-slate-300 backdrop-blur-md px-3 py-1.5 rounded-full font-bold text-[10px] flex items-center gap-1 shadow-lg border border-slate-700">
+            <Signal className="w-3 h-3 text-slate-400" />
+            <span>Connecting GPS...</span>
+          </div>
+        )}
       </div>
 
-      {/* Bottom Floating Delivery Status Card */}
-      <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md p-3 rounded-xl border border-surface-container-high shadow-xl flex items-center justify-between z-10">
+      {/* Bottom Floating Delivery Status Card with Live Google Maps Dynamic ETA */}
+      <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 shadow-xl flex items-center justify-between z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold">
+          <div className="w-10 h-10 rounded-full bg-blue-50 text-[#002b5c] flex items-center justify-center font-bold shadow-xs">
             <Navigation className="w-5 h-5" />
           </div>
           <div>
@@ -204,8 +274,17 @@ export default function MapComponent({
         </div>
 
         <div className="text-right">
-          <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Est. Arrival</div>
-          <div className="text-sm font-extrabold text-primary">{eta}</div>
+          <div className="text-[9px] uppercase font-black text-slate-400 tracking-wider">
+            Google Maps Est. Arrival
+          </div>
+          <div className="text-sm font-black text-[#002b5c]">
+            {routeInfo?.calculatedEta || eta}
+          </div>
+          {routeInfo?.durationText && (
+            <div className="text-[10px] font-bold text-emerald-600">
+              ({routeInfo.durationText} left)
+            </div>
+          )}
         </div>
       </div>
     </div>
