@@ -154,6 +154,12 @@ export default function LocationPickerModal({
     );
   };
 
+  const [mapAddressDetails, setMapAddressDetails] = useState<{ city: string; state: string; name: string }>({
+    city: 'Chennai',
+    state: 'Tamil Nadu',
+    name: 'Chennai Central'
+  });
+
   // Reverse Geocode when map coordinates change
   const fetchMapAddress = async (lat: number, lng: number) => {
     setIsReverseGeocoding(true);
@@ -162,8 +168,19 @@ export default function LocationPickerModal({
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
       );
       const data = await res.json();
-      if (data && data.display_name) {
-        setMapAddress(data.display_name);
+      if (data) {
+        const addr = data.address || {};
+        const extractedCity = addr.city || addr.town || addr.village || addr.city_district || addr.suburb || addr.county || addr.state_district || 'Selected Location';
+        const extractedState = addr.state || 'India';
+        const placeName = addr.road || addr.neighbourhood || addr.suburb || extractedCity;
+        const fullAddr = data.display_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+        
+        setMapAddress(fullAddr);
+        setMapAddressDetails({
+          city: extractedCity,
+          state: extractedState,
+          name: placeName
+        });
       } else {
         setMapAddress(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
       }
@@ -172,6 +189,14 @@ export default function LocationPickerModal({
     } finally {
       setIsReverseGeocoding(false);
     }
+  };
+
+  const handleConfirmLocation = (locItem: LocationItem) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('rideel_selected_location', JSON.stringify(locItem));
+    }
+    onSelectLocation(locItem);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -285,10 +310,7 @@ export default function LocationPickerModal({
                   {suggestions.map((item, idx) => (
                     <button
                       key={idx}
-                      onClick={() => {
-                        onSelectLocation(item);
-                        onClose();
-                      }}
+                      onClick={() => handleConfirmLocation(item)}
                       className="w-full p-3 text-left hover:bg-blue-50/50 transition flex items-start gap-2.5 group"
                     >
                       <MapPin className="w-4 h-4 text-[#002b5c] shrink-0 mt-0.5" />
@@ -316,10 +338,7 @@ export default function LocationPickerModal({
                   {POPULAR_CITIES.map((cityItem, idx) => (
                     <button
                       key={idx}
-                      onClick={() => {
-                        onSelectLocation(cityItem);
-                        onClose();
-                      }}
+                      onClick={() => handleConfirmLocation(cityItem)}
                       className="p-3 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 border border-slate-200/70 rounded-xl text-left transition flex items-center gap-2 group"
                     >
                       <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#002b5c] shrink-0" />
@@ -411,17 +430,14 @@ export default function LocationPickerModal({
 
             <button
               onClick={() => {
-                const parts = mapAddress.split(',');
-                const cityName = parts.length > 2 ? parts[parts.length - 3].trim() : 'Selected Place';
-                onSelectLocation({
-                  name: parts[0] || 'Map Location',
-                  city: cityName,
-                  state: 'India',
+                handleConfirmLocation({
+                  name: mapAddressDetails.name || 'Map Location',
+                  city: mapAddressDetails.city || 'Selected City',
+                  state: mapAddressDetails.state || 'India',
                   fullAddress: mapAddress,
                   lat: selectedMapCoords.lat,
                   lng: selectedMapCoords.lng
                 });
-                onClose();
               }}
               className="w-full bg-[#002b5c] hover:bg-[#001f44] text-white py-3.5 rounded-2xl font-extrabold text-xs shadow-md transition flex items-center justify-center gap-2 mt-auto"
             >

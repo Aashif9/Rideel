@@ -24,6 +24,21 @@ export default function HomePage() {
     apiServices.getDeliveries().then(d => {
       setActiveDeliveries(d);
     });
+
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('rideel_selected_location');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.city) {
+            setSelectedCity(`${parsed.city}${parsed.state ? ', ' + (parsed.state.length > 10 ? parsed.state.slice(0, 2).toUpperCase() : parsed.state) : ''}`);
+          }
+          if (parsed.fullAddress || parsed.name) {
+            setSelectedAddress(parsed.fullAddress || parsed.name);
+          }
+        } catch (e) {}
+      }
+    }
   }, []);
 
   const userName = user?.full_name?.split(' ')[0] || 'Aarav';
