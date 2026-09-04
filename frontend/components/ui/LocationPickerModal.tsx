@@ -377,7 +377,7 @@ export default function LocationPickerModal({
                 frameBorder="0"
                 scrolling="no"
                 src={`https://maps.google.com/maps?q=${selectedMapCoords.lat},${selectedMapCoords.lng}&z=14&output=embed`}
-                className="w-full h-full opacity-90"
+                className="w-full h-full opacity-100"
               />
 
               {/* Map Center Location Pin Marker */}

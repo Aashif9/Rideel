@@ -131,8 +131,8 @@ function SendParcelRouteContent() {
           <p className="text-xs text-slate-500 font-medium">Select exact pickup, dropoff & time windows</p>
         </div>
 
-        {/* 3. INTERACTIVE MAP BOX WITH ROUTE LINE */}
-        <div className="relative w-full h-52 bg-slate-900 rounded-3xl overflow-hidden shadow-sm border border-slate-200/80">
+        {/* 3. INTERACTIVE MAP BOX WITH CLEAN ROUTE PREVIEW */}
+        <div className="relative w-full h-56 bg-slate-100 rounded-3xl overflow-hidden shadow-sm border border-slate-200/80">
           <iframe
             title="Route Map Preview"
             width="100%"
@@ -140,36 +140,24 @@ function SendParcelRouteContent() {
             frameBorder="0"
             scrolling="no"
             src={`https://maps.google.com/maps?q=${encodeURIComponent(pickupLoc + ' to ' + deliveryLoc)}&output=embed`}
-            className="w-full h-full opacity-80"
+            className="w-full h-full opacity-100"
           />
 
-          {/* SVG Overlay Route Line */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none">
-            <path
-              d="M 90 50 Q 150 110 210 140"
-              fill="none"
-              stroke="#002b5c"
-              strokeWidth="4"
-              strokeDasharray="6 4"
-              strokeLinecap="round"
-            />
-          </svg>
-
           {/* Pickup Marker Box */}
-          <div className="absolute left-6 top-4 bg-white/95 backdrop-blur rounded-xl shadow-lg px-3 py-1.5 border border-slate-200 flex items-center gap-2 animate-bounce">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-            <div className="text-[10px] leading-tight max-w-[120px]">
-              <span className="text-slate-400 font-bold block text-[8px]">Pickup</span>
-              <span className="font-extrabold text-slate-900 truncate block">{pickupLoc.split(',')[0]}</span>
+          <div className="absolute left-4 top-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-md px-3.5 py-2 border border-slate-200/80 flex items-center gap-2 pointer-events-none">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
+            <div className="text-[10px] leading-tight max-w-[130px]">
+              <span className="text-slate-400 font-extrabold block text-[8px] uppercase tracking-wider">Pickup</span>
+              <span className="font-black text-slate-900 truncate block">{pickupLoc.split(',')[0]}</span>
             </div>
           </div>
 
           {/* Delivery Marker Box */}
-          <div className="absolute right-6 bottom-4 bg-white/95 backdrop-blur rounded-xl shadow-lg px-3 py-1.5 border border-slate-200 flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-            <div className="text-[10px] leading-tight max-w-[120px]">
-              <span className="text-slate-400 font-bold block text-[8px]">Dropoff</span>
-              <span className="font-extrabold text-slate-900 truncate block">{deliveryLoc.split(',')[0]}</span>
+          <div className="absolute right-4 bottom-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-md px-3.5 py-2 border border-slate-200/80 flex items-center gap-2 pointer-events-none">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span>
+            <div className="text-[10px] leading-tight max-w-[130px]">
+              <span className="text-slate-400 font-extrabold block text-[8px] uppercase tracking-wider">Dropoff</span>
+              <span className="font-black text-slate-900 truncate block">{deliveryLoc.split(',')[0]}</span>
             </div>
           </div>
         </div>
