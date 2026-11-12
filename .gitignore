@@ -12,7 +12,12 @@ node_modules/
 /frontend/out/
 /frontend/build/
 /backend/dist/
+/backend_nestjs/dist/
 *.tsbuildinfo
+
+# External Projects
+/Nemo/
+/Rideel/
 
 # Debug logs
 npm-debug.log*

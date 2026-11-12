@@ -25,23 +25,12 @@ export default function TravelerRequestsPage() {
     setUser(currentUser);
 
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/match-requests/incoming` : `${baseUrl}/api/match-requests/incoming`;
-
-      const res = await fetch(targetUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setRequests(data.requests || []);
+      const res = await apiServices.getIncomingMatchRequests();
+      if (res.success) {
+        setRequests(res.requests || []);
       }
     } catch (err) {
-      console.warn('Failed to fetch incoming match requests from REST API:', err);
+      console.warn('Failed to fetch incoming match requests:', err);
     } finally {
       setLoading(false);
     }
@@ -52,27 +41,15 @@ export default function TravelerRequestsPage() {
     setActionMessage(null);
 
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/match-requests/${requestId}/accept` : `${baseUrl}/api/match-requests/${requestId}/accept`;
-
-      const res = await fetch(targetUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setActionMessage({ type: 'success', text: 'Parcel delivery request accepted! Booking is now active.' });
+      const res = await apiServices.acceptMatchRequest(requestId);
+      if (res.success) {
+        setActionMessage({ type: 'success', text: res.message || 'Parcel delivery request accepted! Booking is now active.' });
         loadRequests();
       } else {
-        setActionMessage({ type: 'error', text: data.message || 'Failed to accept request.' });
+        setActionMessage({ type: 'error', text: res.message || 'Failed to accept request.' });
       }
     } catch (err) {
-      setActionMessage({ type: 'error', text: 'Network error accepting request.' });
+      setActionMessage({ type: 'error', text: 'Error accepting request.' });
     } finally {
       setProcessingId(null);
     }
@@ -83,27 +60,15 @@ export default function TravelerRequestsPage() {
     setActionMessage(null);
 
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/match-requests/${requestId}/reject` : `${baseUrl}/api/match-requests/${requestId}/reject`;
-
-      const res = await fetch(targetUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setActionMessage({ type: 'success', text: 'Parcel request declined.' });
+      const res = await apiServices.rejectMatchRequest(requestId);
+      if (res.success) {
+        setActionMessage({ type: 'success', text: res.message || 'Parcel request declined.' });
         loadRequests();
       } else {
-        setActionMessage({ type: 'error', text: data.message || 'Failed to decline request.' });
+        setActionMessage({ type: 'error', text: res.message || 'Failed to decline request.' });
       }
     } catch (err) {
-      setActionMessage({ type: 'error', text: 'Network error declining request.' });
+      setActionMessage({ type: 'error', text: 'Error declining request.' });
     } finally {
       setProcessingId(null);
     }

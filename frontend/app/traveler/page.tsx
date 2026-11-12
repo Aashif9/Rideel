@@ -34,19 +34,9 @@ export default function TravelerDashboard() {
       setTrips(myTrips);
 
       // Fetch pending incoming match requests count
-      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/match-requests/incoming` : `${baseUrl}/api/match-requests/incoming`;
-
-      const res = await fetch(targetUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      const data = await res.json();
-      if (res.ok && data.requests) {
-        const pending = data.requests.filter((r: any) => r.status === 'PENDING').length;
+      const reqRes = await apiServices.getIncomingMatchRequests();
+      if (reqRes.success && reqRes.requests) {
+        const pending = reqRes.requests.filter((r: any) => r.status === 'PENDING').length;
         setPendingCount(pending);
       }
     } catch (e) {

@@ -1,0 +1,215 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// 1. ENUMS FOR STATES & ROLES
+// ==========================================
+
+enum UserRole {
+  SENDER
+  TRAVELER
+  BUSINESS
+  ADMIN
+}
+
+enum TripStatus {
+  POSTED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ParcelStatus {
+  CREATED
+  MATCHING
+  TRAVELER_SELECTED
+  PAYMENT_PENDING
+  PAYMENT_SECURED
+  PICKUP_PENDING
+  PICKUP_CONFIRMED
+  HANDED_TO_TRAVELER
+  IN_TRANSIT
+  ARRIVED
+  DELIVERY_PENDING
+  DELIVERED
+  ESCROW_RELEASED
+  CANCELLED
+  DISPUTED
+}
+
+enum HandoffMethod {
+  DIRECT
+  PARTNER_HUB
+}
+
+// ==========================================
+// 2. USER & PROFILE MODELS
+// ==========================================
+
+model User {
+  id            String           @id @default(uuid())
+  name          String
+  email         String           @unique
+  phone         String?          @unique
+  image         String?
+  role          UserRole         @default(SENDER)
+  isKycVerified Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  // Relations
+  travelerProfile TravelerProfile?
+  sentParcels     Parcel[]         @relation("SenderParcels")
+  trips           Trip[]           @relation("TravelerTrips")
+  reviewsGiven    Review[]         @relation("Reviewer")
+  reviewsReceived Review[]         @relation("Reviewee")
+}
+
+model TravelerProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating          Float    @default(5.0)
+  totalDeliveries Int      @default(0)
+  successfulTrips Int      @default(0)
+  cancellationRate Float   @default(0.0)
+  vehicleDetails  String?  // e.g., Car / Bike / Train travel info
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ==========================================
+// 3. TRIP & CAPACITY MODELS
+// ==========================================
+
+model Trip {
+  id                 String     @id @default(uuid())
+  travelerId         String
+  traveler           User       @relation("TravelerTrips", fields: [travelerId], references: [id], onDelete: Cascade)
+  origin             String
+  destination        String
+  travelDate         String     // Format: YYYY-MM-DD
+  departureTime      String     // Format: HH:MM
+  estimatedArrival   String     // Format: HH:MM
+  totalCapacityKg    Float
+  remainingCapacityKg Float
+  maxWeightPerItemKg Float
+  pricePerKg         Float
+  status             TripStatus @default(POSTED)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  // Relations
+  parcels            Parcel[]   @relation("TripParcels")
+}
+
+// ==========================================
+// 4. PARCEL & BOOKING MODELS
+// ==========================================
+
+model Parcel {
+  id                 String       @id @default(uuid())
+  parcelCode         String       @unique // e.g. RD784521
+  senderId           String
+  sender             User         @relation("SenderParcels", fields: [senderId], references: [id], onDelete: Cascade)
+  travelerId         String?
+  tripId             String?
+  trip               Trip?        @relation("TripParcels", fields: [tripId], references: [id], onDelete: SetNull)
+  
+  origin             String
+  destination        String
+  dispatchDate       String
+  
+  category           String       // Documents, Electronics, Clothing, etc.
+  weightKg           Float
+  length             Float?
+  width              Float?
+  height             Float?
+  estimatedValue     Float
+  description        String?
+  isFragile          Boolean      @default(false)
+  specialHandling    String?      // None, Keep upright, etc.
+
+  receiverName       String
+  receiverPhone      String
+  destinationAddress String
+
+  pickupMethod       HandoffMethod @default(DIRECT)
+  deliveryMethod     HandoffMethod @default(DIRECT)
+
+  status             ParcelStatus  @default(CREATED)
+  
+  // Financials
+  ratePerKg          Float?
+  deliveryFee        Float?
+  platformFee        Float?
+  totalAmount        Float?
+
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  // Relations
+  escrowTransaction  EscrowTransaction?
+  otpVerification    OtpVerification?
+}
+
+// ==========================================
+// 5. ESCROW & PAYMENT MODELS
+// ==========================================
+
+model EscrowTransaction {
+  id            String   @id @default(uuid())
+  parcelId      String   @unique
+  parcel        Parcel   @relation(fields: [parcelId], references: [id], onDelete: Cascade)
+  amount        Float
+  status        String   @default("HELD") // HELD, RELEASED, REFUNDED
+  paymentGateway String  // UPI, Card, Wallet
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ==========================================
+// 6. SECURITY & OTP MODELS
+// ==========================================
+
+model OtpVerification {
+  id         String   @id @default(uuid())
+  parcelId   String   @unique
+  parcel     Parcel   @relation(fields: [parcelId], references: [id], onDelete: Cascade)
+  pickupOtp  String
+  deliveryOtp String
+  isPickupVerified   Boolean @default(false)
+  isDeliveryVerified Boolean @default(false)
+  createdAt  DateTime @default(now())
+}
+
+// ==========================================
+// 7. PARTNER HUBS & REVIEWS
+// ==========================================
+
+model PartnerHub {
+  id            String   @id @default(uuid())
+  name          String
+  city          String
+  address       String
+  openingHours  String
+  phone         String
+  isVerified    Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  rating     Int      // 1 to 5
+  comment    String?
+  reviewerId String
+  reviewer   User     @relation("Reviewer", fields: [reviewerId], references: [id])
+  revieweeId String
+  reviewee   User     @relation("Reviewee", fields: [revieweeId], references: [id])
+  createdAt  DateTime @default(now())
+}

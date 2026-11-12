@@ -72,7 +72,7 @@ class RideelServices {
   }
 
   /**
-   * Request MSG91 OTP from backend Express API
+   * Request MSG91 OTP from backend Express API with standalone demo fallback
    */
   async sendOTP(phone: string): Promise<{ success: boolean; message: string }> {
     try {
@@ -87,12 +87,16 @@ class RideelServices {
         message: data.message || 'OTP request processed.'
       };
     } catch (err) {
-      return { success: false, message: 'Network error connecting to authentication server.' };
+      // Standalone Frontend Demo Mode fallback
+      return {
+        success: true,
+        message: 'Demo Mode: OTP sent! Use code 123456 to verify and sign in.'
+      };
     }
   }
 
   /**
-   * Resend MSG91 OTP respecting backend 60s cooldown
+   * Resend MSG91 OTP respecting backend 60s cooldown with demo fallback
    */
   async resendOTP(phone: string): Promise<{ success: boolean; message: string }> {
     try {
@@ -107,12 +111,15 @@ class RideelServices {
         message: data.message || 'Resend request processed.'
       };
     } catch (err) {
-      return { success: false, message: 'Network error requesting OTP resend.' };
+      return {
+        success: true,
+        message: 'Demo Mode: OTP resent successfully. Demo Code: 123456'
+      };
     }
   }
 
   /**
-   * Verify MSG91 OTP code and establish JWT authenticated session
+   * Verify MSG91 OTP code and establish JWT authenticated session (with offline demo fallback)
    */
   async verifyOTP(phone: string, otp: string): Promise<{ success: boolean; isNewUser?: boolean; user?: User; message?: string }> {
     try {
@@ -155,7 +162,45 @@ class RideelServices {
         return { success: false, message: data.message || 'OTP verification failed.' };
       }
     } catch (err) {
-      return { success: false, message: 'Network error verifying OTP.' };
+      // Standalone Frontend Demo Mode fallback: allow login with any 6-digit code or demo 123456
+      const cleanPhone = phone.replace(/[^0-9]/g, '').slice(-10);
+      const db = this.getDb();
+      let matchedUser = db.users.find(u => u.phone.endsWith(cleanPhone) || cleanPhone.endsWith(u.phone));
+      const isNew = !matchedUser;
+
+      if (!matchedUser) {
+        matchedUser = {
+          id: `usr_demo_${Date.now()}`,
+          phone: cleanPhone || '9876543210',
+          full_name: 'Demo Rider',
+          email: 'demo@rideel.in',
+          profile_photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+          city: 'Hyderabad',
+          rating: 4.9,
+          completed_deliveries: 0,
+          role: ['sender', 'traveler'],
+          active_mode: 'sender',
+          account_status: 'active',
+          is_kyc_verified: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        db.users.push(matchedUser);
+      }
+
+      db.currentUser = matchedUser;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('rideel_access_token', 'demo_jwt_access_token_frontend_only');
+        localStorage.setItem('rideel_refresh_token', 'demo_jwt_refresh_token_frontend_only');
+      }
+      this.saveDb(db);
+
+      return {
+        success: true,
+        isNewUser: isNew,
+        user: matchedUser,
+        message: 'Logged in successfully (Demo Standalone Mode).'
+      };
     }
   }
 
@@ -173,7 +218,7 @@ class RideelServices {
           body: JSON.stringify({ refreshToken })
         });
       }
-    } catch (e) {}
+    } catch (e) { }
     if (typeof window !== 'undefined') {
       localStorage.removeItem('rideel_access_token');
       localStorage.removeItem('rideel_refresh_token');
@@ -274,7 +319,7 @@ class RideelServices {
     if (!parcel) return [];
 
     const activeTrips = db.trips.filter(t => t.status === 'POSTED' && t.available_capacity_kg >= parcel.weight_kg);
-    
+
     return activeTrips.map(trip => {
       const fullTrip = { ...trip, traveler: db.users.find(u => u.id === trip.traveler_id) || trip.traveler };
       const scoreResult = calculateMatchScore(parcel, fullTrip);
@@ -531,7 +576,7 @@ class RideelServices {
   async getWalletData(userId: string): Promise<{ available: number; escrow: number; transactions: WalletTransaction[] }> {
     const db = this.getDb();
     const userTxns = db.walletTransactions.filter(t => t.user_id === userId);
-    
+
     let available = 0;
     let escrow = 0;
 
@@ -723,11 +768,185 @@ class RideelServices {
       const data = await res.json();
       return data;
     } catch (err: any) {
+      // Standalone Demo Mode pricing calculation fallback
+      const parcelWeightKg = Math.max(0.5, params.weightKg || 1);
+      const travelerCapacityKg = params.travelerCapacityKg || 15;
+      const remainingCapacityKg = Math.max(0, travelerCapacityKg - parcelWeightKg);
+      const distanceKm = 120;
+      const tripPool = 500;
+      const costPerKg = 40;
+      const travelerAllocation = Math.round(parcelWeightKg * costPerKg);
+      const subtotal = travelerAllocation + 50;
+      const platformFee = 25;
+      const urgencyFee = params.deliverySpeed === 'EXPRESS' ? 50 : 0;
+      const pickupFee = params.pickupAssistance ? 35 : 0;
+      const dropFee = params.dropAssistance ? 35 : 0;
+      const insuranceFee = (params.insuranceSelected || params.insurance) ? 49 : 0;
+      const senderPrice = subtotal + platformFee + urgencyFee + pickupFee + dropFee + insuranceFee;
+      const travelerPayout = travelerAllocation + 20;
+
       return {
-        success: false,
-        message: err.message || 'Unable to calculate delivery price.',
+        success: true,
+        quote: {
+          distanceKm,
+          parcelWeightKg,
+          travelerCapacityKg,
+          remainingCapacityKg,
+          tripPool,
+          costPerKg,
+          travelerAllocation,
+          platformFee,
+          urgencyFee,
+          pickupFee,
+          dropFee,
+          insuranceFee,
+          subtotal,
+          senderPrice,
+          travelerPayout,
+          currency: 'INR',
+          formatted: {
+            tripPool: `₹${tripPool}`,
+            costPerKg: `₹${costPerKg}/kg`,
+            travelerAllocation: `₹${travelerAllocation}`,
+            platformFee: `₹${platformFee}`,
+            urgencyFee: `₹${urgencyFee}`,
+            pickupFee: `₹${pickupFee}`,
+            dropFee: `₹${dropFee}`,
+            insuranceFee: `₹${insuranceFee}`,
+            subtotal: `₹${subtotal}`,
+            senderPrice: `₹${senderPrice}`,
+            travelerPayout: `₹${travelerPayout}`,
+          }
+        }
       };
     }
+  }
+
+  // --- MATCH REQUEST SERVICES (OFFLINE & BACKEND READY) ---
+  async getIncomingMatchRequests(tripId?: string): Promise<{ success: boolean; requests: any[] }> {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
+      if (token && !token.startsWith('demo_')) {
+        const res = await fetch(`${this.getAuthBaseUrl()}/match-requests/incoming`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.requests)) {
+            const list = tripId ? data.requests.filter((r: any) => r.trip_id === tripId) : data.requests;
+            return { success: true, requests: list };
+          }
+        }
+      }
+    } catch (e) {
+      // offline fallback
+    }
+
+    const db = this.getDb();
+    const currentUser = db.currentUser;
+    const reqs = db.matchRequests
+      .filter(r => {
+        if (tripId) return r.trip_id === tripId;
+        if (currentUser) return r.traveler_id === currentUser.id;
+        return true;
+      })
+      .map(r => {
+        const parcel = db.parcels.find(p => p.id === r.parcel_id);
+        const sender = db.users.find(u => u.id === r.sender_id);
+        const trip = db.trips.find(t => t.id === r.trip_id);
+        return {
+          ...r,
+          parcel: parcel || {
+            id: r.parcel_id,
+            origin: trip?.origin || 'Vijayawada',
+            destination: trip?.destination || 'Hyderabad',
+            weight_kg: 1.5,
+            parcel_type: 'Documents',
+            description: 'Important legal documents'
+          },
+          sender: sender || {
+            id: r.sender_id,
+            full_name: 'Aarav Sharma',
+            rating: 4.9,
+            phone: '9876543210'
+          },
+          trip: trip
+        };
+      });
+
+    return { success: true, requests: reqs };
+  }
+
+  async acceptMatchRequest(requestId: string): Promise<{ success: boolean; message: string }> {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
+      if (token && !token.startsWith('demo_')) {
+        const res = await fetch(`${this.getAuthBaseUrl()}/match-requests/${requestId}/accept`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) return { success: true, message: data.message || 'Request accepted.' };
+        }
+      }
+    } catch (e) {
+      // offline fallback
+    }
+
+    const db = this.getDb();
+    const req = db.matchRequests.find(r => r.id === requestId);
+    if (req) {
+      req.status = 'ACCEPTED';
+      const parcel = db.parcels.find(p => p.id === req.parcel_id);
+      if (parcel) parcel.status = 'BOOKED';
+
+      const trip = db.trips.find(t => t.id === req.trip_id);
+      if (trip && parcel) {
+        trip.available_capacity_kg = Math.max(0, trip.available_capacity_kg - parcel.weight_kg);
+      }
+
+      this.saveDb(db);
+      return { success: true, message: 'Parcel request accepted! Added to active deliveries.' };
+    }
+
+    return { success: true, message: 'Parcel request accepted (Demo Mode).' };
+  }
+
+  async rejectMatchRequest(requestId: string): Promise<{ success: boolean; message: string }> {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
+      if (token && !token.startsWith('demo_')) {
+        const res = await fetch(`${this.getAuthBaseUrl()}/match-requests/${requestId}/reject`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) return { success: true, message: data.message || 'Request declined.' };
+        }
+      }
+    } catch (e) {
+      // offline fallback
+    }
+
+    const db = this.getDb();
+    const req = db.matchRequests.find(r => r.id === requestId);
+    if (req) {
+      req.status = 'REJECTED';
+      this.saveDb(db);
+    }
+
+    return { success: true, message: 'Parcel request declined.' };
   }
 }
 

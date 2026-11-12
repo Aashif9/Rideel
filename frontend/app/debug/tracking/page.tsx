@@ -90,15 +90,14 @@ export default function DebugTrackingSimulatorPage() {
   };
 
   const handleStartSimulation = () => {
-    if (!socketRef.current?.connected) {
-      alert('Socket server not connected. Check if backend is running on http://localhost:4000');
-      return;
-    }
-
     setIsSimulating(true);
-    addLog(`Started GPS simulation for delivery ${deliveryId}`);
 
-    socketRef.current.emit('tracking:start', { deliveryId, travelerId });
+    if (socketRef.current?.connected) {
+      addLog(`Started live Socket.IO GPS simulation for delivery ${deliveryId}`);
+      socketRef.current.emit('tracking:start', { deliveryId, travelerId });
+    } else {
+      addLog(`[Standalone Demo Mode] Started local GPS simulation for delivery ${deliveryId}`);
+    }
 
     // Interpolate between waypoints
     let currentIdx = stepIndex;
@@ -128,16 +127,19 @@ export default function DebugTrackingSimulatorPage() {
         timestamp: new Date().toISOString(),
       };
 
-      if (socketRef.current) {
+      if (socketRef.current?.connected) {
         socketRef.current.emit('tracking:location', payload);
-        addLog(`Emitted GPS step ${currentIdx + 1}/${waypoints.length}: ${pos.lat}, ${pos.lng}`);
       }
+      addLog(`GPS step ${currentIdx + 1}/${waypoints.length}: Lat ${pos.lat.toFixed(4)}, Lng ${pos.lng.toFixed(4)}`);
     }, 2500);
   };
 
   const handlePauseSimulation = () => {
     setIsSimulating(false);
     if (intervalRef.current) clearInterval(intervalRef.current);
+    if (socketRef.current?.connected) {
+      socketRef.current.emit('tracking:stop', { deliveryId, travelerId });
+    }
     addLog('Simulation paused');
   };
 

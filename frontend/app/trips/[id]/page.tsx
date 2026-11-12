@@ -66,19 +66,9 @@ export default function ActiveTripControlPage() {
       setDeliveries(tripDels);
 
       // Fetch pending incoming match requests for this trip
-      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/match-requests/incoming` : `${baseUrl}/api/match-requests/incoming`;
-
-      const res = await fetch(targetUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      const data = await res.json();
-      if (res.ok && data.requests) {
-        const matchingTripReqs = data.requests.filter((r: any) => r.trip_id === tripId && r.status === 'PENDING');
+      const reqRes = await apiServices.getIncomingMatchRequests(tripId);
+      if (reqRes.success && reqRes.requests) {
+        const matchingTripReqs = reqRes.requests.filter((r: any) => r.trip_id === tripId && r.status === 'PENDING');
         setIncomingRequests(matchingTripReqs);
       }
     } catch (err) {
@@ -91,54 +81,30 @@ export default function ActiveTripControlPage() {
   const handleAcceptRequest = async (requestId: string) => {
     setActionMsg(null);
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/match-requests/${requestId}/accept` : `${baseUrl}/api/match-requests/${requestId}/accept`;
-
-      const res = await fetch(targetUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setActionMsg({ type: 'success', text: 'Parcel request accepted! Added to trip deliveries.' });
+      const res = await apiServices.acceptMatchRequest(requestId);
+      if (res.success) {
+        setActionMsg({ type: 'success', text: res.message || 'Parcel request accepted! Added to trip deliveries.' });
         loadTripDetails();
       } else {
-        setActionMsg({ type: 'error', text: data.message || 'Failed to accept request.' });
+        setActionMsg({ type: 'error', text: res.message || 'Failed to accept request.' });
       }
     } catch (err) {
-      setActionMsg({ type: 'error', text: 'Network error accepting request.' });
+      setActionMsg({ type: 'error', text: 'Error accepting request.' });
     }
   };
 
   const handleRejectRequest = async (requestId: string) => {
     setActionMsg(null);
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('rideel_access_token') : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-      const targetUrl = baseUrl.endsWith('/api') ? `${baseUrl}/match-requests/${requestId}/reject` : `${baseUrl}/api/match-requests/${requestId}/reject`;
-
-      const res = await fetch(targetUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setActionMsg({ type: 'success', text: 'Parcel request declined.' });
+      const res = await apiServices.rejectMatchRequest(requestId);
+      if (res.success) {
+        setActionMsg({ type: 'success', text: res.message || 'Parcel request declined.' });
         loadTripDetails();
       } else {
-        setActionMsg({ type: 'error', text: data.message || 'Failed to decline request.' });
+        setActionMsg({ type: 'error', text: res.message || 'Failed to decline request.' });
       }
     } catch (err) {
-      setActionMsg({ type: 'error', text: 'Network error declining request.' });
+      setActionMsg({ type: 'error', text: 'Error declining request.' });
     }
   };
 

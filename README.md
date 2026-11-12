@@ -248,7 +248,7 @@ Copy `.env.example` to `.env.local` and add your Google Maps API key:
 
 ```env
 # Google Maps API Key
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyCQUWoNs3UQ_ZGQngImYO_oQOsafHTIv9w
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 
 # Supabase Configuration (Optional)
 NEXT_PUBLIC_SUPABASE_URL=https://your-supabase-project.supabase.co

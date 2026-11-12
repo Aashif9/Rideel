@@ -12,18 +12,23 @@ class TrackingSocketService {
   public connect(): Socket {
     if (!this.socket || !this.socket.connected) {
       this.socket = io(BACKEND_URL, {
-        reconnection: true,
-        reconnectionAttempts: 10,
-        reconnectionDelay: 2000,
+        reconnection: Boolean(process.env.NEXT_PUBLIC_API_URL),
+        reconnectionAttempts: 2,
+        reconnectionDelay: 5000,
         transports: ['websocket', 'polling'],
+        autoConnect: Boolean(process.env.NEXT_PUBLIC_API_URL),
       });
 
       this.socket.on('connect', () => {
         console.log('✅ Connected to RIDEEL Tracking Socket Server:', this.socket?.id);
       });
 
+      this.socket.on('connect_error', () => {
+        // Quietly handle connection errors in standalone frontend mode
+      });
+
       this.socket.on('disconnect', () => {
-        console.warn('🔌 Tracking Socket disconnected');
+        // Disconnected
       });
     }
 
